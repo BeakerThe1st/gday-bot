@@ -12,19 +12,19 @@ import {
 const builder = new SlashCommandBuilder()
   .setName("eb")
   .setDescription(
-    "Event blocklists a user. DO NOT USE WITHOUT READING THE PIN IN #plus"
+    "Event blocklists a user. ABUSE MAY RESULT IN REMOVAL OF PLUS"
   )
   .addUserOption((option) =>
     option
       .setName("user")
       .setDescription(
-        "User to event blocklist. DO NOT USE WITHOUT READING THE PIN IN #plus"
+        "User to event blocklist. ABUSE MAY RESULT IN REMOVAL OF PLUS"
       )
       .setRequired(true)
   )
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
   .setScope(SlashCommandScope.MAIN_GUILD)
-  .setEphemeral(true);
+  .setEphemeral(false);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
   const member = interaction.options.getMember("user");
