@@ -24,7 +24,7 @@ const builder = new SlashCommandBuilder()
   )
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
   .setScope(SlashCommandScope.MAIN_GUILD)
-  .setEphemeral(false);
+  .setEphemeral(true);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
   const member = interaction.options.getMember("user");
@@ -32,5 +32,9 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     throw new Error("Member is not a GuildMember");
   }
   await member.roles.add("1013093153248641095");
+  const logChannel = await member.client.channels.fetch("1015966536315445390");
+  if (logChannel && logChannel.isTextBased()) {
+    await logChannel.send(`${interaction.user} blocklisted ${member}`);
+  }
   return `Event blocklisted ${member}`;
 });
