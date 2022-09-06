@@ -11,6 +11,7 @@ export class SlashCommandBuilder extends djsSlashCommandBuilder {
   }
 
   public readonly ephemeral: boolean = false;
+  public readonly deferrable: boolean = true;
   public readonly scope: SlashCommandScope = SlashCommandScope.GLOBAL;
 
   public setEphemeral(ephemeral: boolean) {
@@ -20,6 +21,11 @@ export class SlashCommandBuilder extends djsSlashCommandBuilder {
 
   public setScope(scope: SlashCommandScope) {
     Reflect.set(this, "scope", scope);
+    return this;
+  }
+
+  public setDeferrable(deferrable: boolean) {
+    Reflect.set(this, "deferrable", deferrable);
     return this;
   }
 }

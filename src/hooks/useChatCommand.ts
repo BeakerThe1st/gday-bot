@@ -57,7 +57,9 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     return;
   }
 
-  await interaction.deferReply({ ephemeral: builder.ephemeral });
+  if (builder.deferrable) {
+    await interaction.deferReply({ ephemeral: builder.ephemeral });
+  }
 
   let response;
 
@@ -71,7 +73,11 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
   }
 
   try {
-    await interaction.editReply(response);
+    if (interaction.replied || interaction.deferred) {
+      await interaction.editReply(response);
+    } else {
+      interaction.reply(response);
+    }
   } catch (error) {
     useError(`${error}`);
   }
