@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+/*import { Message } from "discord.js";
 import { useEvent } from "../hooks";
 
 useEvent("messageCreate", async (message: Message) => {
@@ -10,3 +10,4 @@ useEvent("messageCreate", async (message: Message) => {
     );
   }
 });
+*/
