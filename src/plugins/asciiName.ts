@@ -1,11 +1,9 @@
-import { MAIN_GUILD_ID, NEXT_EVENT } from "../globals";
 import {
   bold,
   EmbedBuilder,
   GuildMember,
   Message,
   PartialGuildMember,
-  Typing,
 } from "discord.js";
 import { useEvent } from "../hooks";
 import ASCIIFolder from "fold-to-ascii";
