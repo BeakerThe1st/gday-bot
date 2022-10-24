@@ -6,11 +6,11 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
   inlineCode,
-  MessageOptions,
   PermissionFlagsBits,
   TextBasedChannel,
   time,
   TimestampStyles,
+  BaseMessageOptions,
 } from "discord.js";
 import {
   SlashCommandBuilder,
@@ -125,7 +125,10 @@ class EventMode {
     this.channel = channel;
   }
 
-  getPrompt(): MessageOptions {
+  getPrompt(): BaseMessageOptions {
+    if (!NEXT_EVENT) {
+      return { content: "No event is planned at this time." };
+    }
     const eventDate = new Date(NEXT_EVENT.timestamp);
     const embed = new EmbedBuilder()
       .setTitle(NEXT_EVENT.name)

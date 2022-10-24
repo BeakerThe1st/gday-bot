@@ -1,12 +1,10 @@
-import { useClient } from "./useClient";
 import {
   ChatInputCommandInteraction,
   Interaction,
+  InteractionReplyOptions,
   MessagePayload,
   REST,
   Routes,
-  SlashCommandSubcommandsOnlyBuilder,
-  WebhookEditMessageOptions,
 } from "discord.js";
 
 import {
@@ -20,7 +18,7 @@ import { useEvent } from "./useEvent";
 type InteractionReply =
   | string
   | MessagePayload
-  | WebhookEditMessageOptions
+  | InteractionReplyOptions
   | null;
 type CommandHandler = (
   interaction: ChatInputCommandInteraction

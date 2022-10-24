@@ -3,6 +3,9 @@ import { Typing } from "discord.js";
 import { useEvent } from "../hooks";
 
 useEvent("typingStart", async (typing: Typing) => {
+  if (!NEXT_EVENT) {
+    return;
+  }
   if (Date.now() > NEXT_EVENT.timestamp - 86400000) {
     return;
   }

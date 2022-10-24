@@ -12,6 +12,9 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, () => {
   const event = NEXT_EVENT;
+  if (!event) {
+    return "Apple does not currently have an event planned at this time and we think you're gonna love it.";
+  }
   const eventDate = new Date(event.timestamp);
   const afterEvent = Date.now() > eventDate.getTime();
   const embed = new EmbedBuilder()

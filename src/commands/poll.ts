@@ -10,9 +10,11 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
   Interaction,
+  MessageEditOptions,
   Message,
   User,
-  WebhookEditMessageOptions,
+  InteractionReplyOptions,
+  BaseMessageOptions,
 } from "discord.js";
 import { useEvent } from "../hooks";
 const builder = new SlashCommandBuilder()
@@ -79,7 +81,7 @@ class Poll {
     );
   };
 
-  getMessage = (): WebhookEditMessageOptions => {
+  getMessage = (): BaseMessageOptions => {
     const count = this.countVotes();
     const embed = new EmbedBuilder()
       .setTitle(this.question)
