@@ -7,13 +7,13 @@ useEvent("typingStart", async (typing: Typing) => {
     return;
   }
 
-  const threeDaysAgo = Date.now() - 3 * 24 * 60 * 60 * 1000;
+  const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
   const { member } = typing;
 
   if (!member || !member.joinedTimestamp) {
     return;
   }
-  if (member.joinedTimestamp > threeDaysAgo) {
+  if (member.joinedTimestamp > twentyFourHoursAgo) {
     return;
   }
 
