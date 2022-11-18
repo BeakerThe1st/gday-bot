@@ -3,6 +3,7 @@ import { SlashCommandBuilder as djsSlashCommandBuilder } from "discord.js";
 export enum SlashCommandScope {
   GLOBAL,
   MAIN_GUILD = "332309672486895637",
+  STAFF_SERVER = "337792272693461002",
 }
 
 export class SlashCommandBuilder extends djsSlashCommandBuilder {
