@@ -10,7 +10,12 @@ useEvent("messageCreate", async (message: Message) => {
     message.content.toLowerCase().includes("munstie")
   ) {
     if (!message.mentions.users.get("247133649206640640")) {
-      await message.reply(`${userMention("247133649206640640")} 🤪`);
+      await message.reply({
+        content: `${userMention("247133649206640640")} 🤪`,
+        allowedMentions: {
+          users: ["247133649206640640"],
+        },
+      });
     }
   }
 });
