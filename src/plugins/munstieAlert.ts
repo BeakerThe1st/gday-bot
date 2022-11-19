@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, userMention } from "discord.js";
 import { useEvent } from "../hooks";
 
 useEvent("messageCreate", async (message: Message) => {
@@ -10,7 +10,7 @@ useEvent("messageCreate", async (message: Message) => {
     message.content.toLowerCase().includes("munstie")
   ) {
     if (!message.mentions.users.get("247133649206640640")) {
-      await message.reply("<@247133649206640640> 🤪");
+      await message.reply(`${userMention("247133649206640640")} 🤪`);
     }
   }
 });
