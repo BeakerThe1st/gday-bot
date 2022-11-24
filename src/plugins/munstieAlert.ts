@@ -7,13 +7,13 @@ useEvent("messageCreate", async (message: Message) => {
   }
   if (
     message.guild.id === "332309672486895637" &&
-    message.content.toLowerCase().includes("munstie")
+    message.content.toLowerCase().includes("moo")
   ) {
-    if (!message.mentions.users.get("247133649206640640")) {
+    if (!message.mentions.users.get("297567836254240768")) {
       await message.reply({
-        content: `${userMention("247133649206640640")} 🤪`,
+        content: `${userMention("297567836254240768")} 🤪`,
         allowedMentions: {
-          users: ["247133649206640640"],
+          users: ["297567836254240768"],
         },
       });
     }
