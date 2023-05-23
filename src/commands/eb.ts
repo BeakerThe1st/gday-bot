@@ -29,7 +29,6 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     if (logChannel?.isTextBased()) {
         await logChannel.send({
             content: `${interaction.user} blocklisted ${member}`,
-            allowedMentions: {},
         });
     }
     return `Event blocklisted ${member}`;
