@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import { useEnv, useEvent } from "../hooks";
+import {useEnv, useEvent} from "../hooks";
 
 useEvent("ready", () => {
-  mongoose.connect(useEnv("MONGO_URI"));
+    //IGNORED PROMISE -> please pay attention to promise when doing anything important w/ DB
+    mongoose.connect(useEnv("MONGO_URI"));
 });

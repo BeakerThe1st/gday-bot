@@ -1,15 +1,17 @@
 export const MAIN_GUILD_ID = "332309672486895637";
 
 interface NextEvent {
-  name: string;
-  timestamp: number;
-  image: string;
-  color: string;
+    name: string;
+    timestamp: number;
+    image: string;
+    color: string;
 }
 
-export const NEXT_EVENT: null | NextEvent = null; /*{
-  name: "Far Out",
-  timestamp: 1662570000000,
-  image: "https://i.imgur.com/KvnBbmU.png",
-  color: "#1afefd",
-};*/
+
+//Timestamp is in ms
+export const NEXT_EVENT: null | NextEvent = {
+    name: "WWDC23",
+    timestamp: 1685984400000,
+    image: "https://i.imgur.com/iHZsp0Z.png",
+    color: "#b5dcca",
+};
