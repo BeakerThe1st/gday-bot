@@ -31,19 +31,15 @@ const builder = new SlashCommandBuilder()
 useChatCommand(
     builder as SlashCommandBuilder,
     async (interaction: ChatInputCommandInteraction) => {
-        let filter = {};
 
         const executor = interaction.options.getUser("executor");
         const target = interaction.options.getUser("target");
         const type = interaction.options.getString("type");
-        if (executor) {
-            filter = {...filter, executor: executor.id};
-        }
-        if (target) {
-            filter = {...filter, target: target.id};
-        }
-        if (type) {
-            filter = {...filter, type: type};
+
+        const filter = {
+            executor: executor?.id ?? undefined,
+            target: target?.id ?? undefined,
+            type: type ?? undefined,
         }
         const count = await Case.count(filter);
 
