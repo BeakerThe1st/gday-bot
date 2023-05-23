@@ -6,7 +6,6 @@ import {EmbedBuilder, time, TimestampStyles, userMention,} from "discord.js";
 export enum CaseType {
     WARN = "WARN",
     BAN = "BAN",
-    UNBAN = "UNBAN",
     KICK = "KICK",
     TIMEOUT = "TIMEOUT",
 }
