@@ -54,7 +54,7 @@ const builder = new SlashCommandBuilder()
                         option
                             .setName("interval")
                             .setDescription(
-                                "Interval between event mode prompts in seconds (there are 60 seconds in a minute btw jack)."
+                                "Interval between event mode prompts in seconds."
                             )
                             .setRequired(true)
                             .setMinValue(1)
@@ -85,7 +85,7 @@ useChatCommand(
                     return `Event mode is already running in this channel.`;
                 } else {
                     eventMode.startTimer();
-                    return `Successfully started event mode with a ${eventMode.timerInterval}ms interval.`;
+                    return `Successfully started event mode with a ${eventMode.timerInterval / 1000} second interval.`;
                 }
             case "stop":
                 if (!eventMode.isRunning()) {
@@ -102,7 +102,7 @@ useChatCommand(
                 const interval = interaction.options.getNumber("interval", true);
                 eventMode.setTimerInterval(interval);
                 return `Event mode prompt interval set to ${inlineCode(
-                    `${interval}ms`
+                    `${interval}s`
                 )}`;
             default:
                 return eventMode.getPrompt();
@@ -118,7 +118,7 @@ class EventMode {
 
     constructor(channel: TextBasedChannel) {
         this.image = "https://i.imgur.com/2qyUcTl.png";
-        this.timerInterval = 6000;
+        this.timerInterval = 60000;
         this.channel = channel;
     }
 
@@ -180,7 +180,7 @@ class EventMode {
     }
 
     setTimerInterval(intervalInSeconds: number) {
-        this.timerInterval = intervalInSeconds * 100;
+        this.timerInterval = intervalInSeconds * 1000;
         if (this.isRunning()) {
             this.stopTimer();
             this.startTimer();
