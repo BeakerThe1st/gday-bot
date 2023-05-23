@@ -24,9 +24,9 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     if (!(member instanceof GuildMember)) {
         throw new Error("Member is not a GuildMember");
     }
-    await member.roles.add("1013093153248641095");
-    const logChannel = await member.client.channels.fetch("1015966536315445390");
-    if (logChannel && logChannel.isTextBased()) {
+    await member.roles.add("1110551464394362921");
+    const logChannel = await member.client.channels.fetch("1033960979224088596");
+    if (logChannel?.isTextBased()) {
         await logChannel.send({
             content: `${interaction.user} blocklisted ${member}`,
             allowedMentions: {},
