@@ -37,8 +37,8 @@ useChatCommand(
         const type = interaction.options.getString("type");
 
         const filter = {
-            executor: executor?.id ?? undefined,
-            target: target?.id ?? undefined,
+            executor: executor?.id,
+            target: target?.id,
             type: type ?? undefined,
         }
         const count = await Case.count(filter);
