@@ -24,7 +24,7 @@ useEvent("messageCreate", async (message: Message) => {
     let responseMessage: Message;
     let responseDeletionDelay = 5000;
     if (zeroTolerance) {
-        const logChannel = await useClient().client.channels.fetch("1033960979224088596");
+        const logChannel = await useClient().client.channels.fetch("476924704528138271");
         if (logChannel?.isTextBased()) {
             await logChannel.send(`Blocked a message by ${message.author} in ${message.channel} due to \`${matchedFlags.join(", ")}\`\n${codeBlock(message.cleanContent)}`)
         }
