@@ -25,6 +25,7 @@
     "mongoose": "^6.6.7",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.19",
+    "openai": "^3.2.1",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
