@@ -15,6 +15,9 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildBans,
     ],
+    allowedMentions: {
+        parse: ["users"]
+    },
     partials: [Partials.GuildMember],
 });
 useClient().setClient(client);
