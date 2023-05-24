@@ -17,5 +17,6 @@ export const NEXT_EVENT: null | NextEvent = {
 };
 
 export const ROLES = {
-    established: "881503056091557978"
+    established: "881503056091557978",
+    event_reserved: "1111076493834072165"
 }

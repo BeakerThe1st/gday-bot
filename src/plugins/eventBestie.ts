@@ -1,4 +1,4 @@
-import {MAIN_GUILD_ID, NEXT_EVENT} from "../globals";
+import {MAIN_GUILD_ID, NEXT_EVENT, ROLES} from "../globals";
 import {Typing} from "discord.js";
 import {useEvent} from "../hooks";
 
@@ -16,13 +16,11 @@ useEvent("typingStart", async (typing: Typing) => {
         return;
     }
 
-    const roleId = "1110545998377406484";
-
     if (!typing.member) {
         return;
     }
     const {roles} = typing.member;
-    if (!roles.cache.has(roleId)) {
-        await roles.add(roleId);
+    if (!roles.cache.has(ROLES.event_reserved)) {
+        await roles.add(ROLES.event_reserved);
     }
 });
