@@ -15,3 +15,7 @@ export const NEXT_EVENT: null | NextEvent = {
     image: "https://i.imgur.com/iHZsp0Z.png",
     color: "#b5dcca",
 };
+
+export const ROLES = {
+    established: "881503056091557978"
+}
