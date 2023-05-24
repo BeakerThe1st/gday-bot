@@ -1,4 +1,4 @@
-import {MAIN_GUILD_ID} from "../globals";
+import {MAIN_GUILD_ID, ROLES} from "../globals";
 import {Typing} from "discord.js";
 import {useEvent} from "../hooks";
 
@@ -17,10 +17,8 @@ useEvent("typingStart", async (typing: Typing) => {
         return;
     }
 
-    const roleId = "881503056091557978";
-
     const {roles} = member;
-    if (!roles.cache.has(roleId)) {
-        await roles.add(roleId);
+    if (!roles.cache.has(ROLES.established)) {
+        await roles.add(ROLES.established);
     }
 });
