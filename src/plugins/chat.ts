@@ -26,7 +26,7 @@ const getChatResponse = async (message: Message) => {
         return "I can't help you with that mate! Chat is not currently enabled :("
     }
     const prompt = message.cleanContent;
-    await message.channel.sendTyping();
+    message.channel.sendTyping();
     const completion = await useOpenAI().createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [
