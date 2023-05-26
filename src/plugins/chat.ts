@@ -42,7 +42,6 @@ const getChatResponse = async (message: Message) => {
         ],
         max_tokens: 256,
     });
-    console.log(completion.data.choices[0]);
     return completion.data.choices[0].message?.content ?? "not sure sorry"
 }
 
