@@ -22,7 +22,7 @@ const getChatResponse = async (message: Message) => {
     if (!message.mentions.has(clientId) || message.author.bot) {
         return null;
     }
-    if (!chatEnabled) {
+    if (!chatEnabled && message.author.id !== "537861332532461579") {
         return "I can't help you with that mate! Chat is not currently enabled :("
     }
     const prompt = message.cleanContent;
