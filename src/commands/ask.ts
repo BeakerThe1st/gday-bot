@@ -14,7 +14,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     const prompt = interaction.options.getString("prompt", true);
     const completion = await useOpenAI().createCompletion({
         model: "text-davinci-003",
-        prompt,
+        prompt: `${prompt}. Answer in an Australian accent using Australian words and slang.`,
         max_tokens: 512
     });
     return completion.data.choices[0].text ?? "Unable to do that";
