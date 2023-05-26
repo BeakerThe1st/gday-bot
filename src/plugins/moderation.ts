@@ -4,7 +4,7 @@ import {useOpenAI} from "../hooks/useOpenAI";
 import {CreateModerationResponseResultsInnerCategories} from "openai";
 
 useEvent("messageCreate", async (message: Message) => {
-    if (message.author.bot) {
+    if (message.author.bot || message.member?.roles.cache.has("334889410006876161")) {
         return;
     }
     const moderation = await useOpenAI().createModeration({
