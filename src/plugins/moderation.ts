@@ -5,6 +5,9 @@ import {CreateModerationResponseResultsInnerCategories} from "openai";
 import {ROLES} from "../globals";
 
 useEvent("messageCreate", async (message: Message) => {
+    if (message.guildId !== "332309672486895637") {
+        return;
+    }
     if (message.author.bot || message.member?.roles.cache.has(ROLES.modsquad)) {
         return;
     }
