@@ -2,9 +2,10 @@ import {useClient, useEvent} from "../hooks";
 import {codeBlock, Message, userMention} from "discord.js";
 import {useOpenAI} from "../hooks/useOpenAI";
 import {CreateModerationResponseResultsInnerCategories} from "openai";
+import {ROLES} from "../globals";
 
 useEvent("messageCreate", async (message: Message) => {
-    if (message.author.bot || message.member?.roles.cache.has("334889410006876161")) {
+    if (message.author.bot || message.member?.roles.cache.has(ROLES.modsquad)) {
         return;
     }
     const moderation = await useOpenAI().createModeration({
