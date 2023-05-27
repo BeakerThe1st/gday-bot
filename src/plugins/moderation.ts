@@ -2,10 +2,10 @@ import {useClient, useEvent} from "../hooks";
 import {codeBlock, Message, userMention} from "discord.js";
 import {useOpenAI} from "../hooks/useOpenAI";
 import {CreateModerationResponseResultsInnerCategories} from "openai";
-import {ROLES} from "../globals";
+import {MAIN_GUILD_ID, ROLES} from "../globals";
 
 useEvent("messageCreate", async (message: Message) => {
-    if (message.guildId !== "332309672486895637") {
+    if (message.guildId !== MAIN_GUILD_ID) {
         return;
     }
     if (message.author.bot || message.member?.roles.cache.has(ROLES.modsquad)) {
