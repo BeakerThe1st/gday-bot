@@ -4,6 +4,7 @@ import {useChatCommand} from "../hooks/useChatCommand";
 import {useClient, useEvent} from "../hooks";
 import {useOpenAI} from "../hooks/useOpenAI";
 import {ChatCompletionRequestMessageRoleEnum} from "openai";
+import {NEXT_EVENT} from "../globals";
 
 let chatEnabled = false;
 
@@ -55,12 +56,14 @@ const getChatResponse = async (message: Message) => {
                     "You're not always positive and can be a bit cheeky. " +
                     "While you love Apple products, you're not a blind fan and can acknowledge their flaws. " +
                     "Keep it casual, crack jokes, and make puns. Make yourself seem very Australian." +
-                    `The person that is asking you the prompt is named ${message.author.username} and has been in the server since (in seconds since unix epoch) ${message.member?.joinedTimestamp}`},
+                    `The person that is asking you the prompt is named ${message.author.username}. Keep in mind previous messages were not necessarily by them.`},
             ...context
         ],
         max_tokens: 256,
     });
-    return completion.data.choices[0].message?.content ?? "not sure sorry"
+    const response = completion.data.choices[0];
+    console.dir(response);
+    return `${response.message?.content}${response.finish_reason !== "stop" ? "\n\nCrikey, ran out of breath there! Guess I'll have to save my other thoughts for another time, mate." : ""}` ?? "not sure sorry"
 }
 
 useEvent("messageCreate", async (message: Message) => {
