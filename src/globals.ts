@@ -12,7 +12,7 @@ interface NextEvent {
 export const NEXT_EVENT: null | NextEvent = {
     name: "WWDC23",
     timestamp: 1685984400000,
-    image: "https://i.imgur.com/iHZsp0Z.png",
+    image: "https://media3.giphy.com/media/apZ1rCWXf427CwPjAU/giphy.gif",
     color: "#b5dcca",
 };
 
