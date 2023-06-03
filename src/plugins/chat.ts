@@ -38,10 +38,13 @@ const getContext = async (message: Message) => {
 
 const getChatResponse = async (message: Message) => {
     const clientId = useClient().client.user?.id ?? "958702160617566249";
-    if (!message.mentions.has(clientId) || message.author.bot) {
+    if (!message.mentions.has(clientId) || (message.author.bot && message.author.id !== "535722349132251136")) {
         return null;
     }
     if (!chatEnabled && message.author.id !== "537861332532461579") {
+        if (message.author.id === "535722349132251136") {
+            return null;
+        }
         return "I can't help you with that mate! Chat is not currently enabled :("
     }
     message.channel.sendTyping();
