@@ -19,5 +19,6 @@ export const NEXT_EVENT: null | NextEvent = {
 export const ROLES = {
     established: "881503056091557978",
     event_reserved: "1111076493834072165",
-    modsquad: "334889410006876161"
+    modsquad: "334889410006876161",
+    plus: "338950814108483586"
 }

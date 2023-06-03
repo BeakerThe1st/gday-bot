@@ -8,6 +8,15 @@ useEvent("messageCreate", async (message: Message) => {
     if (message.guildId !== MAIN_GUILD_ID) {
         return;
     }
+    if (message.author.bot) {
+        return;
+    }
+    const roleCache = message.member?.roles.cache;
+    if (roleCache) {
+        if (roleCache.has(ROLES.modsquad) || roleCache.has(ROLES.plus)) {
+            return;
+        }
+    }
     if (message.author.bot || message.member?.roles.cache.has(ROLES.modsquad)) {
         return;
     }
