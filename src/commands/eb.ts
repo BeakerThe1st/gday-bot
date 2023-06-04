@@ -28,7 +28,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const logChannel = await member.client.channels.fetch("1033960979224088596");
     if (logChannel?.isTextBased()) {
         await logChannel.send({
-            content: `${interaction.user} blocklisted ${member}`,
+            content: `${interaction.user} event blocklisted ${member}`,
+            allowedMentions: {parse: []}
         });
     }
     return `Event blocklisted ${member}`;
