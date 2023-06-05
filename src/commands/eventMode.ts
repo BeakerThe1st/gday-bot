@@ -117,7 +117,7 @@ class EventMode {
     timer?: NodeJS.Timer;
 
     constructor(channel: TextBasedChannel) {
-        this.image = "https://i.imgur.com/2qyUcTl.png";
+        this.image = "https://i.imgur.com/Lm3XKB0.png";
         this.timerInterval = 60000;
         this.channel = channel;
     }
