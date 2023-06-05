@@ -5,6 +5,7 @@ import {bingoItems} from "../utils/bingoItems";
 import {Bingo} from "../database/Bingo";
 import {createCanvas, loadImage} from "canvas";
 import path from "path";
+import {BingoCheck} from "../database/BingoCheck";
 
 const builder = new SlashCommandBuilder()
     .setName("bingo")
@@ -42,13 +43,21 @@ const prettyBoard = async (board: string[][]) => {
 
     const SQUARE_WIDTH = 110;
 
+    const check = await BingoCheck.findOne();
+
     board.forEach((row, rowIndex) => {
         row.forEach(async (col, colIndex) => {
             const x = SQUARE_WIDTH * rowIndex + 25;
             const y = SQUARE_WIDTH * colIndex + 80;
 
             try {
+                const isChecked = check?.bingoEntries.get(col) ?? false;
                 const image = await loadImage(`${imageDir}${col}.png`);
+                console.log(isChecked);
+                if (isChecked === true) {
+                    const checkedImage = await loadImage(`${imageDir}checked.png`)
+                    ctx.drawImage(checkedImage, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1);
+                }
                 ctx.drawImage(image, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1)
             } catch {
                 ctx.fillText(col, x + 5, y + 20);
