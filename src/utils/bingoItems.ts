@@ -1,8 +1,10 @@
 export const bingoItems = new Map<string, boolean>()
 
-const items = ["free_space", "ar", "ar_os", "macos_sequoia", "15_inch_mba", "m2_ultra", "mac_studio", "vr_facetime", "vr_iphone_apps", "memerighi",
-"mac_pro", "ar_devkit", "one_more_thing", "carplay", "ios_lock_screen", "watch_widgets", "camera_app", "ios_compass", "good_mornang", "imac", "ipad_calculator",
-"ipad_xcode", "iphone_os", "icloud_storage_increase"]
+const items = ["15_inch_mba", "ar", "ar_devkit", "ar_os", "camera_app", "carplay",
+    "good_mornang", "icloud_storage_increase", "imac", "ios_compass", "ios_lock_screen",
+    "ipad_calculator", "ipad_xcode", "iphone_os", "mac_pro", "mac_studio", "macos_sequoia", "m2_ultra",
+    "memerighi", "one_more_thing", "vr_facetime", "vr_iphone_apps", "watch_widgets", "free_space"];
+
 
 items.forEach((item) => {
     bingoItems.set(item, item === "free_space");
