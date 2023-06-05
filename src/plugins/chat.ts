@@ -65,7 +65,6 @@ const getChatResponse = async (message: Message) => {
         max_tokens: 256,
     });
     const response = completion.data.choices[0];
-    console.dir(response);
     return `${response.message?.content}${response.finish_reason !== "stop" ? "\n\nCrikey, ran out of breath there! Guess I'll have to save my other thoughts for another time, mate." : ""}` ?? "not sure sorry"
 }
 
