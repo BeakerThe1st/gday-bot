@@ -78,22 +78,28 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     }
 });
 
-setTimeout(() => {
-    const rest = new REST({version: "10"}).setToken(useEnv("DISCORD_TOKEN"));
-    const clientId = useEnv("DISCORD_CLIENT_ID");
-    for (const [scope, builders] of buildersByScope) {
-        const route =
-            scope === SlashCommandScope.GLOBAL
-                ? Routes.applicationCommands(clientId)
-                : Routes.applicationGuildCommands(clientId, scope);
-        (async () => {
-            try {
-                await rest.put(route, {
-                    body: builders.map((builder) => builder.toJSON()),
-                });
-            } catch (error) {
-                useError(error as string);
-            }
-        })();
-    }
-}, 5000);
+export const updateSlashCommands = () => {
+    setTimeout(() => {
+        const rest = new REST({version: "10"}).setToken(useEnv("DISCORD_TOKEN"));
+        const clientId = useEnv("DISCORD_CLIENT_ID");
+        for (const [scope, builders] of buildersByScope) {
+            const route =
+                scope === SlashCommandScope.GLOBAL
+                    ? Routes.applicationCommands(clientId)
+                    : Routes.applicationGuildCommands(clientId, scope);
+            (async () => {
+                try {
+                    await rest.put(route, {
+                        body: builders.map((builder) => builder.toJSON()),
+                    });
+                } catch (error) {
+                    useError(`${error}`);
+                }
+            })();
+        }
+    }, 5000);
+}
+
+updateSlashCommands();
+
+
