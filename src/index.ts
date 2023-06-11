@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import {useEnv} from "./hooks";
 import {ActivityType, Client, GatewayIntentBits, Partials} from "discord.js";
+import mongoose from "mongoose";
 
 const client = new Client({
     intents: [
@@ -21,23 +22,52 @@ const client = new Client({
     partials: [Partials.GuildMember],
 });
 useClient().setClient(client);
-
-const folders = ["./plugins", "./commands"];
-
-for (const folder of folders) {
-    const url = new URL(folder, import.meta.url);
-    const files = fs.readdirSync(url);
+const loadFilesFromFolder = (folder: string) => {
+    const folderUrl = new URL(folder, import.meta.url);
+    const files = fs.readdirSync(folderUrl);
     for (const file of files) {
-        import(path.join(url.href, file));
+        const filePath = path.join(folderUrl.href, file);
+        if (!file.includes('.')) {
+            loadFilesFromFolder(filePath);
+        } else if (file.endsWith('.ts') && !file.endsWith(".model.ts")) {
+            import(filePath);
+            console.log(`Loaded ${file}`);
+        }
     }
 }
 
-//IGNORED PROMISE -> not really needed as we have ready function, may be useful in error handling
+loadFilesFromFolder("./plugins");
+
+//IGNORED PROMISE -> better to let the whole bot crash than to continue without login :DDD
 client.login(useEnv("DISCORD_TOKEN"));
 
-useEvent("ready", (client: Client) => {
+
+const statuses: [ActivityType, string][] = [
+    [ActivityType.Watching, "the sunset with a coldie"],
+    [ActivityType.Competing, "a TimTam race"],
+    [ActivityType.Watching, "the roos hop by"],
+    [ActivityType.Competing, "on the telly, mate"],
+    [ActivityType.Listening, "to some didgeridoo"],
+    [ActivityType.Streaming, "Home and Away"],
+    [ActivityType.Playing, "some cricket, legend"],
+    [ActivityType.Watching, "the waves roll in, sheila"],
+    [ActivityType.Listening, "to the rustle of gum trees"],
+    [ActivityType.Competing, "a BBQ competition"],
+    [ActivityType.Streaming, "some classic INXS"]
+]
+
+useEvent("ready", async (client: Client) => {
+    try {
+        await mongoose.connect(useEnv("MONGO_URI"));
+    } catch (error) {
+        console.warn(`Error connecting to database: ${error}`)
+    }
+
+    const chosenStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+    // @ts-ignore
     client.user?.setActivity({
-        name: "with iPhone 14",
-        type: ActivityType.Playing,
+        name: chosenStatus[1],
+        type: chosenStatus[0],
     });
 });

@@ -1,6 +1,6 @@
-import {useChatCommand} from "../hooks/useChatCommand";
+import {useChatCommand} from "../../hooks/useChatCommand";
 import {ChatInputCommandInteraction, GuildMember, PermissionFlagsBits,} from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
 
 const builder = new SlashCommandBuilder()
     .setName("eb")

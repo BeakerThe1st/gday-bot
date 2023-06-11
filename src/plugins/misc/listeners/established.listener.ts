@@ -1,9 +1,9 @@
-import {MAIN_GUILD_ID, ROLES} from "../globals";
+import {GUILDS, ROLES} from "../../../globals";
 import {Typing} from "discord.js";
-import {useEvent} from "../hooks";
+import {useEvent} from "../../../hooks";
 
 useEvent("typingStart", async (typing: Typing) => {
-    if (typing.guild?.id !== MAIN_GUILD_ID) {
+    if (typing.guild?.id !== GUILDS.MAIN) {
         return;
     }
 
@@ -18,7 +18,8 @@ useEvent("typingStart", async (typing: Typing) => {
     }
 
     const {roles} = member;
-    if (!roles.cache.has(ROLES.established)) {
-        await roles.add(ROLES.established);
+    const established = ROLES.MAIN.established
+    if (!roles.cache.has(established)) {
+        await roles.add(established);
     }
 });

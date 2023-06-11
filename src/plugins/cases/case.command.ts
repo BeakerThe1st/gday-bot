@@ -1,4 +1,4 @@
-import {useChatCommand} from "../hooks/useChatCommand";
+import {useChatCommand} from "../../hooks/useChatCommand";
 import {
     ChatInputCommandInteraction,
     EmbedBuilder,
@@ -8,8 +8,8 @@ import {
     TimestampStyles,
     userMention,
 } from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
-import {Case} from "../database/Case";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {Case} from "./Case.model";
 
 const builder = new SlashCommandBuilder()
     .setName("case")

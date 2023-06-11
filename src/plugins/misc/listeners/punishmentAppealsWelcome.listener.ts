@@ -1,5 +1,5 @@
 import {bold, channelMention, EmbedBuilder, GuildMember, inlineCode, PartialGuildMember,} from "discord.js";
-import {useEvent} from "../hooks";
+import {useEvent} from "../../../hooks";
 
 useEvent(
     "guildMemberUpdate",

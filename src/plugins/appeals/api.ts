@@ -2,7 +2,7 @@ import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention,
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import {useClient} from "../hooks";
+import {useClient} from "../../hooks";
 
 const app = express();
 

@@ -1,6 +1,6 @@
 import {ChatInputCommandInteraction, inlineCode, PermissionFlagsBits,} from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
-import {useChatCommand} from "../hooks/useChatCommand";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../../builders/SlashCommandBuilder";
+import {useChatCommand} from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("say")

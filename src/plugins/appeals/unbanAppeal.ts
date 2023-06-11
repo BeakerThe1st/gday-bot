@@ -1,5 +1,5 @@
-import {useClient} from "../hooks";
-import {useEvent} from "../hooks";
+import {useClient} from "../../hooks";
+import {useEvent} from "../../hooks";
 import {Interaction, Message} from "discord.js";
 
 useEvent("interactionCreate", async (interaction: Interaction) => {

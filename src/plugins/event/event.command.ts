@@ -1,6 +1,6 @@
-import {useChatCommand} from "../hooks/useChatCommand";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
-import {NEXT_EVENT} from "../globals";
+import {useChatCommand} from "../../hooks/useChatCommand";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {NEXT_EVENT} from "../../globals";
 import {EmbedBuilder, time, TimestampStyles} from "discord.js";
 
 const builder = new SlashCommandBuilder()

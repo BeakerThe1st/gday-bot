@@ -1,7 +1,7 @@
-import {SlashCommandBuilder, SlashCommandScope} from "../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
 import {ChatInputCommandInteraction, GuildMember, PermissionFlagsBits} from "discord.js";
-import {useChatCommand} from "../hooks/useChatCommand";
-import {ROLES} from "../globals";
+import {useChatCommand} from "../../../hooks/useChatCommand";
+import {ROLES} from "../../../globals";
 
 const builder: SlashCommandBuilder = new SlashCommandBuilder()
     .setName("establish")
@@ -19,9 +19,10 @@ useChatCommand(builder, async (interaction:ChatInputCommandInteraction) => {
    if (!(member instanceof GuildMember)) {
        throw new Error("User is not a GuildMember");
    }
-   if (member.roles.cache.has(ROLES.established)) {
+   const established = ROLES.MAIN.established
+   if (member.roles.cache.has(established)) {
        return `${member} is already established!`
    }
-   await member.roles.add(ROLES.established);
+   await member.roles.add(established);
    return `Successfully established ${member}.`
 });

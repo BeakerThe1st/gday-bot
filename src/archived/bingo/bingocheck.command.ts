@@ -1,10 +1,10 @@
-import {SlashCommandBuilder, SlashCommandScope} from "../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {ChatInputCommandInteraction, codeBlock, PermissionFlagsBits} from "discord.js";
-import {useChatCommand} from "../hooks/useChatCommand";
-import {bingoItems} from "../utils/bingoItems";
-import {BingoCheck} from "../database/BingoCheck";
-import {Bingo} from "../database/Bingo";
-import {useClient} from "../hooks";
+import {useChatCommand} from "../../hooks/useChatCommand";
+import {bingoItems} from "./bingoItems";
+import {BingoCheck} from "./BingoCheck.model";
+import {Bingo} from "./Bingo.model";
+import {useClient} from "../../hooks";
 
 const options = Array.from(bingoItems.keys()).map((key) => ({
     name: key,

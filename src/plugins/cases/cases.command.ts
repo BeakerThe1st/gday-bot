@@ -1,7 +1,7 @@
 import {bold, ChatInputCommandInteraction, PermissionFlagsBits, userMention,} from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
-import {Case} from "../database/Case";
-import {useChatCommand} from "../hooks/useChatCommand";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {Case} from "./Case.model";
+import {useChatCommand} from "../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("cases")

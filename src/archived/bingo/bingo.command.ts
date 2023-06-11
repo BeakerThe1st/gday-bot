@@ -1,11 +1,11 @@
-import {SlashCommandBuilder, SlashCommandScope} from "../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {AttachmentBuilder, ChatInputCommandInteraction, codeBlock, PermissionFlagsBits} from "discord.js";
-import {useChatCommand} from "../hooks/useChatCommand";
-import {bingoItems} from "../utils/bingoItems";
-import {Bingo} from "../database/Bingo";
+import {useChatCommand} from "../../hooks/useChatCommand";
+import {bingoItems} from "./bingoItems";
+import {Bingo} from "./Bingo.model";
 import {createCanvas, loadImage} from "canvas";
 import path from "path";
-import {BingoCheck} from "../database/BingoCheck";
+import {BingoCheck} from "./BingoCheck.model";
 
 const builder = new SlashCommandBuilder()
     .setName("bingo")
@@ -36,7 +36,7 @@ const prettyBoard = async (board: string[][]) => {
     const canvas = createCanvas(600, 655);
     const ctx = canvas.getContext("2d");
 
-    const imageDir = path.join(process.cwd(), "/src/bingo_images/");
+    const imageDir = path.join(process.cwd(), "/src/plugins/bingo/bingo_images/");
 
     const bg = await loadImage(`${imageDir}/bg.png`);
     ctx.drawImage(bg, 0, 0, 600, 655);

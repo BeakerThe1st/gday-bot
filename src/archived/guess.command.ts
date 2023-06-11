@@ -1,6 +1,6 @@
 import {useChatCommand} from "../hooks/useChatCommand";
 import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
-import {Guess} from "../database/Guess";
+import {Guess} from "../plugins/event/Guess.model";
 import {ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits} from "discord.js";
 
 let guessEnabled = true;

@@ -1,6 +1,6 @@
 import {model, Schema} from "mongoose";
 import cryptoRandomString from "crypto-random-string";
-import {useClient} from "../hooks";
+import {useClient} from "../../hooks";
 import {EmbedBuilder, time, TimestampStyles, userMention,} from "discord.js";
 
 export enum CaseType {

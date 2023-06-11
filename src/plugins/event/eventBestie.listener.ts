@@ -1,6 +1,6 @@
-import {MAIN_GUILD_ID, NEXT_EVENT, ROLES} from "../globals";
+import {GUILDS, NEXT_EVENT, ROLES} from "../../globals";
 import {Typing} from "discord.js";
-import {useEvent} from "../hooks";
+import {useEvent} from "../../hooks";
 
 useEvent("typingStart", async (typing: Typing) => {
     if (!NEXT_EVENT) {
@@ -12,7 +12,7 @@ useEvent("typingStart", async (typing: Typing) => {
         return;
     }
 
-    if (typing.guild?.id !== MAIN_GUILD_ID) {
+    if (typing.guild?.id !== GUILDS.MAIN) {
         return;
     }
 
@@ -20,7 +20,7 @@ useEvent("typingStart", async (typing: Typing) => {
         return;
     }
     const {roles} = typing.member;
-    if (!roles.cache.has(ROLES.event_reserved)) {
-        await roles.add(ROLES.event_reserved);
+    if (!roles.cache.has(ROLES.MAIN.event_reserved)) {
+        await roles.add(ROLES.MAIN.event_reserved);
     }
 });

@@ -1,6 +1,6 @@
 import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry, GuildBan, GuildMember, PartialGuildMember} from "discord.js";
-import {useEvent} from "../hooks";
-import {Case, CaseType, ICase} from "../database/Case";
+import {useEvent} from "../../hooks";
+import {Case, CaseType, ICase} from "./Case.model";
 
 const fetchLogEntry = async (
     guild: Guild,

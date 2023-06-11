@@ -1,4 +1,4 @@
-import {useChatCommand} from "../hooks/useChatCommand";
+import {useChatCommand} from "../../hooks/useChatCommand";
 import {
     ActionRowBuilder,
     BaseMessageOptions,
@@ -12,8 +12,8 @@ import {
     time,
     TimestampStyles,
 } from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
-import {NEXT_EVENT} from "../globals";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {NEXT_EVENT} from "../../globals";
 
 const builder = new SlashCommandBuilder()
     .setName("eventmode")

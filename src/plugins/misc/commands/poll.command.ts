@@ -1,5 +1,5 @@
-import {useChatCommand} from "../hooks/useChatCommand";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
+import {useChatCommand} from "../../../hooks/useChatCommand";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../../builders/SlashCommandBuilder";
 import {
     ActionRowBuilder,
     BaseMessageOptions,
@@ -11,7 +11,7 @@ import {
     Message,
     User,
 } from "discord.js";
-import {useEvent} from "../hooks";
+import {useEvent} from "../../../hooks";
 
 const builder = new SlashCommandBuilder()
     .setName("poll")
@@ -24,11 +24,11 @@ const builder = new SlashCommandBuilder()
     )
     .setScope(SlashCommandScope.GLOBAL);
 
-const polls = new Map<string, Poll>();
+const polls = new Map<string, PollCommand>();
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const message = await interaction.fetchReply();
-    const poll = new Poll(
+    const poll = new PollCommand(
         interaction.options.getString("question", true),
         message
     );
@@ -57,7 +57,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     );
 });
 
-class Poll {
+class PollCommand {
     question: string;
     users: Map<string, "yes" | "no">;
     message: Message;

@@ -1,5 +1,5 @@
-import {useChatCommand} from "../hooks/useChatCommand";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
+import {useChatCommand} from "../../../hooks/useChatCommand";
+import {SlashCommandBuilder, SlashCommandScope,} from "../../../builders/SlashCommandBuilder";
 import {
     ActionRowBuilder,
     ChatInputCommandInteraction,
