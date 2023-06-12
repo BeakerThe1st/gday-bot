@@ -1,6 +1,6 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, inlineCode} from "discord.js";
+import {ChatInputCommandInteraction, inlineCode, userMention} from "discord.js";
 import {Tag} from "./Tag.model";
 
 const options = (await Tag.find({}, 'name').exec())
@@ -13,6 +13,7 @@ const options = (await Tag.find({}, 'name').exec())
 const builder = new SlashCommandBuilder()
     .setName("tag")
     .setDescription("Calls a tag.")
+    .setDeferrable(false)
     .addStringOption((option) =>
         option
             .setName("name")
