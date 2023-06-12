@@ -71,7 +71,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
         if (interaction.replied || interaction.deferred) {
             await interaction.editReply(response);
         } else {
-            interaction.reply(response);
+            await interaction.reply(response);
         }
     } catch (error) {
         useError(`${error}`);
