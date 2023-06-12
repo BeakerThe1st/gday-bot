@@ -29,7 +29,7 @@ const loadFilesFromFolder = (folder: string) => {
         const filePath = path.join(folderUrl.href, file);
         if (!file.includes('.')) {
             loadFilesFromFolder(filePath);
-        } else if (file.endsWith('.ts') && !file.endsWith(".model.ts")) {
+        } else if ((file.endsWith('.ts') || file.endsWith('.js')) && !file.includes(".model.")) {
             import(filePath);
             console.log(`Loaded ${file}`);
         }
