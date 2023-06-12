@@ -6,18 +6,12 @@ import {useOpenAI} from "../../hooks/useOpenAI";
 import {ChatCompletionRequestMessageRoleEnum} from "openai";
 import {NEXT_EVENT} from "../../globals";
 
-let chatEnabled = false;
+export let chatEnabled = false;
 
-const builder = new SlashCommandBuilder()
-    .setName("togglechat")
-    .setDescription("Toggles whether chat is enabled.")
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
-    .setScope(SlashCommandScope.MAIN_GUILD);
-
-useChatCommand(builder, () => {
+export const toggleChatEnabled = () => {
     chatEnabled = !chatEnabled;
-    return `${chatEnabled ? "Enabled" : "Disabled"} the chat module.`
-})
+    return chatEnabled;
+}
 
 const getContext = async (message: Message) => {
     const messageList: Message[] = [message];
