@@ -15,7 +15,7 @@ export const toggleChatEnabled = () => {
 
 const getContext = async (message: Message) => {
     const messageList: Message[] = [message];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
         try {
             messageList.push(await messageList[i].fetchReference())
         } catch {
