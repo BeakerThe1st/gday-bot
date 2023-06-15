@@ -46,7 +46,6 @@ const statuses: [ActivityType, string][] = [
     [ActivityType.Watching, "the sunset with a coldie"],
     [ActivityType.Competing, "a TimTam race"],
     [ActivityType.Watching, "the roos hop by"],
-    [ActivityType.Competing, "on the telly, mate"],
     [ActivityType.Listening, "to some didgeridoo"],
     [ActivityType.Streaming, "Home and Away"],
     [ActivityType.Playing, "some cricket, legend"],
