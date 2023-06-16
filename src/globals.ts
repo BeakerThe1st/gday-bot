@@ -20,6 +20,12 @@ export const GUILDS = {
     MAIN: "332309672486895637",
     STAFF: "337792272693461002"
 }
+
+export const CHANNELS = {
+    MAIN: {
+        case_log: "1033960979224088596"
+    }
+}
 export const ROLES = {
     MAIN: {
         established: "881503056091557978",

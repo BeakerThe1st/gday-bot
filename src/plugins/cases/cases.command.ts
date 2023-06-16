@@ -23,6 +23,7 @@ const builder = new SlashCommandBuilder()
             .setChoices(
                 {name: "Warn", value: "WARN"},
                 {name: "Ban", value: "BAN"},
+                {name: "Unban", value: "UNBAN"},
                 {name: "Kick", value: "KICK"},
                 {name: "Timeout", value: "TIMEOUT"}
             )
@@ -35,11 +36,17 @@ useChatCommand(
         const executor = interaction.options.getUser("executor");
         const target = interaction.options.getUser("target");
         const type = interaction.options.getString("type");
-
-        const filter = {
-            executor: executor?.id,
-            target: target?.id,
-            type: type ?? undefined,
+        let filter: any = {
+            deleted: false,
+        };
+        if (executor) {
+            filter.executor = executor.id;
+        }
+        if (target) {
+            filter.target = target.id;
+        }
+        if (type) {
+            filter.type = type;
         }
         const count = await Case.count(filter);
 
@@ -60,7 +67,7 @@ useChatCommand(
             if (result.reason) {
                 currentStr += ` for ${result.reason}`;
             }
-            return acc + `\n${currentStr}.`;
+            return acc + `\n${currentStr}`;
         }, "");
 
         return `I found ${count.toLocaleString()} cases that match what you're looking for. ${

@@ -1,8 +1,85 @@
-import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry, GuildBan, GuildMember, PartialGuildMember} from "discord.js";
-import {useEvent} from "../../hooks";
+import {AuditLogEvent, codeBlock, Events, Guild, GuildAuditLogsEntry,} from "discord.js";
+import {useClient, useEvent} from "../../hooks";
 import {Case, CaseType, ICase} from "./Case.model";
+import {CHANNELS, GUILDS} from "../../globals";
 
-const fetchLogEntry = async (
+const actionsToCaseType = new Map<AuditLogEvent, CaseType>();
+
+actionsToCaseType.set(AuditLogEvent.MemberKick, CaseType.KICK);
+actionsToCaseType.set(AuditLogEvent.MemberBanAdd, CaseType.BAN);
+actionsToCaseType.set(AuditLogEvent.MemberBanRemove, CaseType.UNBAN);
+actionsToCaseType.set(AuditLogEvent.MemberUpdate, CaseType.TIMEOUT);
+
+const generateCase = (
+    type: CaseType,
+    guild: Guild,
+    log: GuildAuditLogsEntry,
+    options?: Partial<ICase>
+) => {
+    if (!log.target || !log.executor || !("id" in log.target)) {
+        throw new Error("Must have target and executor to generate case.");
+    }
+    return Case.create({
+        ...{
+            type,
+            guild: guild.id,
+            target: log.target?.id,
+            executor: log.executor?.id,
+            reason: log.reason ?? undefined,
+        },
+        ...options,
+    });
+};
+
+//This function returns the duration of a timeout, or undefined if there is no timeout
+const getTimeoutExpiry = (entry: GuildAuditLogsEntry) => {
+    for (const change of entry.changes) {
+        if (change.key == "communication_disabled_until" && change.new) {
+            return Date.parse(`${change.new}`);
+        }
+    }
+}
+useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, guild: Guild) => {
+    if (guild.id !== GUILDS.MAIN) {
+        return;
+    }
+    const caseType = actionsToCaseType.get(entry.action);
+    if (!caseType) {
+        //The action does not have a corresponding case type - we can just ignore it
+        return;
+    }
+
+    let expiry;
+
+    if (caseType == CaseType.TIMEOUT) {
+        /*We've assumed it's a timeout when it could be any member update - getTimeoutExpiry will be undefined
+            if it's not actually a timeout and will stop execution of this func
+         */
+        expiry = getTimeoutExpiry(entry);
+        if (!expiry) {
+            return;
+        }
+    }
+
+    const {executorId, targetId, reason} = entry;
+
+    //If some kind of ID is missing, throw an error
+    if (!(executorId && targetId)) {
+        throw new Error("Missing an ID for case generation");
+    }
+
+    const generatedCase = await Case.create({
+        type: caseType,
+        guild: guild.id,
+        deleted: false,
+        target: targetId,
+        executor: executorId,
+        duration: expiry ?  Date.now() - expiry : undefined,
+        reason,
+    })
+});
+
+/*const fetchLogEntry = async (
     guild: Guild,
     targetId: string,
     event: AuditLogEvent
@@ -52,14 +129,14 @@ useEvent(Events.GuildBanAdd, async (ban: GuildBan) => {
 });
 
 //Unban Listener
-/*useEvent(Events.GuildBanRemove, async (ban: GuildBan) => {
+useEvent(Events.GuildBanRemove, async (ban: GuildBan) => {
   //ignore unban at this stage?
   const log = await fetchLogEntry(
     ban.guild,
     ban.user.id,
     AuditLogEvent.MemberBanRemove
   );
-});*/
+});
 
 //Timeout Listener
 useEvent(
@@ -87,25 +164,4 @@ useEvent(
             //Member was unmuted, ignore at this stage
         }
     }
-);
-
-const generateCase = (
-    type: CaseType,
-    guild: Guild,
-    log: GuildAuditLogsEntry,
-    options?: Partial<ICase>
-) => {
-    if (!log.target || !log.executor || !("id" in log.target)) {
-        throw new Error("Must have target and executor to generate case.");
-    }
-    return Case.create({
-        ...{
-            type,
-            guild: guild.id,
-            target: log.target?.id,
-            executor: log.executor?.id,
-            reason: log.reason ?? undefined,
-        },
-        ...options,
-    });
-};
+);*/

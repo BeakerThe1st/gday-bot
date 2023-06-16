@@ -73,10 +73,10 @@ useChatCommand(
         } else if (subcommand === "info") {
             const target = await interaction.client.users.fetch(givenCase.target);
             const embed = new EmbedBuilder()
-                .setTitle(givenCase.type[0] + givenCase.type.slice(1).toLowerCase())
+                .setTitle(`${givenCase.type[0]}${givenCase.type.slice(1).toLowerCase()}${givenCase.deleted ? " - DELETED" : ""}`)
                 .setFooter({text: givenCase._id})
                 .setThumbnail(target.displayAvatarURL())
-                .setColor("Fuchsia");
+                .setColor(givenCase.deleted ? "Red" : "Fuchsia");
             if (givenCase.target) {
                 embed.addFields({
                     name: "Target",
