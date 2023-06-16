@@ -9,6 +9,7 @@ actionsToCaseType.set(AuditLogEvent.MemberKick, CaseType.KICK);
 actionsToCaseType.set(AuditLogEvent.MemberBanAdd, CaseType.BAN);
 actionsToCaseType.set(AuditLogEvent.MemberBanRemove, CaseType.UNBAN);
 actionsToCaseType.set(AuditLogEvent.MemberUpdate, CaseType.TIMEOUT);
+actionsToCaseType.set(AuditLogEvent.AutoModerationUserCommunicationDisabled, CaseType.TIMEOUT);
 
 const generateCase = (
     type: CaseType,
@@ -50,12 +51,18 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
     }
 
     let expiry;
-
     if (caseType == CaseType.TIMEOUT) {
         /*We've assumed it's a timeout when it could be any member update - getTimeoutExpiry will be undefined
             if it's not actually a timeout and will stop execution of this func
          */
-        expiry = getTimeoutExpiry(entry);
+        if (entry.action === AuditLogEvent.AutoModerationUserCommunicationDisabled) {
+            //Expiry is in 1 hour (default for naughties violation in r/apple)
+            expiry = Date.now() + 1000 * 60 * 60
+        } else {
+            //User initiated timeout - will have an expiry
+            expiry = getTimeoutExpiry(entry);
+        }
+        //Finally if we did not get an expiry from default (automod did it) or entry (user did it), return as it is not actually a timeout
         if (!expiry) {
             return;
         }
@@ -74,7 +81,7 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         deleted: false,
         target: targetId,
         executor: executorId,
-        duration: expiry ?  Date.now() - expiry : undefined,
+        duration: expiry ?  expiry - Date.now() : undefined,
         reason,
     })
 });
