@@ -17,7 +17,7 @@ useEvent("messageCreate", async (message: Message) => {
             return;
         }
     }
-    if (message.author.bot || message.member?.roles.cache.has(ROLES.MAIN.mod_squad)) {
+    if (message.author.bot) {
         return;
     }
     const moderation = await useOpenAI().createModeration({
