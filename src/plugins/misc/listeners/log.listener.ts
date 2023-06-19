@@ -1,9 +1,13 @@
 import {useEvent} from "../../../hooks";
-import {codeBlock, Events, Guild, GuildAuditLogsEntry, userMention} from "discord.js";
+import {AuditLogEvent, codeBlock, Events, Guild, GuildAuditLogsEntry, userMention} from "discord.js";
 import {CHANNELS, GUILDS} from "../../../globals";
 
+const excludedActions = [146, 144];
 useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, guild: Guild) => {
     if (guild.id !== GUILDS.MAIN) {
+        return;
+    }
+    if (excludedActions.includes(entry.action)) {
         return;
     }
     const logChannel = await guild.channels.fetch(CHANNELS.MAIN.log);
