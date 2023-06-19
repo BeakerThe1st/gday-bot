@@ -1,5 +1,5 @@
 import {useEvent} from "../../../hooks";
-import {AuditLogEvent, codeBlock, Events, Guild, GuildAuditLogsEntry, userMention} from "discord.js";
+import {AuditLogEvent, codeBlock, Events, Guild, GuildAuditLogsEntry} from "discord.js";
 import {CHANNELS, GUILDS} from "../../../globals";
 
 const excludedActions = [146, 144];

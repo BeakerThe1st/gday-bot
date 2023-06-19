@@ -1,10 +1,7 @@
-import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
-import {cleanContent, codeBlock, Message, PermissionFlagsBits} from "discord.js";
-import {useChatCommand} from "../../hooks/useChatCommand";
+import {Message, PermissionFlagsBits} from "discord.js";
 import {useClient, useEvent} from "../../hooks";
 import {useOpenAI} from "../../hooks/useOpenAI";
 import {ChatCompletionRequestMessageRoleEnum} from "openai";
-import {NEXT_EVENT} from "../../globals";
 
 export let chatEnabled = false;
 

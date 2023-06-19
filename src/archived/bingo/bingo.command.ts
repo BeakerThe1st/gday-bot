@@ -1,5 +1,5 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
-import {AttachmentBuilder, ChatInputCommandInteraction, codeBlock, PermissionFlagsBits} from "discord.js";
+import {AttachmentBuilder, ChatInputCommandInteraction, PermissionFlagsBits} from "discord.js";
 import {useChatCommand} from "../../hooks/useChatCommand";
 import {bingoItems} from "./bingoItems";
 import {Bingo} from "./Bingo.model";

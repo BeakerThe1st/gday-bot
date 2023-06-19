@@ -1,7 +1,6 @@
 import {useClient, useEvent} from "../../../hooks";
 import {codeBlock, Message, userMention} from "discord.js";
 import {useOpenAI} from "../../../hooks/useOpenAI";
-import {CreateModerationResponseResultsInnerCategories} from "openai";
 import {GUILDS, ROLES} from "../../../globals";
 
 useEvent("messageCreate", async (message: Message) => {

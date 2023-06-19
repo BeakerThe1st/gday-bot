@@ -1,5 +1,4 @@
 import {SlashCommandBuilder as djsSlashCommandBuilder} from "discord.js";
-import { GUILDS } from "../globals";
 
 export enum SlashCommandScope {
     // noinspection JSUnusedGlobalSymbols
