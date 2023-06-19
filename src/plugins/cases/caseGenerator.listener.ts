@@ -11,27 +11,6 @@ actionsToCaseType.set(AuditLogEvent.MemberBanRemove, CaseType.UNBAN);
 actionsToCaseType.set(AuditLogEvent.MemberUpdate, CaseType.TIMEOUT);
 actionsToCaseType.set(AuditLogEvent.AutoModerationUserCommunicationDisabled, CaseType.TIMEOUT);
 
-const generateCase = (
-    type: CaseType,
-    guild: Guild,
-    log: GuildAuditLogsEntry,
-    options?: Partial<ICase>
-) => {
-    if (!log.target || !log.executor || !("id" in log.target)) {
-        throw new Error("Must have target and executor to generate case.");
-    }
-    return Case.create({
-        ...{
-            type,
-            guild: guild.id,
-            target: log.target?.id,
-            executor: log.executor?.id,
-            reason: log.reason ?? undefined,
-        },
-        ...options,
-    });
-};
-
 //This function returns the duration of a timeout, or undefined if there is no timeout
 const getTimeoutExpiry = (entry: GuildAuditLogsEntry) => {
     for (const change of entry.changes) {
