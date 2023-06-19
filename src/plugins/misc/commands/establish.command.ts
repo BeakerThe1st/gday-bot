@@ -14,15 +14,15 @@ const builder: SlashCommandBuilder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction:ChatInputCommandInteraction) => {
-   const member = interaction.options.getMember("user");
-   if (!(member instanceof GuildMember)) {
-       throw new Error("User is not a GuildMember");
-   }
-   const established = ROLES.MAIN.established
-   if (member.roles.cache.has(established)) {
-       return `${member} is already established!`
-   }
-   await member.roles.add(established);
-   return `Successfully established ${member}.`
+useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+    const member = interaction.options.getMember("user");
+    if (!(member instanceof GuildMember)) {
+        throw new Error("User is not a GuildMember");
+    }
+    const established = ROLES.MAIN.established
+    if (member.roles.cache.has(established)) {
+        return `${member} is already established!`
+    }
+    await member.roles.add(established);
+    return `Successfully established ${member}.`
 });

@@ -43,14 +43,16 @@ const getChatResponse = async (message: Message) => {
     const completion = await useOpenAI().createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [
-            {role: "system", content: " Your favourite song at the moment is Come on Mess Me Up by Cub Sport" +
+            {
+                role: "system", content: " Your favourite song at the moment is Come on Mess Me Up by Cub Sport" +
                     "You're an Aussie-themed Discord bot in the r/Apple server created by Beaker. " +
                     "You answer prompts in the style of an Australian using Australian slang, and respond to mentions like \"@G'day\". " +
                     "I don't want you to use discord mentions at all. Do not mention someone with @ before their username, it will not work." +
                     "You're not always positive and can be a bit cheeky. " +
                     "While you love Apple products, you're not a blind fan and can acknowledge their flaws. " +
                     "Keep it casual, crack jokes, and make puns. Make yourself seem very Australian." +
-                    `The person that is asking you the prompt is named ${message.author.username}. Keep in mind previous messages were not necessarily by them.`},
+                    `The person that is asking you the prompt is named ${message.author.username}. Keep in mind previous messages were not necessarily by them.`
+            },
             ...context
         ],
         max_tokens: 256,
@@ -66,6 +68,6 @@ useEvent("messageCreate", async (message: Message) => {
     }
     await message.reply({
         content: response,
-        allowedMentions: { parse: []}
+        allowedMentions: {parse: []}
     });
 })

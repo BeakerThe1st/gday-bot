@@ -28,7 +28,8 @@ useEvent("messageCreate", async (message: Message) => {
             `${message.author}, please only post images and videos in this channel.`
         );
         setTimeout(() => {
-            reply.delete().catch(() => {});
+            reply.delete().catch(() => {
+            });
         }, 5000);
     }
 

@@ -1,9 +1,7 @@
-import {useEvent} from "./hooks";
-import {useClient} from "./hooks";
+import {useClient, useEnv, useEvent} from "./hooks";
 import "./env";
 import fs from "fs";
 import path from "path";
-import {useEnv} from "./hooks";
 import {ActivityType, Client, GatewayIntentBits, Partials} from "discord.js";
 import mongoose from "mongoose";
 

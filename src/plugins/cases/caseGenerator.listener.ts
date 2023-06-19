@@ -1,7 +1,7 @@
-import {AuditLogEvent, codeBlock, Events, Guild, GuildAuditLogsEntry,} from "discord.js";
-import {useClient, useEvent} from "../../hooks";
-import {Case, CaseType, ICase} from "./Case.model";
-import {CHANNELS, GUILDS} from "../../globals";
+import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry,} from "discord.js";
+import {useEvent} from "../../hooks";
+import {Case, CaseType} from "./Case.model";
+import {GUILDS} from "../../globals";
 
 const actionsToCaseType = new Map<AuditLogEvent, CaseType>();
 
@@ -60,7 +60,7 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         deleted: false,
         target: targetId,
         executor: executorId,
-        duration: expiry ?  expiry - Date.now() : undefined,
+        duration: expiry ? expiry - Date.now() : undefined,
         reason,
     })
 });

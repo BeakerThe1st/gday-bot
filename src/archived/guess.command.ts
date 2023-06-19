@@ -40,7 +40,7 @@ const toTitleCase = (str: string): string => {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
     );
-}   
+}
 
 useChatCommand(guessBuilder, async (interaction: ChatInputCommandInteraction) => {
     const userId = interaction.user.id;
@@ -51,7 +51,7 @@ useChatCommand(guessBuilder, async (interaction: ChatInputCommandInteraction) =>
             .setTitle("macOS Name Guess is not enabled")
             .setDescription("Sorry, but you're not able to set your guess right now.")
             .setColor("Red")
-        
+
         let guess = await Guess.findOne({user: userId});
 
         if (guess) {
@@ -70,7 +70,7 @@ useChatCommand(guessBuilder, async (interaction: ChatInputCommandInteraction) =>
     let guess = await Guess.findOneAndUpdate(
         {user: userId},
         {user: userId, guess: userGuess},
-        {new: true, upsert: true} 
+        {new: true, upsert: true}
     );
 
     const embed = new EmbedBuilder()

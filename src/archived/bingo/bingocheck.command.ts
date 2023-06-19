@@ -21,7 +21,6 @@ const builder = new SlashCommandBuilder()
     .setScope(SlashCommandScope.MAIN_GUILD);
 
 
-
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     const id = interaction.options.getString("bingo_id", true);
     const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
