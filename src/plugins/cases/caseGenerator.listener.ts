@@ -50,6 +50,11 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         return;
     }
 
+    if (caseType === CaseType.UNBAN) {
+        // We generate the case for unbans differently than what we currently do here, so case generation is moved to the unban command.
+        return;
+    }
+
     let expiry;
     if (caseType == CaseType.TIMEOUT) {
         /*We've assumed it's a timeout when it could be any member update - getTimeoutExpiry will be undefined
