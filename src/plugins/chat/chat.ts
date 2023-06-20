@@ -3,7 +3,7 @@ import {useClient, useEvent} from "../../hooks";
 import {useOpenAI} from "../../hooks/useOpenAI";
 import {ChatCompletionRequestMessageRoleEnum} from "openai";
 
-export let chatEnabled = true;
+export let chatEnabled = false;
 
 export const toggleChatEnabled = () => {
     chatEnabled = !chatEnabled;
