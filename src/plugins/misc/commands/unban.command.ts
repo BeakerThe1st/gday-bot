@@ -2,6 +2,7 @@ import {ChatInputCommandInteraction, PermissionFlagsBits, userMention,} from "di
 import {SlashCommandBuilder, SlashCommandScope,} from "../../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../../hooks/useChatCommand";
 import { Case, CaseType } from "../../cases/Case.model";
+import { GUILDS } from "../../../globals";
 
 const builder = new SlashCommandBuilder()
     .setName("unban")
@@ -28,15 +29,17 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     }
     try {
         await interaction.guild.members.unban(uid);
-        const generatedCase = await Case.create({
-            type: CaseType.UNBAN,
-            guild: interaction.guild?.id,
-            deleted: false,
-            target: uid,
-            executor: interaction.user.id,
-            duration: undefined, // Unbans are not meant to have a duration
-            reason: reason ? reason : "No reason provided.",
-        })
+        if (interaction.guild.id === GUILDS.MAIN) {
+            const generatedCase = await Case.create({
+                type: CaseType.UNBAN,
+                guild: interaction.guild?.id,
+                deleted: false,
+                target: uid,
+                executor: interaction.user.id,
+                duration: undefined, // Unbans are not meant to have a duration
+                reason: reason ? reason : "No reason provided.",
+            })
+        }
         return `Successfully unbanned user ${userMention(uid)}`;
     } catch (e) {
         throw new Error();
