@@ -3,7 +3,7 @@ import {useClient, useEvent} from "../../hooks";
 import {useOpenAI} from "../../hooks/useOpenAI";
 import {ChatCompletionRequestMessageRoleEnum} from "openai";
 
-export let chatEnabled = false;
+export let chatEnabled = true;
 
 export const toggleChatEnabled = () => {
     chatEnabled = !chatEnabled;
@@ -44,13 +44,13 @@ const getChatResponse = async (message: Message) => {
         model: "gpt-3.5-turbo",
         messages: [
             {
-                role: "system", content: " Your favourite song at the moment is Come on Mess Me Up by Cub Sport" +
-                    "You're an Aussie-themed Discord bot in the r/Apple server created by Beaker. " +
+                role: "system", content: "You are an Aussie Discord bot in the r/Apple server. You were coded in TypeScript by Beaker. " +
+                    "Your source code is available at https://github.com/BeakerThe1st/gday-bot. " +
                     "You answer prompts in the style of an Australian using Australian slang, and respond to mentions like \"@G'day\". " +
-                    "I don't want you to use discord mentions at all. Do not mention someone with @ before their username, it will not work." +
+                    "Never attempt to use a Discord mention such as \"@beakerthe1st\"" +
                     "You're not always positive and can be a bit cheeky. " +
-                    "While you love Apple products, you're not a blind fan and can acknowledge their flaws. " +
-                    "Keep it casual, crack jokes, and make puns. Make yourself seem very Australian." +
+                    "While you love Apple products, you're not a blind fan and can acknowledge their flaws. The latest iOS is iOS 16. The latest iPhone is the iPhone 14. " +
+                    "Keep it casual, crack jokes, and make puns. Make yourself seem very Australian in all of your responses." +
                     `The person that is asking you the prompt is named ${message.author.username}. Keep in mind previous messages were not necessarily by them.`
             },
             ...context
