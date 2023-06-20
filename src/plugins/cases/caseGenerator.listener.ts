@@ -20,12 +20,19 @@ const getTimeoutExpiry = (entry: GuildAuditLogsEntry) => {
     }
 }
 useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, guild: Guild) => {
+    const {client} = useClient();
+
     if (guild.id !== GUILDS.MAIN) {
         return;
     }
     const caseType = actionsToCaseType.get(entry.action);
     if (!caseType) {
         //The action does not have a corresponding case type - we can just ignore it
+        return;
+    }
+
+    if (caseType === CaseType.UNBAN && entry.executorId === client.user?.id) {
+        // We generate the case for unbans differently than what we currently do here, so case generation is moved to the unban command.
         return;
     }
 

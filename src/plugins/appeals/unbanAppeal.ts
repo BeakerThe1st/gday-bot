@@ -1,5 +1,6 @@
 import {useClient, useEvent} from "../../hooks";
 import {Interaction, Message} from "discord.js";
+import { unbanWithBlame } from "../moderation/unbanGenerator";
 
 useEvent("interactionCreate", async (interaction: Interaction) => {
     if (!interaction.isButton()) {
@@ -16,8 +17,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     await interaction.deferReply({ephemeral: true});
     const {client} = useClient();
     try {
-        const rApple = await client.guilds.fetch("332309672486895637");
-        await rApple.bans.remove(userId);
+        unbanWithBlame(interaction.user, userId, "Ban appealed successfully.")
         interaction.editReply(`Unbanned <@${userId}>`);
     } catch {
         interaction.reply("Could not unban user");
