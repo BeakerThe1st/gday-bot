@@ -26,24 +26,18 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const ban = await interaction.guild?.bans.fetch(uid);
     if (!ban) {
         return `The user ${uid} is not banned.` 
+    }     
+    await interaction.guild.members.unban(uid);
+    if (interaction.guild.id === GUILDS.MAIN) {
+        const generatedCase = await Case.create({
+            type: CaseType.UNBAN,
+            guild: interaction.guild?.id,
+            deleted: false,
+            target: uid,
+            executor: interaction.user.id,
+            duration: undefined, // Unbans are not meant to have a duration
+            reason: reason ? reason : "No reason provided.",
+        })
     }
-    try {
-        await interaction.guild.members.unban(uid);
-        if (interaction.guild.id === GUILDS.MAIN) {
-            const generatedCase = await Case.create({
-                type: CaseType.UNBAN,
-                guild: interaction.guild?.id,
-                deleted: false,
-                target: uid,
-                executor: interaction.user.id,
-                duration: undefined, // Unbans are not meant to have a duration
-                reason: reason ? reason : "No reason provided.",
-            })
-        }
-        return `Successfully unbanned user ${userMention(uid)}`;
-    } catch (e) {
-        throw new Error();
-    }
+    return `Successfully unbanned user ${userMention(uid)}`;  
 });
-
-
