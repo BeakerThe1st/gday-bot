@@ -28,6 +28,6 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         await unbanWithBlame(interaction.user, uid, reason);
         return `Successfully unbanned user ${userMention(uid)}`;  
     } catch (e) {
-        return `There was an error while executing the unban command.`
+        return `There was an error while executing the unban command. ${e}`
     }
 });
