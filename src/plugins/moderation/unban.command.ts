@@ -24,6 +24,10 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     if (!interaction.guild) {
         throw new Error("This command has to be executed in a guild.");
     }
-    unbanWithBlame(interaction.user, uid, reason);
-    return `Successfully unbanned user ${userMention(uid)}`;  
+    try {
+        await unbanWithBlame(interaction.user, uid, reason);
+        return `Successfully unbanned user ${userMention(uid)}`;  
+    } catch (e) {
+        return `There was an error while executing the unban command.`
+    }
 });
