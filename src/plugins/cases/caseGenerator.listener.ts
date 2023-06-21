@@ -1,5 +1,5 @@
 import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry,} from "discord.js";
-import {useEvent} from "../../hooks";
+import {useClient, useEvent} from "../../hooks";
 import {Case, CaseType} from "./Case.model";
 import {GUILDS} from "../../globals";
 
@@ -21,6 +21,8 @@ const getTimeoutExpiry = (entry: GuildAuditLogsEntry) => {
 }
 useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, guild: Guild) => {
     const {client} = useClient();
+    let { executorId } = entry;
+    const { targetId, reason} = entry;
 
     if (guild.id !== GUILDS.MAIN) {
         return;
@@ -31,9 +33,11 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         return;
     }
 
-    if (caseType === CaseType.UNBAN && entry.executorId === client.user?.id) {
-        // We generate the case for unbans differently than what we currently do here, so case generation is moved to the unban command.
-        return;
+    const gDayId = client.user?.id
+
+    if (caseType === CaseType.UNBAN && entry.executorId === gDayId) {
+        //If the unban was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.
+        executorId = reason?.split(" ")[0] ?? gDayId;
     }
 
     let expiry;
@@ -53,8 +57,6 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
             return;
         }
     }
-
-    const {executorId, targetId, reason} = entry;
 
     //If some kind of ID is missing, throw an error
     if (!(executorId && targetId)) {
