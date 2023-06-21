@@ -16,6 +16,7 @@ export const useEvent = <K extends keyof ClientEvents>(
             await executor(...args);
         } catch (error) {
             useError(`Error with ${eventName} event, ${error}`);
+            //throw error;
         }
     });
 };
