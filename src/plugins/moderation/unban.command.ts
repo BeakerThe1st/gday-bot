@@ -16,10 +16,10 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const user = interaction.options.getUser("user", true);
-    const reason = interaction.options.getString("reason", false) ?? undefined;
+    const reason = interaction.options.getString("reason");
     if (!interaction.guild) {
         throw new Error("This command can only be run in a guild.");
     }
-    await interaction.guild.bans.remove(user, `${user.id} via unban command${reason ? ` with reason "${reason}"` : ""}.`);
+    await interaction.guild.bans.remove(user, `${interaction.user.id}${reason ? ` ${reason}` : ""}`);
     return `Successfully unbanned ${user}.`;
 });
