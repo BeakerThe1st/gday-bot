@@ -18,7 +18,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     const {client} = useClient();
     try {
         const rApple = await client.guilds.fetch(GUILDS.MAIN);
-        await rApple.bans.remove(userId, `${interaction.user.id} via ban appeal button`);
+        await rApple.bans.remove(userId, `${interaction.user.id} appealed`);
         await interaction.editReply(`Unbanned <@${userId}>`);
     } catch {
         await interaction.reply("Could not unban user");
