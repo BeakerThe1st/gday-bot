@@ -21,8 +21,8 @@ const getTimeoutExpiry = (entry: GuildAuditLogsEntry) => {
 }
 useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, guild: Guild) => {
     const {client} = useClient();
-    let { executorId } = entry;
-    const { targetId, reason} = entry;
+    let { executorId, reason } = entry;
+    const { targetId} = entry;
 
     if (guild.id !== GUILDS.MAIN) {
         return;
@@ -37,7 +37,12 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
 
     if (caseType === CaseType.UNBAN && entry.executorId === gDayId) {
         //If the unban was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.
-        executorId = reason?.split(" ")[0] ?? gDayId;
+        const splitReason = reason?.split(" ");
+        if (splitReason) {
+            //Changes executor id to first word and changes reason to rest of the audit log entry reason.
+            executorId = splitReason.shift() ?? gDayId;
+            reason = splitReason.length > 0 ? splitReason.join(" ") : null;
+        }
     }
 
     let expiry;
