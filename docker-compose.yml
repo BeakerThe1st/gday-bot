@@ -1,0 +1,20 @@
+version: "3"
+services:
+  gday:
+    container_name: gday
+    image: gday
+    restart: always
+    build: .
+    depends_on: 
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=gday
+      - MONGO_INITDB_ROOT_PASSWORD=gdaybot
