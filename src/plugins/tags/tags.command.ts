@@ -60,8 +60,10 @@ subcommand
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     const subcommand = interaction.options.getSubcommand();
+    
     if (!interaction.guild) throw new Error(`This command can only be ran in guilds.`)
     const guildId = interaction.guild.id
+    
     if (subcommand === "list") {
         const tags = await Tag.find({guild: guildId});
         if (tags.length === 0) {
@@ -81,14 +83,14 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     } else if (subcommand === "delete") {
         const tagName = interaction.options.getString("name", true);
         const tag = await Tag.findOne({name: tagName, guild: guildId})
-        if (!tag) throw new Error(`${inlineCode(tagName)} not found.`)
+        if (!tag) throw new Error(`Tag ${inlineCode(tagName)} not found.`)
         await tag.delete();
         return `Tag ${inlineCode(tagName)} was successfully deleted.`
     } else if (subcommand === "name") {
         const tagName = interaction.options.getString("name", true);
         const newName = interaction.options.getString("new_name", true);
         const tag = await Tag.findOne({name: tagName, guild: guildId})
-        if (!tag) throw new Error(`${inlineCode(tagName)} not found.`)
+        if (!tag) throw new Error(`Tag ${inlineCode(tagName)} not found.`)
         tag.name = newName;
         await tag.save();
         return `Tag name for ${tagName} has been updated to ${newName}.`
@@ -96,7 +98,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
         const tagName = interaction.options.getString("name", true);
         const newContent = interaction.options.getString("new_content", true);
         const tag = await Tag.findOne({name: tagName, guild: guildId})
-        if (!tag) throw new Error(`${inlineCode(tagName)} not found.`)
+        if (!tag) throw new Error(`Tag ${inlineCode(tagName)} not found.`)
         tag.content = newContent;
         await tag.save();
         return `Tag content for ${inlineCode(tagName)} has been updated.`
