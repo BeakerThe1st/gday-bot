@@ -1,4 +1,4 @@
-import {ChannelType, ChatInputCommandInteraction, PermissionFlagsBits, TextChannel, NewsChannel, ThreadChannel} from "discord.js";
+import {ChannelType, ChatInputCommandInteraction, PermissionFlagsBits, TextChannel, NewsChannel, ThreadChannel, userMention, channelMention} from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
 
@@ -28,13 +28,18 @@ const builder = new SlashCommandBuilder()
         if (amount < 1 || amount > 1000) throw new Error("Amount can only be a number in the range from 1 to 1000.")
         if (!interaction.guild) throw new Error("This command can only be run in a guild.");
         
-        // If user is not specified we delete all messages from the target channel
-        if (!user && channel) await channel.bulkDelete(amount);
+        // If user is not specified we delete all messages from the target channel. Fetching is necessary because of Discord API's 14 days limit.
+        if (!user && channel) {
+            let messages = await (channel as GuildTextBasedChannel).messages.fetch({ limit: amount, after: startDate});
+            await channel.bulkDelete(messages);
+            return `Successfully cleared ${amount} messages in ${channelMention(channel.id)}.`;
+        }
 
         if (user && channel) {
             let messages = await (channel as GuildTextBasedChannel).messages.fetch({ limit: amount, after: startDate});
             messages = messages.filter(msg => msg.author.id === user.id);
             await (channel as GuildTextBasedChannel).bulkDelete(messages);
+            return `Successfully cleared ${amount} messages sent by ${userMention(user.id)} in ${channelMention(channel.id)}.`;
         }
 
         // If channel is not specified we delete from all channels
@@ -45,10 +50,9 @@ const builder = new SlashCommandBuilder()
                 if (user) messages = messages.filter(msg => msg.author.id === user.id) // We filter for author if user is specified
                 await (channel as GuildTextBasedChannel).bulkDelete(messages);
             })
+            return `Successfully cleared ${amount} messages from all channels.`;
         }
-
-        // Return statement needs to be cleared up and be specific to the cases above.
-        return `Successfully cleared ${amount} messages.`;
+        return null;
     });
     
     const searchStartDate = () : string => {
