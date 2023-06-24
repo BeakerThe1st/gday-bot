@@ -20,21 +20,19 @@ const builder = new SlashCommandBuilder()
     .setScope(SlashCommandScope.GLOBAL);
 
     useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
-
-        // TODO: Discord.js' bulkDelete function throws an exception if we try to delete messages older than 14 days. While it is not likely for r/Apple to encounter such an edge-case, we should implement a way to fetch only messages younger than 14 days.
         const user = interaction.options.getUser("user", false);
         const channel = interaction.options.getChannel("channel", false) as TextChannel;
         const amount = interaction.options.getInteger("amount", false) || 100;
-        
+        const startDate = searchStartDate();
+
         if (amount < 1 || amount > 1000) throw new Error("Amount can only be a number in the range from 1 to 1000.")
         if (!interaction.guild) throw new Error("This command can only be run in a guild.");
         
         // If user is not specified we delete all messages from the target channel
         if (!user && channel) await channel.bulkDelete(amount);
 
-        // This needs implementation of the TODO above
         if (user && channel) {
-            let messages = await (channel as GuildTextBasedChannel).messages.fetch({ limit: amount });
+            let messages = await (channel as GuildTextBasedChannel).messages.fetch({ limit: amount, after: startDate});
             messages = messages.filter(msg => msg.author.id === user.id);
             await (channel as GuildTextBasedChannel).bulkDelete(messages);
         }
@@ -43,7 +41,7 @@ const builder = new SlashCommandBuilder()
         if (!channel) {
             const channels = interaction.guild?.channels.cache.filter(channel => channel.type === ChannelType.GuildText);
             channels?.forEach(async channel => {
-                let messages = await (channel as GuildTextBasedChannel).messages.fetch({ limit: amount });
+                let messages = await (channel as GuildTextBasedChannel).messages.fetch({ limit: amount, after: startDate });
                 if (user) messages = messages.filter(msg => msg.author.id === user.id) // We filter for author if user is specified
                 await (channel as GuildTextBasedChannel).bulkDelete(messages);
             })
@@ -53,3 +51,10 @@ const builder = new SlashCommandBuilder()
         return `Successfully cleared ${amount} messages.`;
     });
     
+    const searchStartDate = () : string => {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 14);
+        // See https://discord.com/developers/docs/reference#snowflake-ids-in-pagination-generating-a-snowflake-id-from-a-timestamp-example for conversion from timestamp to Snowflake.
+        const dateSnowflake = (startDate.getTime() - 1420070400000) << 22;
+        return dateSnowflake.toString();
+    }
