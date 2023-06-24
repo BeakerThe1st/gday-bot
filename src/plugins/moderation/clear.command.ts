@@ -55,6 +55,6 @@ const builder = new SlashCommandBuilder()
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - 14);
         // See https://discord.com/developers/docs/reference#snowflake-ids-in-pagination-generating-a-snowflake-id-from-a-timestamp-example for conversion from timestamp to Snowflake.
-        const dateSnowflake = (startDate.getTime() - 1420070400000) << 22;
+        const dateSnowflake = (BigInt(startDate.getTime()) - 1420070400000n) << 22n;
         return dateSnowflake.toString();
     }
