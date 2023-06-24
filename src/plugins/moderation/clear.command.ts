@@ -43,14 +43,14 @@ const builder = new SlashCommandBuilder()
         }
 
         // If channel is not specified we delete from all channels
-        if (!channel) {
+        if (user && !channel) {
             const channels = interaction.guild?.channels.cache.filter(channel => channel.type === ChannelType.GuildText);
             channels?.forEach(async channel => {
                 let messages = await (channel as GuildTextBasedChannel).messages.fetch({ limit: amount, after: startDate });
-                if (user) messages = messages.filter(msg => msg.author.id === user.id) // We filter for author if user is specified
+                messages = messages.filter(msg => msg.author.id === user.id) // We filter for author if user is specified
                 await (channel as GuildTextBasedChannel).bulkDelete(messages);
             })
-            return `Successfully cleared ${amount} messages from all channels.`;
+            return `Successfully cleared ${amount} messages sent by ${userMention(user.id)} in all channels.`;
         }
         return null;
     });
