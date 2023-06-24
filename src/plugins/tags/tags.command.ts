@@ -67,7 +67,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     if (subcommand === "list") {
         const tags = await Tag.find({guild: guildId});
         if (tags.length === 0) {
-            return `No tags were found for this server.`
+            return `There are no tags in this server!`
         }
         return `${tags}`
     } else if (subcommand === "create") {
@@ -103,6 +103,6 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
         await tag.save();
         return `Tag content for ${inlineCode(tagName)} has been updated.`
     }
-    return null;
+    throw new Error(`Something went wrong with the tags command.`);
 });
 
