@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, PermissionFlagsBits, userMention } from "discord.js";
+import { ChatInputCommandInteraction, PermissionFlagsBits, time, userMention } from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
 import parse from 'parse-duration';
@@ -31,7 +31,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         if (!member) return `This member is not a member of this guild.`
         try {
             await member.timeout(parsedDuration, reason);
-            return `Successfully muted ${userMention(member.id)} for ${duration}.`
+            const timestamp = Math.floor(Date.now()/1000 + parsedDuration/1000);
+            return `${userMention(member.id)} has been muted for ${duration}. (${reason})\nExpiring <t:${timestamp}:R>.`
         } catch (e) {
             return `Something went wrong with the mute command: ${e}`
         }
