@@ -27,9 +27,11 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
 
         if (!interaction.guild) return `This command can only be used in a guild.` 
         if (parsedDuration > MAX_MUTE) return `You cannot mute anyone for more than 28 days.`; 
-        const member = interaction.guild.members.cache.find(member => member.id === user.id);
+        const member = await interaction.guild.members.fetch(user);
         if (!member) return `This member is not a member of this guild.`
         try {
+            const lastMutedTimestamp = member.communicationDisabledUntilTimestamp;
+            if (lastMutedTimestamp && lastMutedTimestamp > Date.now()) return `${userMention(member.id)} is already muted!`
             await member.timeout(parsedDuration, reason);
             const timestamp = Math.floor(Date.now()/1000 + parsedDuration/1000);
             return `${userMention(member.id)} has been muted for ${duration}. (${reason})\nExpiring <t:${timestamp}:R>.`
