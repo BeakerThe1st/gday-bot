@@ -69,8 +69,8 @@ caseSchema.pre("save", async function () {
         const user = await useClient().client.users.fetch(this.target);
         const guild = await useClient().client.guilds.fetch(this.guild);
         await user.send(`You have been ${friendlyNames.get(this.type)} ${guild.name} 
-                            ${this.reason ? ` for ${inlineCode(this.reason)}` : ""} 
-                            ${this.duration ? `\nExpiry: ${time(new Date(parseInt(this.createdAtTimestamp) + this.duration), TimestampStyles.RelativeTime)}` : ""}`);
+                            ${this.reason ? ` for ${inlineCode(this.reason)}` : ""}. 
+                            ${this.duration ? ` Expiry: ${time(new Date(parseInt(this.createdAtTimestamp) + this.duration), TimestampStyles.RelativeTime)}` : ""}`);
         this.userNotified = true;
     } catch {
         this.userNotified = false;
