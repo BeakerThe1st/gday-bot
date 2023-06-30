@@ -1,7 +1,7 @@
 import {model, Schema} from "mongoose";
 import cryptoRandomString from "crypto-random-string";
 import {useClient} from "../../hooks";
-import {EmbedBuilder, time, TimestampStyles, userMention,} from "discord.js";
+import {EmbedBuilder, inlineCode, Integration, time, TimestampStyles, userMention,} from "discord.js";
 
 export enum CaseType {
     WARN = "WARN",
@@ -21,6 +21,7 @@ export interface ICase {
     duration?: number;
     reason?: string;
     createdAtTimestamp: string;
+    userNotified: boolean;
 }
 
 const caseSchema = new Schema<ICase>({
@@ -41,6 +42,7 @@ const caseSchema = new Schema<ICase>({
             return Date.now().toString();
         },
     },
+    userNotified: Boolean,
 });
 
 //ID creation middleware
@@ -53,6 +55,29 @@ caseSchema.pre("save", async function () {
     this._id = id;
 });
 
+//DM the user to tell them
+
+const friendlyNames = new Map<CaseType, string>();
+friendlyNames.set(CaseType.TIMEOUT, "timed out in");
+friendlyNames.set(CaseType.BAN, "banned from");
+friendlyNames.set(CaseType.KICK, "kicked from");
+friendlyNames.set(CaseType.WARN, "warned in");
+friendlyNames.set(CaseType.UNBAN, "unbanned from");
+caseSchema.pre("save", async function () {
+    if (!this.isNew) return;
+    try {
+        const user = await useClient().client.users.fetch(this.target);
+        const guild = await useClient().client.guilds.fetch(this.guild);
+        await user.send(`You have been ${friendlyNames.get(this.type)} ${guild.name} 
+                            ${this.reason ? ` for ${inlineCode(this.reason)}` : ""} 
+                            ${this.duration ? `\nExpiry: ${time(new Date(parseInt(this.createdAtTimestamp) + this.duration), TimestampStyles.RelativeTime)}` : ""}`);
+        this.userNotified = true;
+    } catch {
+        this.userNotified = false;
+    }
+});
+
+//Logging middleware
 caseSchema.pre("save", async function () {
     if (!this.isNew) return;
     if (this.guild !== "332309672486895637") return;
@@ -64,7 +89,7 @@ caseSchema.pre("save", async function () {
             .setTitle("✅ New Case Generated")
             .addFields({name: "Type", value: this.type, inline: true})
             .setColor("Fuchsia")
-            .setFooter({text: this._id});
+            .setFooter({text: `${this._id} • ${this.userNotified ? "User has been notified" : "User has not been notified"}`});
         if (this.duration) {
             embed.addFields({
                 name: "Expiry",
