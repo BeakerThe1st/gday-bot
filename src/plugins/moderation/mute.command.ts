@@ -23,7 +23,7 @@ const builder = new SlashCommandBuilder()
         option.setName("reason").setDescription("Reason for the mute.")
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .setScope(SlashCommandScope.GLOBAL);
+    .setScope(SlashCommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const MAX_MUTE = 2419200000 // 28 days in ms, limit provided by Discord API.
