@@ -35,8 +35,8 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
 
     const gDayId = client.user?.id
 
-    if (caseType === CaseType.UNBAN && entry.executorId === gDayId) {
-        //If the unban was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.
+    if (entry.executorId === gDayId) {
+        //If the case was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.
         const splitReason = reason?.split(" ");
         if (splitReason) {
             //Changes executor id to first word and changes reason to rest of the audit log entry reason.
