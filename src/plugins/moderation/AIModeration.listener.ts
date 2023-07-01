@@ -1,5 +1,5 @@
 import {useClient, useEvent} from "../../hooks";
-import {codeBlock, Message, userMention} from "discord.js";
+import {codeBlock, inlineCode, Message, userMention} from "discord.js";
 import {useOpenAI} from "../../hooks/useOpenAI";
 import {GUILDS, ROLES} from "../../globals";
 
@@ -28,13 +28,13 @@ useEvent("messageCreate", async (message: Message) => {
     if (!result.flagged) {
         return;
     }
-    const zeroToleranceFlags = ["hate", "hate/threatening", "self-harm", "sexual/minors", "violence/graphic"];
     const matchedFlags = Object.entries(result.categories)
         .filter((value) => value[1])
         .map((value) => value[0]);
-    const zeroTolerance = matchedFlags.some((flag => zeroToleranceFlags.includes(flag)));
+    const logChannel = await useClient().client.channels.fetch("476924704528138271");
+    /*const zeroTolerance = matchedFlags.some((flag => zeroToleranceFlags.includes(flag)));
+    const zeroToleranceFlags = ["harassment/threatening", "hate/threatening", "self-harm/intent", "self-harm/instructions", "sexual/minors", "violence/graphic"];
     if (zeroTolerance) {
-        const logChannel = await useClient().client.channels.fetch("476924704528138271");
         if (logChannel?.isTextBased()) {
             await logChannel.send(`Blocked a message by ${message.author} in ${message.channel} due to \`${matchedFlags.join(", ")}\`\n${codeBlock(message.cleanContent)}`)
         }
@@ -46,7 +46,10 @@ useEvent("messageCreate", async (message: Message) => {
         }
         await message.delete();
         await message.channel.send(response);
-    } else {
+    } else {*/
+        if (logChannel?.isTextBased()) {
+            await logChannel.send(`Message by ${message.author} flagged in ${message.channel} due to ${inlineCode(matchedFlags.join(", "))}\n${codeBlock(message.cleanContent)}`)
+        }
         await message.react("❗");
-    }
+    //}
 })
