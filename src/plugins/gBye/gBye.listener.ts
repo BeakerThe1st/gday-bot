@@ -1,8 +1,21 @@
 import {useClient, useEvent} from "../../hooks";
-import {Events, GuildBan, GuildMember, inlineCode} from "discord.js";
+import {
+    AuditLogEvent,
+    Events, Guild,
+    GuildAuditLogsEntry,
+    GuildMember,
+    inlineCode, User
+} from "discord.js";
 import {fetchGbyeBans, fetchGbyeBansString, gByeGuilds, getGbyeChannel} from "./gBye";
-useEvent(Events.GuildBanAdd, async (ban: GuildBan) => {
-    const {user, guild: txGuild, reason} = ban;
+useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, txGuild: Guild) => {
+    if (entry.action !== AuditLogEvent.MemberBanAdd) {
+        return;
+    }
+    const {target: user, reason} = entry;
+    if (!(user instanceof User)) {
+        //Target is not a user
+        return;
+    }
     if (!gByeGuilds.includes(txGuild.id)) {
         return; //not a g'bye guild - we don't care about this ban
     }
