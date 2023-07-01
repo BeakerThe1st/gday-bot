@@ -8,6 +8,10 @@ useEvent(Events.GuildBanAdd, async (ban: GuildBan) => {
     }
     for (const gByeGuildId of gByeGuilds) {
         try {
+            if (gByeGuildId == txGuild.id) {
+                //Continue to not broadcast in originating guild.
+                continue;
+            }
             const rxGuild = await useClient().client.guilds.fetch(gByeGuildId);
             //This line verifies they are in fact in the guild
             await rxGuild.members.fetch(user);
