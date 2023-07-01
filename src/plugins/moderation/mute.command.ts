@@ -17,7 +17,7 @@ const builder = new SlashCommandBuilder()
         option.setName("user").setDescription("User to be muted.").setRequired(true)
     )
     .addStringOption((option) =>
-        option.setName("duration").setDescription("Duration (max 28d, default 10m)").setRequired(true)
+        option.setName("duration").setDescription("Duration (max 28 days)").setRequired(true)
     )
     .addStringOption((option) =>
         option.setName("reason").setDescription("Reason for the mute.")
