@@ -1,4 +1,3 @@
-import { ChatInputCommandInteraction, PermissionFlagsBits, time, userMention } from "discord.js";
 import {
     ChatInputCommandInteraction,
     inlineCode,
