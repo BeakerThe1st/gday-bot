@@ -35,8 +35,8 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
 
     const gDayId = client.user?.id
 
-    if (caseType === CaseType.UNBAN && entry.executorId === gDayId) {
-        //If the unban was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.
+    if (entry.executorId === gDayId) {
+        //If the case was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.
         const splitReason = reason?.split(" ");
         if (splitReason) {
             //Changes executor id to first word and changes reason to rest of the audit log entry reason.
@@ -78,90 +78,3 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         reason,
     })
 });
-
-/*const fetchLogEntry = async (
-    guild: Guild,
-    targetId: string,
-    event: AuditLogEvent
-) => {
-    const fetchedLogs = await guild.fetchAuditLogs({limit: 1, type: event});
-    const log = fetchedLogs.entries.first();
-    if (!log) {
-        return null;
-    }
-    if (log.createdTimestamp < Date.now() - 1000) {
-        return null;
-    }
-    const {target} = log;
-    if (!target || !("id" in target)) {
-        return null;
-    }
-    if (target.id === targetId) {
-        return log;
-    }
-};
-
-//Kick Listener
-useEvent(
-    Events.GuildMemberRemove,
-    async (member: GuildMember | PartialGuildMember) => {
-        const log = await fetchLogEntry(
-            member.guild,
-            member.id,
-            AuditLogEvent.MemberKick
-        );
-        if (log) {
-            generateCase(CaseType.KICK, member.guild, log);
-        }
-    }
-);
-
-//Ban Listener
-useEvent(Events.GuildBanAdd, async (ban: GuildBan) => {
-    const log = await fetchLogEntry(
-        ban.guild,
-        ban.user.id,
-        AuditLogEvent.MemberBanAdd
-    );
-    if (log) {
-        generateCase(CaseType.BAN, ban.guild, log);
-    }
-});
-
-//Unban Listener
-useEvent(Events.GuildBanRemove, async (ban: GuildBan) => {
-  //ignore unban at this stage?
-  const log = await fetchLogEntry(
-    ban.guild,
-    ban.user.id,
-    AuditLogEvent.MemberBanRemove
-  );
-});
-
-//Timeout Listener
-useEvent(
-    Events.GuildMemberUpdate,
-    async (oldMember: GuildMember | PartialGuildMember, member: GuildMember) => {
-        const log = await fetchLogEntry(
-            member.guild,
-            member.user.id,
-            AuditLogEvent.MemberUpdate
-        );
-        if (!log) {
-            return;
-        }
-        if (
-            !oldMember.isCommunicationDisabled() &&
-            member.isCommunicationDisabled()
-        ) {
-            generateCase(CaseType.TIMEOUT, member.guild, log, {
-                duration: member.communicationDisabledUntilTimestamp - Date.now(),
-            });
-        } else if (
-            oldMember.isCommunicationDisabled() &&
-            !member.isCommunicationDisabled()
-        ) {
-            //Member was unmuted, ignore at this stage
-        }
-    }
-);*/
