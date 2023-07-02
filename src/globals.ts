@@ -23,7 +23,7 @@ export const GUILDS = {
 
 export const CHANNELS = {
     MAIN: {
-        case_log: "1033960979224088596",
+        case_log: "1124954351023169597",
         log: "1120432710830280784",
     },
 };
