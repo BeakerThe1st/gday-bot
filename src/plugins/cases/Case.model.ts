@@ -2,6 +2,7 @@ import {model, Schema} from "mongoose";
 import cryptoRandomString from "crypto-random-string";
 import {useClient} from "../../hooks";
 import {EmbedBuilder, inlineCode, time, TimestampStyles, userMention} from "discord.js";
+import {CHANNELS, GUILDS} from "../../globals";
 
 export enum CaseType {
     WARN = "WARN",
@@ -78,9 +79,9 @@ caseSchema.pre("save", async function () {
 //Logging middleware
 caseSchema.pre("save", async function () {
     if (!this.isNew) return;
-    if (this.guild !== "332309672486895637") return;
+    if (this.guild !== GUILDS.MAIN) return;
     const channel = await useClient().client.channels.fetch(
-        "1033960979224088596",
+        CHANNELS.MAIN.case_log,
     );
     if (channel?.isTextBased()) {
         const embed = new EmbedBuilder()
