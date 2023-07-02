@@ -12,6 +12,6 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
     }
     const logChannel = await guild.channels.fetch(CHANNELS.MAIN.log);
     if (logChannel?.isTextBased()) {
-        logChannel.send(`${entry.action}\n${codeBlock("json", JSON.stringify(entry, null, 2))}`)
+        logChannel.send(`${entry.action}\n${codeBlock("json", JSON.stringify(entry, null, 2))}`);
     }
-})
+});

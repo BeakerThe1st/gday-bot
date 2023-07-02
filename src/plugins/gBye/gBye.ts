@@ -8,7 +8,7 @@ export const gByeGuilds = [
     "114407194971209731", // Droidcord
     "549448381613998103", // Samsung
     "871642313561096194", // Nashy cab
-    "1041118987787972678" // G'day server
+    "1041118987787972678", // G'day server
 ];
 
 export const fetchGbyeBans = async (user: User) => {
@@ -26,7 +26,7 @@ export const fetchGbyeBans = async (user: User) => {
         return bans;
     }
     return null;
-}
+};
 
 export const fetchGbyeBansString = async (user: User) => {
     const bans = await fetchGbyeBans(user);
@@ -40,10 +40,10 @@ export const fetchGbyeBansString = async (user: User) => {
             const guildName = await useClient().client.guilds.fetch(guildId);
             return `\n- ${guildName} ${friendlyReason}`;
         } catch {
-            `\n- Unknown Guild ${friendlyReason}`
+            `\n- Unknown Guild ${friendlyReason}`;
         }
-    }))
-}
+    }));
+};
 
 export const getGbyeChannel = async (guild: Guild) => {
     const config = await GByeConfig.findOne({guild: guild.id});
@@ -55,4 +55,4 @@ export const getGbyeChannel = async (guild: Guild) => {
         return null;
     }
     return channel;
-}
+};

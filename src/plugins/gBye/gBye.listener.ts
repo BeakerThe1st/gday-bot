@@ -1,12 +1,7 @@
 import {useClient, useEvent} from "../../hooks";
-import {
-    AuditLogEvent,
-    Events, Guild,
-    GuildAuditLogsEntry,
-    GuildMember,
-    inlineCode, User
-} from "discord.js";
+import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry, GuildMember, inlineCode, User} from "discord.js";
 import {fetchGbyeBans, fetchGbyeBansString, gByeGuilds, getGbyeChannel} from "./gBye";
+
 useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, txGuild: Guild) => {
     if (entry.action !== AuditLogEvent.MemberBanAdd) {
         return;
@@ -29,7 +24,10 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, txG
             //This line verifies they are in fact in the guild
             await rxGuild.members.fetch(user);
             const channel = await getGbyeChannel(rxGuild);
-            await channel?.send({content: `# G'bye \n${user} was banned from ${txGuild.name}${reason ? ` for ${inlineCode(reason)}` : `. No reason specified`}.`, allowedMentions: { parse: []}});
+            await channel?.send({
+                content: `# G'bye \n${user} was banned from ${txGuild.name}${reason ? ` for ${inlineCode(reason)}` : `. No reason specified`}.`,
+                allowedMentions: {parse: []},
+            });
         } catch {
             //ignored - they or we aren't in guild
         }
@@ -45,5 +43,8 @@ useEvent(Events.GuildMemberAdd, async (member: GuildMember) => {
         return;
     }
     const channel = await getGbyeChannel(member.guild);
-    await channel?.send({content: `# G'bye \n${member} just joined your server, they are banned in:\n${await fetchGbyeBansString(member.user)}`, allowedMentions: {parse: []}});
-})
+    await channel?.send({
+        content: `# G'bye \n${member} just joined your server, they are banned in:\n${await fetchGbyeBansString(member.user)}`,
+        allowedMentions: {parse: []},
+    });
+});

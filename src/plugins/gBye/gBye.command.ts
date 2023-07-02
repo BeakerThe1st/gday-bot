@@ -31,17 +31,17 @@ const builder = new SlashCommandBuilder()
                     .setRequired(true)
 
             ))
-    ))
+    ));
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     const subcommand = interaction.options.getSubcommand();
-    const { guildId } = interaction;
+    const {guildId} = interaction;
     let config = await GByeConfig.findOne({guild: guildId});
     if (!interaction.guildId || !gByeGuilds.includes(interaction.guildId)) {
         return "That command can only be run in G'bye guilds";
     }
     if (!config) {
-        config = new GByeConfig({guild: guildId})
+        config = new GByeConfig({guild: guildId});
     }
     if (subcommand === "set_channel") {
         const channel = interaction.options.getChannel("channel", true);
@@ -53,12 +53,12 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
             throw new Error("G'bye output must be in a text channel");
         }
     } else if (subcommand === "standing") {
-        const user = interaction.options.getUser("user", true)
+        const user = interaction.options.getUser("user", true);
         const bans = await fetchGbyeBansString(user);
         if (!bans) {
             return `${user} is not banned in any G'bye guilds.`;
         }
-        return `${user} is banned in:\n${bans}`
+        return `${user} is banned in:\n${bans}`;
     }
     throw new Error("Exhausted G'bye command options");
-})
+});

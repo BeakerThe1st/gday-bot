@@ -1,5 +1,5 @@
 import {useClient, useEvent} from "../hooks";
-import {codeBlock, inlineCode, Message, userMention} from "discord.js";
+import {codeBlock, inlineCode, Message} from "discord.js";
 import {useOpenAI} from "../hooks/useOpenAI";
 import {GUILDS, ROLES} from "../globals";
 
@@ -21,7 +21,7 @@ useEvent("messageCreate", async (message: Message) => {
     }
     const moderation = await useOpenAI().createModeration({
         input: message.cleanContent,
-        model: "text-moderation-latest"
+        model: "text-moderation-latest",
     });
 
     const [result] = moderation.data.results;
@@ -47,9 +47,9 @@ useEvent("messageCreate", async (message: Message) => {
         await message.delete();
         await message.channel.send(response);
     } else {*/
-        if (logChannel?.isTextBased()) {
-            await logChannel.send(`Message by ${message.author} flagged in ${message.channel} due to ${inlineCode(matchedFlags.join(", "))}\n${codeBlock(message.cleanContent)}`)
-        }
-        await message.react("❗");
+    if (logChannel?.isTextBased()) {
+        await logChannel.send(`Message by ${message.author} flagged in ${message.channel} due to ${inlineCode(matchedFlags.join(", "))}\n${codeBlock(message.cleanContent)}`);
+    }
+    await message.react("❗");
     //}
-})
+});

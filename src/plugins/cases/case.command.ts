@@ -8,7 +8,7 @@ import {
     TimestampStyles,
     userMention,
 } from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {Case} from "./Case.model";
 
 const builder = new SlashCommandBuilder()
@@ -21,30 +21,30 @@ const builder = new SlashCommandBuilder()
             .setName("info")
             .setDescription("Shows information about a given case.")
             .addStringOption((option) =>
-                option.setName("case_id").setDescription("Case ID").setRequired(true)
-            )
+                option.setName("case_id").setDescription("Case ID").setRequired(true),
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("reason")
             .setDescription("Updates the reason on a given case.")
             .addStringOption((option) =>
-                option.setName("case_id").setDescription("Case ID").setRequired(true)
+                option.setName("case_id").setDescription("Case ID").setRequired(true),
             )
             .addStringOption((option) =>
                 option
                     .setName("new_reason")
                     .setDescription("New reason")
-                    .setRequired(true)
-            )
+                    .setRequired(true),
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("delete")
             .setDescription("Delets a given case.")
             .addStringOption((option) =>
-                option.setName("case_id").setDescription("Case ID").setRequired(true)
-            )
+                option.setName("case_id").setDescription("Case ID").setRequired(true),
+            ),
     );
 
 useChatCommand(
@@ -68,7 +68,7 @@ useChatCommand(
             givenCase.reason = newReason;
             await givenCase.save();
             return `Successfully set the reason to "${newReason}" for case ${inlineCode(
-                caseId
+                caseId,
             )}`;
         } else if (subcommand === "info") {
             const target = await interaction.client.users.fetch(givenCase.target);
@@ -101,7 +101,7 @@ useChatCommand(
                     name: "Expiry",
                     value: time(
                         new Date(+givenCase.createdAtTimestamp + givenCase.duration),
-                        TimestampStyles.RelativeTime
+                        TimestampStyles.RelativeTime,
                     ),
                     inline: true,
                 });
@@ -115,5 +115,5 @@ useChatCommand(
             return {content: givenCase._id, embeds: [embed]};
         }
         return null;
-    }
+    },
 );

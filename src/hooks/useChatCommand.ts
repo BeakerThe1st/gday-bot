@@ -7,7 +7,7 @@ import {
     Routes,
 } from "discord.js";
 
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../builders/SlashCommandBuilder";
 import {useEnv} from "./useEnv";
 import {useError} from "./useError";
 import {useEvent} from "./useEvent";
@@ -18,7 +18,7 @@ type InteractionReply =
     | InteractionReplyOptions
     | null;
 type CommandHandler = (
-    interaction: ChatInputCommandInteraction
+    interaction: ChatInputCommandInteraction,
 ) => InteractionReply | Promise<InteractionReply>;
 
 const commandHandlers = new Map<string, CommandHandler>();
@@ -28,7 +28,7 @@ const buildersByScope = new Map<SlashCommandScope, SlashCommandBuilder[]>();
 
 export const useChatCommand = (
     builder: SlashCommandBuilder,
-    handler: CommandHandler
+    handler: CommandHandler,
 ) => {
     const {name, scope} = builder;
     const buildersForGuild = buildersByScope.get(builder.scope) ?? [];
@@ -47,7 +47,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     const builder = buildersByName.get(commandName);
     if (!handler || !builder) {
         useError(
-            `${commandName} does not have a corresponding handler or builder.`
+            `${commandName} does not have a corresponding handler or builder.`,
         );
         return;
     }
@@ -98,7 +98,7 @@ export const updateSlashCommands = () => {
             })();
         }
     }, 5000);
-}
+};
 
 updateSlashCommands();
 

@@ -1,19 +1,19 @@
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, GuildMember, PermissionFlagsBits,} from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {ChatInputCommandInteraction, GuildMember, PermissionFlagsBits} from "discord.js";
+import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 
 const builder = new SlashCommandBuilder()
     .setName("eb")
     .setDescription(
-        "Event blocklists a user."
+        "Event blocklists a user.",
     )
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription(
-                "User to event blocklist."
+                "User to event blocklist.",
             )
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
     .setScope(SlashCommandScope.MAIN_GUILD)
@@ -29,7 +29,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     if (logChannel?.isTextBased()) {
         await logChannel.send({
             content: `${interaction.user} event blocklisted ${member}`,
-            allowedMentions: {parse: []}
+            allowedMentions: {parse: []},
         });
     }
     return `Event blocklisted ${member}`;

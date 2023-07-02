@@ -3,10 +3,10 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 import {ChatInputCommandInteraction, inlineCode} from "discord.js";
 import {Tag} from "./Tag.model";
 
-const options = (await Tag.find({}, 'name').exec())
+const options = (await Tag.find({}, "name").exec())
     .map(({name}) => ({
         name,
-        value: name
+        value: name,
     }));
 
 
@@ -19,12 +19,12 @@ const builder = new SlashCommandBuilder()
             .setName("name")
             .setDescription("The name of the tag you want to call.")
             .setChoices(...options)
-            .setRequired(true)
+            .setRequired(true),
     )
     .addUserOption((option) =>
         option
             .setName("user")
-            .setDescription("User to ping with the tag.")
+            .setDescription("User to ping with the tag."),
     )
     .setScope(SlashCommandScope.MAIN_GUILD);
 
@@ -33,12 +33,12 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const target = interaction.options.getUser("user");
     const tag = await Tag.findOne({name: tagName});
     if (!tag) {
-        throw new Error(`${inlineCode(tagName)} not found.`)
+        throw new Error(`${inlineCode(tagName)} not found.`);
     }
     return {
-        content: `${target ? `${target}\n` : ''}${tag.content}`,
+        content: `${target ? `${target}\n` : ""}${tag.content}`,
         allowedMentions: {
-            users: [target?.id ?? '']
-        }
-    }
-})
+            users: [target?.id ?? ""],
+        },
+    };
+});

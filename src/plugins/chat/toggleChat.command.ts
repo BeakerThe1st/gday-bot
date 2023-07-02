@@ -11,5 +11,5 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, () => {
     const enabled = toggleChatEnabled();
-    return `${enabled ? "Enabled" : "Disabled"} the chat module.`
-})
+    return `${enabled ? "Enabled" : "Disabled"} the chat module.`;
+});

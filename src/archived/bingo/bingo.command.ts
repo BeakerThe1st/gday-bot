@@ -20,7 +20,7 @@ const generateBoard = () => {
         let row: string[] = [];
         for (let colIndex = 0; colIndex < 5; colIndex++) {
             if (rowIndex === 2 && colIndex === 2) {
-                row[colIndex] = "free_space"
+                row[colIndex] = "free_space";
             } else {
                 let chosenOptionIndex = Math.floor(Math.random() * availableOptions.length);
                 row[colIndex] = availableOptions[chosenOptionIndex];
@@ -30,7 +30,7 @@ const generateBoard = () => {
         board.push(row);
     }
     return board;
-}
+};
 
 const prettyBoard = async (board: string[][]) => {
     const canvas = createCanvas(600, 655);
@@ -54,30 +54,30 @@ const prettyBoard = async (board: string[][]) => {
                 const isChecked = check?.bingoEntries.get(col) ?? false;
                 const image = await loadImage(`${imageDir}${col}.png`);
                 if (isChecked === true) {
-                    const checkedImage = await loadImage(`${imageDir}checked.png`)
+                    const checkedImage = await loadImage(`${imageDir}checked.png`);
                     ctx.drawImage(checkedImage, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1);
                 }
-                ctx.drawImage(image, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1)
+                ctx.drawImage(image, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1);
             } catch {
                 ctx.fillText(col, x + 5, y + 20);
             }
-        })
-    })
+        });
+    });
 
-    return new AttachmentBuilder(await canvas.createPNGStream(), {name: "bingo.png"})
-}
+    return new AttachmentBuilder(await canvas.createPNGStream(), {name: "bingo.png"});
+};
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     const userId = interaction.user.id;
     let board = await Bingo.findOne({user: userId});
 
     if (!board) {
-        return "WWDC23 bingo is now over! Unfortunately, you missed out :( We plan on running this next year though!"
+        return "WWDC23 bingo is now over! Unfortunately, you missed out :( We plan on running this next year though!";
         //board = await Bingo.create({user: userId, board: generateBoard()})
     }
 
     return {
         content: "Here's your WWDC23 bingo board!",
-        files: [await prettyBoard(board.board)]
-    }
+        files: [await prettyBoard(board.board)],
+    };
 });

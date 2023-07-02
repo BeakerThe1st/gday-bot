@@ -1,4 +1,4 @@
-import {model, Schema} from 'mongoose';
+import {model, Schema} from "mongoose";
 
 export interface ITag {
     name: string;
@@ -9,7 +9,7 @@ export interface ITag {
 const tagSchema = new Schema<ITag>({
     name: String,
     content: String,
-    author: String
-})
+    author: String,
+});
 
-export const Tag = model<ITag>("tag", tagSchema)
+export const Tag = model<ITag>("tag", tagSchema);
