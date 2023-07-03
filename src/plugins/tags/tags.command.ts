@@ -1,13 +1,25 @@
-import {ChatInputCommandInteraction, EmbedBuilder, inlineCode, userMention} from "discord.js";
+import {
+    ActionRowBuilder,
+    ChatInputCommandInteraction,
+    EmbedBuilder, Events,
+    inlineCode, ModalActionRowComponentBuilder,
+    ModalBuilder, PermissionFlagsBits,
+    TextInputBuilder, TextInputStyle,
+    userMention
+} from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {createTag, deleteTag, editTagContent, editTagName, fetchTags} from "./tags";
+import {createTag, deleteTag, editTag, fetchTags} from "./tags";
+import { useEvent} from "../../hooks";
+import {Tag} from "./Tag.model";
 
 const builder = new SlashCommandBuilder()
 .setName("tags")
 .setDescription("Manages tags.")
     .setScope(SlashCommandScope.MAIN_GUILD)
-.addSubcommand((subcommand) => 
+    .setDeferrable(false)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+.addSubcommand((subcommand) =>
     subcommand
         .setName("list")
         .setDescription("Lists all tags for this server.")
@@ -16,12 +28,6 @@ const builder = new SlashCommandBuilder()
     subcommand
         .setName("create")
         .setDescription("Creates a tag with the given name and content.")
-        .addStringOption((option) => 
-            option.setName("name").setDescription("Name for the tag to create").setRequired(true)
-        )
-        .addStringOption((option) => 
-        option.setName("content").setDescription("Content for the tag to create").setRequired(true)
-        )
     )
 .addSubcommand((subcommand) => 
 subcommand
@@ -31,45 +37,37 @@ subcommand
         option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
     )
 )
-.addSubcommandGroup((group) => 
-    group
-    .setName("edit")
-    .setDescription("Edits a tag.")
-    .addSubcommand((subcommand) => 
+    .addSubcommand((subcommand) =>
         subcommand
-        .setName("name")
-        .setDescription("Edits a tag's name")
-        .addStringOption((option) =>
-            option.setName("name").setDescription("Name for the tag").setRequired(true)        
-        )
-        .addStringOption((option) =>
-        option.setName("new_name").setDescription("New name for the tag").setRequired(true)        
-    )
-    )
-    .addSubcommand((subcommand) => 
-    subcommand
-    .setName("content")
-    .setDescription("Edits a tag's content.")
-    .addStringOption((option) =>
-        option.setName("name").setDescription("Name for the tag").setRequired(true)        
-    )
-    .addStringOption((option) =>
-    option.setName("new_content").setDescription("New content for the tag").setRequired(true)        
-)
-)
-)
+            .setName("edit")
+            .setDescription("Edits a tag.")
+            .addStringOption((option) =>
+                option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
+            )
+    );
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     if (!interaction.guild) throw new Error(`This command can only be ran in guilds.`);
 
     const subcommand = interaction.options.getSubcommand();
     const guildId = interaction.guild.id;
-    const interactionUser = interaction.user.id;
     const tagName = interaction.options.getString("name", false);
-    const tagContent = interaction.options.getString("content", false);
-    const newTagName = interaction.options.getString("new_name", false);
-    const newTagContent = interaction.options.getString("new_content", false);
 
+    const modal = new ModalBuilder();
+    const tagTitleInput = new TextInputBuilder()
+        .setCustomId('tagTitleInput')
+        .setLabel("Tag name")
+        .setStyle(TextInputStyle.Short)
+        .setRequired(true);
+    const tagContentInput = new TextInputBuilder()
+        .setCustomId('tagContentInput')
+        .setLabel("Tag content")
+        .setStyle(TextInputStyle.Paragraph)
+        .setRequired(true);
+    const firstActionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(tagTitleInput);
+    const secondActionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(tagContentInput);
+
+    // TODO: Need to figure out why we get [ERROR]: Error with interactionCreate event, Error [InteractionAlreadyReplied]: The reply to this interaction has already been sent or deferred. every time we interact with the modals, even though everything's working fine.
     switch (subcommand) {
         case "list":
             // TODO: Find a prettier way to show this stuff to users
@@ -80,13 +78,13 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
             tags.forEach(tag => {
                 embed.addFields({name: '\u200B', value: '.'}, {name: "Tag name", value: tag.name}, {name:"Content", value: tag.content}, {name: "Author", value: userMention(tag.author)})
             })
-            return {embeds: [embed]}
+            await interaction.reply({embeds: [embed]});
+            return null;
             break;
         case "create":
-            if (tagName && tagContent) {
-                const createdTag = await createTag(guildId, interactionUser, tagName, tagContent);
-                return `Successfully created tag ${inlineCode(createdTag.name)}.`;
-            }
+            modal.setCustomId("tagCreate").setTitle("Create new tag").addComponents(firstActionRow, secondActionRow);
+            await interaction.showModal(modal);
+            return null;
             break;
         case "delete":
             if (tagName) {
@@ -94,18 +92,14 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
                 return `Tag ${inlineCode(tagName)} was successfully deleted.`
             }
             break;
-        case "name":
-            if (tagName && newTagName) {
-                const editedTag = await editTagName(guildId, interactionUser, tagName, newTagName);
-                return `Successfully updated tag's name to ${inlineCode(editedTag.name)}.`;
-            }
-            break;
-        case "content":
-            if (tagName && newTagContent) {
-                const editedTag = await editTagContent(guildId, interactionUser, tagName, newTagContent);
-                return `Successfully updated tag content for ${inlineCode(editedTag.name)}.`;
-            }
-            break;
+        case "edit":
+            const tag = await Tag.findOne({guild: guildId, name: tagName});
+            if (!tag) return `Tag not found!`;
+            tagTitleInput.setValue(tag.name);
+            tagContentInput.setValue(tag.content);
+            modal.setTitle("Edit a tag").setCustomId("tagEdit-" + tag.name).addComponents(firstActionRow, secondActionRow);
+            await interaction.showModal(modal);
+            return null;
         default:
             // Should never get here, the throw error statement got our back anyway.
             break;
@@ -113,3 +107,19 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     throw new Error(`Something went wrong with the tags command.`);
 });
 
+useEvent(Events.InteractionCreate, async (interaction)  => {
+    if (!interaction.isModalSubmit() || !interaction.guild) return;
+
+    const tagName = interaction.fields.getTextInputValue('tagTitleInput');
+    const tagContent = interaction.fields.getTextInputValue('tagContentInput');
+
+    if (interaction.customId.startsWith("tagCreate")) {
+        const createdTag = await createTag(interaction.guild.id, interaction.user.id, tagName, tagContent);
+        await interaction.reply({content:`Successfully created tag ${inlineCode(createdTag.name)}.`});
+    } else if (interaction.customId.startsWith("tagEdit")) {
+        const oldName = interaction.customId.replace("tagEdit-", "");
+        await editTag(interaction.guild.id, interaction.user.id, oldName, tagName, tagContent);
+        await interaction.reply({content:`Successfully updated tag ${inlineCode(oldName)}.`});
+    }
+    await interaction.reply({content:  `Something went wrong with the modal submission.`})
+})

@@ -17,21 +17,14 @@ export const createTag = async (guild: string, author: string, name: string, con
     }
 }
 
-export const editTagName = async (guild: string, author: string, name: string, newName: string) => {
-    const tag = await Tag.findOne({name, guild});
-    if (!tag) throw new Error(`Tag ${inlineCode(name)} was not found.`);
+export const editTag = async (guild: string, author: string, oldName: string, newName: string, content: string) => {
+    const tag = await Tag.findOne({name: oldName, guild});
+    if (!tag) throw new Error(`Tag ${inlineCode(oldName)} was not found.`);
     tag.name = newName;
+    tag.content = content;
     tag.author = author;
     return await tag.save();
 }
-export const editTagContent = async (guild: string, author: string, name: string, newContent: string) => {
-    const tag = await Tag.findOne({name, guild});
-    if (!tag) throw new Error(`Tag ${inlineCode(name)} was not found.`);
-    tag.content = newContent;
-    tag.author = author;
-    return await tag.save();
-}
-
 export const deleteTag = async (guild: string, name: string) => {
     const tag = await Tag.findOne({guild, name});
     if (!tag) throw new Error(`Tag ${inlineCode(name)} not found.`);
