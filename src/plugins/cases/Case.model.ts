@@ -76,6 +76,15 @@ caseSchema.pre("save", async function () {
     }
 });
 
+const getUsernameFromId = async (id: string) => {
+    try {
+        const user = await useClient().client.users.fetch(id);
+        return user.username;
+    } catch {
+        return null;
+    }
+}
+
 //Logging middleware
 caseSchema.pre("save", async function () {
     if (!this.isNew) return;
@@ -101,13 +110,13 @@ caseSchema.pre("save", async function () {
         }
         embed.addFields({
             name: "Target",
-            value: userMention(this.target),
+            value: `${userMention(this.target)} (${await getUsernameFromId(this.target)})`,
             inline: true,
         });
         if (this.executor) {
             embed.addFields({
                 name: "Executor",
-                value: userMention(this.executor),
+                value: `${userMention(this.executor)} (${await getUsernameFromId(this.executor)}`,
                 inline: true,
             });
         }
