@@ -31,10 +31,13 @@ const builder = new SlashCommandBuilder()
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const tagName = interaction.options.getString("name", true);
     const target = interaction.options.getUser("user");
-    const tag = await Tag.findOne({name: tagName});
-    if (!tag) {
-        throw new Error(`${inlineCode(tagName)} not found.`);
-    }
+    if (!interaction.guild) throw new Error(`This command can only be ran in guilds.`)
+    const tag = await Tag.findOneAndUpdate(
+        {name: tagName, guild: interaction.guild?.id},
+        {$inc: {usesCount: 1}},
+        {new: true});
+    if (!tag) throw new Error(`${inlineCode(tagName)} not found.`);
+
     return {
         content: `${target ? `${target}\n` : ""}${tag.content}`,
         allowedMentions: {
