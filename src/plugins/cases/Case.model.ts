@@ -116,7 +116,7 @@ caseSchema.pre("save", async function () {
         if (this.executor) {
             embed.addFields({
                 name: "Executor",
-                value: `${userMention(this.executor)} (${await getUsernameFromId(this.executor)}`,
+                value: `${userMention(this.executor)} (${await getUsernameFromId(this.executor)})`,
                 inline: true,
             });
         }
