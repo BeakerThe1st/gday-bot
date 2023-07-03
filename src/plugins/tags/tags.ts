@@ -1,7 +1,7 @@
 import { Tag } from "./Tag.model";
 import {inlineCode} from "discord.js";
 export const fetchTags = async (guildId: string) => {
-    const tags = await Tag.find({guild: guildId});
+    const tags = await Tag.find({guild: guildId}).sort({name: 1});
     if (tags.length > 0) return tags;
     return null;
 }

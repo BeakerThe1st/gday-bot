@@ -70,15 +70,36 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     // TODO: Need to figure out why we get [ERROR]: Error with interactionCreate event, Error [InteractionAlreadyReplied]: The reply to this interaction has already been sent or deferred. every time we interact with the modals, even though everything's working fine.
     switch (subcommand) {
         case "list":
-            // TODO: Find a prettier way to show this stuff to users
-            const embed = new EmbedBuilder()
-                .setTitle("Tags List")
             const tags = await fetchTags(guildId);
             if (!tags) return `No tags were found for this server.`
-            tags.forEach(tag => {
-                embed.addFields({name: '\u200B', value: '.'}, {name: "Tag name", value: tag.name}, {name:"Content", value: tag.content}, {name: "Author", value: userMention(tag.author)})
-            })
-            await interaction.reply({embeds: [embed]});
+
+            const embeds : EmbedBuilder[] = [];
+            let currentEmbed = new EmbedBuilder().setTitle("Tags List");
+            let isFirstElement = true;
+
+            tags.forEach((tag, index) => {
+                const fields = [
+                    { name: "Tag name", value: tag.name, inline: true },
+                    { name: "Author", value: userMention(tag.author), inline: true },
+                    { name: "# of usages", value: tag.usesCount.toString(), inline: true }
+                ];
+
+                if (!isFirstElement) {
+                    fields.forEach(field => {
+                        field.name = '\u200B'; // Use a zero-width space character
+                    });
+                }
+                currentEmbed.addFields(...fields);
+
+                if ((index + 1) % 5 === 0 || index === tags.length - 1) {
+                    embeds.push(currentEmbed);
+                    currentEmbed = new EmbedBuilder().setTitle("Tags List");
+                    isFirstElement = true;
+                } else {
+                    isFirstElement = false;
+                }
+            });
+            await interaction.reply({embeds});
             return null;
             break;
         case "create":
