@@ -15,7 +15,7 @@ const client = new Client({
         GatewayIntentBits.GuildBans,
     ],
     allowedMentions: {
-        parse: ["users"]
+        parse: ["users"],
     },
     partials: [Partials.GuildMember],
 });
@@ -25,14 +25,14 @@ const loadFilesFromFolder = (folder: string) => {
     const files = fs.readdirSync(folderUrl);
     for (const file of files) {
         const filePath = path.join(folderUrl.href, file);
-        if (!file.includes('.')) {
+        if (!file.includes(".")) {
             loadFilesFromFolder(filePath);
-        } else if ((file.endsWith('.ts') || file.endsWith('.js')) && !file.includes(".model.")) {
+        } else if ((file.endsWith(".ts") || file.endsWith(".js")) && !file.includes(".model.")) {
             import(filePath);
             console.log(`Loaded ${file}`);
         }
     }
-}
+};
 
 loadFilesFromFolder("./plugins");
 
@@ -50,14 +50,14 @@ const statuses: [ActivityType, string][] = [
     [ActivityType.Watching, "the waves roll in, sheila"],
     [ActivityType.Listening, "to the rustle of gum trees"],
     [ActivityType.Competing, "a BBQ competition"],
-    [ActivityType.Streaming, "some classic INXS"]
-]
+    [ActivityType.Streaming, "some classic INXS"],
+];
 
 useEvent("ready", async (client: Client) => {
     try {
         await mongoose.connect(useEnv("MONGO_URI"));
     } catch (error) {
-        console.warn(`Error connecting to database: ${error}`)
+        console.warn(`Error connecting to database: ${error}`);
     }
 
     const chosenStatus = statuses[Math.floor(Math.random() * statuses.length)];

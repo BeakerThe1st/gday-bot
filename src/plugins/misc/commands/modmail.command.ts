@@ -1,5 +1,5 @@
 import {useChatCommand} from "../../../hooks/useChatCommand";
-import {SlashCommandBuilder, SlashCommandScope,} from "../../../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
 import {
     ActionRowBuilder,
     ChatInputCommandInteraction,
@@ -27,7 +27,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
 
     const rowOne =
         new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-            issueInput
+            issueInput,
         );
 
     modal.addComponents(rowOne);

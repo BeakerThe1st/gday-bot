@@ -1,5 +1,5 @@
 import {useChatCommand} from "../../../hooks/useChatCommand";
-import {SlashCommandBuilder, SlashCommandScope,} from "../../../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
 import {
     ActionRowBuilder,
     BaseMessageOptions,
@@ -20,7 +20,7 @@ const builder = new SlashCommandBuilder()
         option
             .setName("question")
             .setDescription("The question you want to poll.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setScope(SlashCommandScope.GLOBAL);
 
@@ -30,7 +30,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const message = await interaction.fetchReply();
     const poll = new PollCommand(
         interaction.options.getString("question", true),
-        message
+        message,
     );
     polls.set(message.id, poll);
     return poll.getMessage();
@@ -53,7 +53,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     }
 
     await interaction.editReply(
-        poll.setVote(interaction.user, action as "yes" | "no")
+        poll.setVote(interaction.user, action as "yes" | "no"),
     );
 });
 
@@ -73,7 +73,7 @@ class PollCommand {
             (acc, vote) => {
                 return Object.assign(acc, {[vote]: acc[vote] + 1});
             },
-            {yes: 0, no: 0}
+            {yes: 0, no: 0},
         );
     };
 
@@ -91,7 +91,7 @@ class PollCommand {
                     name: "No",
                     value: count.no.toLocaleString(),
                     inline: true,
-                }
+                },
             )
             .setColor("Blurple");
         const actionRow = new ActionRowBuilder()
@@ -103,7 +103,7 @@ class PollCommand {
                 new ButtonBuilder()
                     .setCustomId("poll-no")
                     .setStyle(ButtonStyle.Danger)
-                    .setLabel("No")
+                    .setLabel("No"),
             )
             .toJSON();
         return {

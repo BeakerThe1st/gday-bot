@@ -12,7 +12,7 @@ import {
     time,
     TimestampStyles,
 } from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {NEXT_EVENT} from "../../globals";
 
 const builder = new SlashCommandBuilder()
@@ -21,15 +21,15 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setScope(SlashCommandScope.MAIN_GUILD)
     .addSubcommand((subcommand) =>
-        subcommand.setName("start").setDescription("Starts event mode.")
+        subcommand.setName("start").setDescription("Starts event mode."),
     )
     .addSubcommand((subcommand) =>
-        subcommand.setName("stop").setDescription("Stops event mode.")
+        subcommand.setName("stop").setDescription("Stops event mode."),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("prompt")
-            .setDescription("Displays the event mode prompt.")
+            .setDescription("Displays the event mode prompt."),
     )
     .addSubcommandGroup((group) =>
         group
@@ -43,8 +43,8 @@ const builder = new SlashCommandBuilder()
                         option
                             .setName("image_url")
                             .setDescription("Image URL for event mode prompt")
-                            .setRequired(true)
-                    )
+                            .setRequired(true),
+                    ),
             )
             .addSubcommand((subcommand) =>
                 subcommand
@@ -54,13 +54,13 @@ const builder = new SlashCommandBuilder()
                         option
                             .setName("interval")
                             .setDescription(
-                                "Interval between event mode prompts in seconds."
+                                "Interval between event mode prompts in seconds.",
                             )
                             .setRequired(true)
                             .setMinValue(1)
-                            .setMaxValue(1440)
-                    )
-            )
+                            .setMaxValue(1440),
+                    ),
+            ),
     );
 
 const eventModes: Map<string, EventMode> = new Map();
@@ -102,12 +102,12 @@ useChatCommand(
                 const interval = interaction.options.getNumber("interval", true);
                 eventMode.setTimerInterval(interval);
                 return `Event mode prompt interval set to ${inlineCode(
-                    `${interval}s`
+                    `${interval}s`,
                 )}`;
             default:
                 return eventMode.getPrompt();
         }
-    }
+    },
 );
 
 class EventMode {
@@ -134,8 +134,8 @@ class EventMode {
                     Date.now() > eventDate.getTime() ? "began" : "begins"
                 } ${time(
                     eventDate,
-                    TimestampStyles.RelativeTime
-                )}. Watch at the links below.`
+                    TimestampStyles.RelativeTime,
+                )}. Watch at the links below.`,
             )
             .setImage(this.image)
             .setColor("Aqua");
@@ -151,7 +151,7 @@ class EventMode {
             new ButtonBuilder()
                 .setLabel("Leaked Event Footage")
                 .setStyle(ButtonStyle.Link)
-                .setURL("https://youtu.be/ZoG5jJ3E8rg")
+                .setURL("https://youtu.be/ZoG5jJ3E8rg"),
         );
         //@ts-ignore
         return {embeds: [embed], components: [actionRow]};

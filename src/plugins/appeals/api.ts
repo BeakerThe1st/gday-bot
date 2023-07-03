@@ -1,4 +1,4 @@
-import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention,} from "discord.js";
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention} from "discord.js";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -54,13 +54,13 @@ app.post("/ban-appeal", async (req, res) => {
                 {
                     name: "Argument",
                     value: reason,
-                }
+                },
             );
         const actionRow = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
                 .setLabel("Unban")
                 .setStyle(ButtonStyle.Success)
-                .setCustomId(`appeal-unban-${id}`)
+                .setCustomId(`appeal-unban-${id}`),
         );
         await appealChannel.send({
             embeds: [embed],

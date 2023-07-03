@@ -19,10 +19,10 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     if (!(member instanceof GuildMember)) {
         throw new Error("User is not a GuildMember");
     }
-    const established = ROLES.MAIN.established
+    const established = ROLES.MAIN.established;
     if (member.roles.cache.has(established)) {
-        return `${member} is already established!`
+        return `${member} is already established!`;
     }
     await member.roles.add(established);
-    return `Successfully established ${member}.`
+    return `Successfully established ${member}.`;
 });

@@ -10,7 +10,7 @@ import {
     PermissionFlagsBits,
     userMention,
 } from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../builders/SlashCommandBuilder";
+import {SlashCommandBuilder, SlashCommandScope} from "../builders/SlashCommandBuilder";
 import {useChatCommand} from "../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
@@ -26,7 +26,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
             .setLabel("Apply for Santa Squad")
             .setEmoji("🎅")
             .setStyle(ButtonStyle.Primary)
-            .setCustomId(`santa-apply`)
+            .setCustomId(`santa-apply`),
     );
     if (channel) {
         channel.send({
@@ -62,8 +62,8 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
             .setColor("Red")
             .setDescription(
                 `${userMention(
-                    interaction.user.id
-                )} Ho ho ho sleigh queens! Please only accept if the santa hat is recognisable and visible.`
+                    interaction.user.id,
+                )} Ho ho ho sleigh queens! Please only accept if the santa hat is recognisable and visible.`,
             )
             .setThumbnail(interaction.member.displayAvatarURL());
         const actionRow = new ActionRowBuilder().addComponents(
@@ -75,7 +75,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
             new ButtonBuilder()
                 .setLabel("Deny")
                 .setStyle(ButtonStyle.Danger)
-                .setCustomId(`santa-deny-${interaction.user.id}`)
+                .setCustomId(`santa-deny-${interaction.user.id}`),
         );
         //@ts-ignore
         await apps.send({embeds: [embed], components: [actionRow]});
@@ -111,7 +111,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
             interaction.channel.send(
                 `${interaction.user} ${c2 === "accept" ? "accepted" : "denied"} ${
                     member.user
-                } for Santa Squad.`
+                } for Santa Squad.`,
             );
         }
 
@@ -121,7 +121,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
         } else {
             try {
                 await member.user.send(
-                    "Your Santa Squad application in r/Apple was denied. Please ensure you have a visible and recognisible santa hat in your profile and re-apply. If you changed your profile picture immediately before applying, please wait before applying again as sometimes Discord can take a while to update profile pictures. If you have any further questions, please read the info provided in the channel and then feel free to contact staff about why your application was denied."
+                    "Your Santa Squad application in r/Apple was denied. Please ensure you have a visible and recognisible santa hat in your profile and re-apply. If you changed your profile picture immediately before applying, please wait before applying again as sometimes Discord can take a while to update profile pictures. If you have any further questions, please read the info provided in the channel and then feel free to contact staff about why your application was denied.",
                 );
             } catch {
                 `${member} was denied from Santa Squad but I was unable to DM them. Please contact them directly.`;

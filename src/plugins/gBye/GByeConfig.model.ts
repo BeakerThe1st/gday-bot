@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import {model, Schema} from "mongoose";
 
 export interface IGByeConfig {
     guild: string;
@@ -7,7 +7,7 @@ export interface IGByeConfig {
 
 const gByeConfigSchema = new Schema<IGByeConfig>({
     guild: String,
-    channel: String
-})
+    channel: String,
+});
 
-export const GByeConfig = model<IGByeConfig>("gByeConfig", gByeConfigSchema)
+export const GByeConfig = model<IGByeConfig>("gByeConfig", gByeConfigSchema);

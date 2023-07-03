@@ -18,20 +18,20 @@ export const NEXT_EVENT: null | NextEvent = null; /*{
 //THESE GUILD IDS ARE MIRRORED SlashCommandBuilder, CHANGE THEM THERE TOO
 export const GUILDS = {
     MAIN: "332309672486895637",
-    STAFF: "337792272693461002"
-}
+    STAFF: "337792272693461002",
+};
 
 export const CHANNELS = {
     MAIN: {
-        case_log: "1033960979224088596",
+        case_log: "1124954351023169597",
         log: "1120432710830280784",
-    }
-}
+    },
+};
 export const ROLES = {
     MAIN: {
         established: "881503056091557978",
         event_reserved: "1111076493834072165",
         mod_squad: "334889410006876161",
-        plus: "338950814108483586"
-    }
-}
+        plus: "338950814108483586",
+    },
+};

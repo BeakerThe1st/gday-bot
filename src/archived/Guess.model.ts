@@ -7,7 +7,7 @@ export interface IGuess {
 
 const guessSchema = new Schema<IGuess>({
     user: String,
-    guess: String
-})
+    guess: String,
+});
 
 export const Guess = model<IGuess>("guess", guessSchema);

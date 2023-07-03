@@ -6,7 +6,7 @@ import {BingoCheck} from "./BingoCheck.model";
 
 const options = Array.from(bingoItems.keys()).map((key) => ({
     name: key,
-    value: key
+    value: key,
 }));
 
 const builder = new SlashCommandBuilder()
@@ -27,7 +27,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     let current = check.bingoEntries.get(id) ?? false;
     check.bingoEntries.set(id, !current);
     await check.save();
-    return `Successfully ${current ? "un" : ""}checked \`${id}\``
+    return `Successfully ${current ? "un" : ""}checked \`${id}\``;
     /*const bingos = await Bingo.find();
     const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
     const filteredBingos = bingos.filter((bingo) => {

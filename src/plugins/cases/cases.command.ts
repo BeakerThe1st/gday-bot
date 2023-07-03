@@ -1,20 +1,20 @@
-import {bold, ChatInputCommandInteraction, PermissionFlagsBits, userMention,} from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
+import {bold, ChatInputCommandInteraction, PermissionFlagsBits, userMention} from "discord.js";
+import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {Case} from "./Case.model";
 import {useChatCommand} from "../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("cases")
     .setDescription(
-        "Searches all cases in the guild, filtered by the given parameters."
+        "Searches all cases in the guild, filtered by the given parameters.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
     .setScope(SlashCommandScope.MAIN_GUILD)
     .addUserOption((option) =>
-        option.setName("executor").setDescription("Case executor.")
+        option.setName("executor").setDescription("Case executor."),
     )
     .addUserOption((option) =>
-        option.setName("target").setDescription("Case target.")
+        option.setName("target").setDescription("Case target."),
     )
     .addStringOption((option) =>
         option
@@ -25,8 +25,8 @@ const builder = new SlashCommandBuilder()
                 {name: "Ban", value: "BAN"},
                 {name: "Unban", value: "UNBAN"},
                 {name: "Kick", value: "KICK"},
-                {name: "Timeout", value: "TIMEOUT"}
-            )
+                {name: "Timeout", value: "TIMEOUT"},
+            ),
     );
 
 useChatCommand(
@@ -59,7 +59,7 @@ useChatCommand(
 
         const resultsList = results.reduce((acc, result) => {
             let currentStr = `${bold(result._id)} - ${result.type} on ${userMention(
-                result.target
+                result.target,
             )}`;
             if (result.executor) {
                 currentStr += ` by ${userMention(result.executor)}`;
@@ -73,5 +73,5 @@ useChatCommand(
         return `I found ${count.toLocaleString()} cases that match what you're looking for. ${
             count > 6 ? "Here are the latest 6!" : "Here they are!"
         } \n${resultsList}`;
-    }
+    },
 );

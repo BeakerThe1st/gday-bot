@@ -1,4 +1,4 @@
-export const bingoItems = new Map<string, boolean>()
+export const bingoItems = new Map<string, boolean>();
 
 const items = ["15_inch_mba", "ar", "ar_devkit", "ar_os", "camera_app", "carplay",
     "good_mornang", "icloud_storage_increase", "imac", "ios_compass", "ios_lock_screen",
@@ -8,4 +8,4 @@ const items = ["15_inch_mba", "ar", "ar_devkit", "ar_os", "camera_app", "carplay
 
 items.forEach((item) => {
     bingoItems.set(item, item === "free_space");
-})
+});

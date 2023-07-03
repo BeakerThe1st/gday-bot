@@ -1,4 +1,4 @@
-import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry,} from "discord.js";
+import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry} from "discord.js";
 import {useClient, useEvent} from "../../hooks";
 import {Case, CaseType} from "./Case.model";
 import {GUILDS} from "../../globals";
@@ -18,11 +18,11 @@ const getTimeoutExpiry = (entry: GuildAuditLogsEntry) => {
             return Date.parse(`${change.new}`);
         }
     }
-}
+};
 useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, guild: Guild) => {
     const {client} = useClient();
-    let { executorId, reason } = entry;
-    const { targetId} = entry;
+    let {executorId, reason} = entry;
+    const {targetId} = entry;
 
     if (guild.id !== GUILDS.MAIN) {
         return;
@@ -33,7 +33,7 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         return;
     }
 
-    const gDayId = client.user?.id
+    const gDayId = client.user?.id;
 
     if (entry.executorId === gDayId) {
         //If the case was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.
@@ -52,7 +52,7 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
          */
         if (entry.action === AuditLogEvent.AutoModerationUserCommunicationDisabled) {
             //Expiry is in 1 hour (default for naughties violation in r/apple)
-            expiry = Date.now() + 1000 * 60 * 60
+            expiry = Date.now() + 1000 * 60 * 60;
         } else {
             //User initiated timeout - will have an expiry
             expiry = getTimeoutExpiry(entry);
@@ -76,5 +76,5 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         executor: executorId,
         duration: expiry ? expiry - Date.now() : undefined,
         reason,
-    })
+    });
 });

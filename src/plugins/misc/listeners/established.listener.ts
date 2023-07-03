@@ -18,7 +18,7 @@ useEvent("typingStart", async (typing: Typing) => {
     }
 
     const {roles} = member;
-    const established = ROLES.MAIN.established
+    const established = ROLES.MAIN.established;
     if (!roles.cache.has(established)) {
         await roles.add(established);
     }
