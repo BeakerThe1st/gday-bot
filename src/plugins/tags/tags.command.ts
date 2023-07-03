@@ -1,11 +1,12 @@
-import { ChatInputCommandInteraction, inlineCode } from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
-import { Tag } from "./Tag.model";
+import {ChatInputCommandInteraction, EmbedBuilder, inlineCode, userMention} from "discord.js";
+import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
+import {useChatCommand} from "../../hooks/useChatCommand";
+import {createTag, deleteTag, editTagContent, editTagName, fetchTags} from "./tags";
 
 const builder = new SlashCommandBuilder()
 .setName("tags")
 .setDescription("Manages tags.")
+    .setScope(SlashCommandScope.MAIN_GUILD)
 .addSubcommand((subcommand) => 
     subcommand
         .setName("list")
@@ -59,49 +60,55 @@ subcommand
 )
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
+    if (!interaction.guild) throw new Error(`This command can only be ran in guilds.`);
+
     const subcommand = interaction.options.getSubcommand();
-    
-    if (!interaction.guild) throw new Error(`This command can only be ran in guilds.`)
-    const guildId = interaction.guild.id
-    
-    if (subcommand === "list") {
-        const tags = await Tag.find({guild: guildId});
-        if (tags.length === 0) {
-            return `There are no tags in this server!`
-        }
-        return `${tags}`
-    } else if (subcommand === "create") {
-        const tagName = interaction.options.getString("name", true);
-        const tagContent = interaction.options.getString("content", true);
-        await Tag.create({
-            name: tagName,
-            content: tagContent,
-            author: interaction.user.id,
-            guild: interaction.guild.id
-        });
-        return `Successfully created tag ${tagName} with content ${tagContent}`;
-    } else if (subcommand === "delete") {
-        const tagName = interaction.options.getString("name", true);
-        const tag = await Tag.findOne({name: tagName, guild: guildId})
-        if (!tag) throw new Error(`Tag ${inlineCode(tagName)} not found.`)
-        await tag.delete();
-        return `Tag ${inlineCode(tagName)} was successfully deleted.`
-    } else if (subcommand === "name") {
-        const tagName = interaction.options.getString("name", true);
-        const newName = interaction.options.getString("new_name", true);
-        const tag = await Tag.findOne({name: tagName, guild: guildId})
-        if (!tag) throw new Error(`Tag ${inlineCode(tagName)} not found.`)
-        tag.name = newName;
-        await tag.save();
-        return `Tag name for ${tagName} has been updated to ${newName}.`
-    } else if (subcommand === "content") {
-        const tagName = interaction.options.getString("name", true);
-        const newContent = interaction.options.getString("new_content", true);
-        const tag = await Tag.findOne({name: tagName, guild: guildId})
-        if (!tag) throw new Error(`Tag ${inlineCode(tagName)} not found.`)
-        tag.content = newContent;
-        await tag.save();
-        return `Tag content for ${inlineCode(tagName)} has been updated.`
+    const guildId = interaction.guild.id;
+    const interactionUser = interaction.user.id;
+    const tagName = interaction.options.getString("name", false);
+    const tagContent = interaction.options.getString("content", false);
+    const newTagName = interaction.options.getString("new_name", false);
+    const newTagContent = interaction.options.getString("new_content", false);
+
+    switch (subcommand) {
+        case "list":
+            // TODO: Find a prettier way to show this stuff to users
+            const embed = new EmbedBuilder()
+                .setTitle("Tags List")
+            const tags = await fetchTags(guildId);
+            if (!tags) return `No tags were found for this server.`
+            tags.forEach(tag => {
+                embed.addFields({name: '\u200B', value: '.'}, {name: "Tag name", value: tag.name}, {name:"Content", value: tag.content}, {name: "Author", value: userMention(tag.author)})
+            })
+            return {embeds: [embed]}
+            break;
+        case "create":
+            if (tagName && tagContent) {
+                const createdTag = await createTag(guildId, interactionUser, tagName, tagContent);
+                return `Successfully created tag ${inlineCode(createdTag.name)}.`;
+            }
+            break;
+        case "delete":
+            if (tagName) {
+                await deleteTag(guildId, tagName);
+                return `Tag ${inlineCode(tagName)} was successfully deleted.`
+            }
+            break;
+        case "name":
+            if (tagName && newTagName) {
+                const editedTag = await editTagName(guildId, interactionUser, tagName, newTagName);
+                return `Successfully updated tag's name to ${inlineCode(editedTag.name)}.`;
+            }
+            break;
+        case "content":
+            if (tagName && newTagContent) {
+                const editedTag = await editTagContent(guildId, interactionUser, tagName, newTagContent);
+                return `Successfully updated tag content for ${inlineCode(editedTag.name)}.`;
+            }
+            break;
+        default:
+            // Should never get here, the throw error statement got our back anyway.
+            break;
     }
     throw new Error(`Something went wrong with the tags command.`);
 });
