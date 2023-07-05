@@ -1,4 +1,4 @@
-import {Guild, inlineCode, User} from "discord.js";
+import {RESTJSONErrorCodes, Guild, inlineCode, User} from "discord.js";
 import {useClient} from "../../hooks";
 import {GByeConfig} from "./GByeConfig.model";
 
@@ -18,8 +18,12 @@ export const fetchGbyeBans = async (user: User) => {
             const guild = await useClient().client.guilds.fetch(gByeGuildId);
             const ban = await guild.bans.fetch(user);
             bans.set(guild.id, ban.reason);
-        } catch {
-            //ignored - we are not in the guild or they don't have a ban
+        } catch (error: any) {
+            if ("code" in error && error.code === RESTJSONErrorCodes.UnknownBan) {
+                //ignored - they just aren't banned
+            } else {
+                console.error(`Error fetching G'bye bans in ${gByeGuildId}: ${error}`);
+            }
         }
     }
     if (bans.size > 0) {
@@ -35,7 +39,7 @@ export const fetchGbyeBansString = async (user: User) => {
     }
     const entries = Array.from(bans.entries());
     return await Promise.all(entries.map(async ([guildId, reason]) => {
-        const friendlyReason = reason ? `for ${inlineCode(reason)}` : "- No reason specified.";
+        const friendlyReason = reason ? `for ${inlineCode(reason.replaceAll("\n", ""))}` : "- No reason specified.";
         try {
             const guildName = await useClient().client.guilds.fetch(guildId);
             return `\n- ${guildName} ${friendlyReason}`;
