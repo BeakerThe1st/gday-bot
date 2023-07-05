@@ -1,16 +1,19 @@
 import {
     ActionRowBuilder,
     ChatInputCommandInteraction,
-    EmbedBuilder, Events,
-    inlineCode, ModalActionRowComponentBuilder,
-    ModalBuilder, PermissionFlagsBits,
-    TextInputBuilder, TextInputStyle,
-    userMention
+    Events,
+    inlineCode,
+    ModalActionRowComponentBuilder,
+    ModalBuilder,
+    PermissionFlagsBits,
+    TextInputBuilder,
+    TextInputStyle,
+    userMention,
 } from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
 import {createTag, deleteTag, editTag, fetchTags} from "./tags";
-import { useEvent} from "../../hooks";
+import {useEvent} from "../../hooks";
 import {Tag} from "./Tag.model";
 
 const builder = new SlashCommandBuilder()
@@ -23,28 +26,28 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName("list")
-            .setDescription("Lists all tags for this server")
-        )
+            .setDescription("Lists all tags for this server"),
+    )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("create")
-            .setDescription("Displays the tag creation modal")
-        )
+            .setDescription("Displays the tag creation modal"),
+    )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("delete")
             .setDescription("Deletes a tag")
             .addStringOption((option) =>
-                option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
-        )
+                option.setName("name").setDescription("Name for the tag to delete").setRequired(true),
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("edit")
             .setDescription("Displays the tag editing modal")
             .addStringOption((option) =>
-                option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
-            )
+                option.setName("name").setDescription("Name for the tag to delete").setRequired(true),
+            ),
     );
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
@@ -55,12 +58,12 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
 
     const modal = new ModalBuilder();
     const tagTitleInput = new TextInputBuilder()
-        .setCustomId('tagTitleInput')
+        .setCustomId("tagTitleInput")
         .setLabel("Tag name")
         .setStyle(TextInputStyle.Short)
         .setRequired(true);
     const tagContentInput = new TextInputBuilder()
-        .setCustomId('tagContentInput')
+        .setCustomId("tagContentInput")
         .setLabel("Tag content")
         .setStyle(TextInputStyle.Paragraph)
         .setRequired(true);
@@ -75,41 +78,41 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
                 return "Crikey, there are no tags in this server mate!";
             }
             const tagStrings = tags.map((tag) => {
-                return `\n- ${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`
+                return `\n- ${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`;
             });
             return {
                 content: `Here are all ya tags cobber:\n ${tagStrings.join("")}`,
-                allowedMentions: {parse: []}
+                allowedMentions: {parse: []},
+            };
+        /*if (!tags) return `No tags were found for this server.`
+
+        const embeds : EmbedBuilder[] = [];
+        let currentEmbed = new EmbedBuilder().setTitle("Tags List");
+        let isFirstElement = true;
+
+        tags.forEach((tag, index) => {
+            const fields = [
+                { name: "Tag name", value: tag.name, inline: true },
+                { name: "Author", value: userMention(tag.author), inline: true },
+                { name: "# of usages", value: tag.usesCount.toString(), inline: true }
+            ];
+
+            if (!isFirstElement) {
+                fields.forEach(field => {
+                    field.name = '\u200B'; // Use a zero-width space character
+                });
             }
-            /*if (!tags) return `No tags were found for this server.`
+            currentEmbed.addFields(...fields);
 
-            const embeds : EmbedBuilder[] = [];
-            let currentEmbed = new EmbedBuilder().setTitle("Tags List");
-            let isFirstElement = true;
-
-            tags.forEach((tag, index) => {
-                const fields = [
-                    { name: "Tag name", value: tag.name, inline: true },
-                    { name: "Author", value: userMention(tag.author), inline: true },
-                    { name: "# of usages", value: tag.usesCount.toString(), inline: true }
-                ];
-
-                if (!isFirstElement) {
-                    fields.forEach(field => {
-                        field.name = '\u200B'; // Use a zero-width space character
-                    });
-                }
-                currentEmbed.addFields(...fields);
-
-                if ((index + 1) % 5 === 0 || index === tags.length - 1) {
-                    embeds.push(currentEmbed);
-                    currentEmbed = new EmbedBuilder().setTitle("Tags List");
-                    isFirstElement = true;
-                } else {
-                    isFirstElement = false;
-                }
-            });
-            await interaction.reply({embeds});*/
+            if ((index + 1) % 5 === 0 || index === tags.length - 1) {
+                embeds.push(currentEmbed);
+                currentEmbed = new EmbedBuilder().setTitle("Tags List");
+                isFirstElement = true;
+            } else {
+                isFirstElement = false;
+            }
+        });
+        await interaction.reply({embeds});*/
         case "create":
             modal.setCustomId("tagCreate").setTitle("Create new tag").addComponents(firstActionRow, secondActionRow);
             return modal;
@@ -127,19 +130,19 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     throw new Error(`Something went wrong with the tags command.`);
 });
 
-useEvent(Events.InteractionCreate, async (interaction)  => {
+useEvent(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isModalSubmit() || !interaction.guild) return;
 
-    const tagName = interaction.fields.getTextInputValue('tagTitleInput');
-    const tagContent = interaction.fields.getTextInputValue('tagContentInput');
+    const tagName = interaction.fields.getTextInputValue("tagTitleInput");
+    const tagContent = interaction.fields.getTextInputValue("tagContentInput");
 
     if (interaction.customId.startsWith("tagCreate")) {
         const createdTag = await createTag(interaction.guild.id, interaction.user.id, tagName, tagContent);
-        await interaction.reply({content:`Successfully created tag ${inlineCode(createdTag.name)}.`});
+        await interaction.reply({content: `Successfully created tag ${inlineCode(createdTag.name)}.`});
     } else if (interaction.customId.startsWith("tagEdit")) {
         const oldName = interaction.customId.replace("tagEdit-", "");
         await editTag(interaction.guild.id, interaction.user.id, oldName, tagName, tagContent);
-        await interaction.reply({content:`Successfully updated tag ${inlineCode(oldName)}.`});
+        await interaction.reply({content: `Successfully updated tag ${inlineCode(oldName)}.`});
     }
-    await interaction.reply({content:  `Something went wrong with the modal submission.`})
+    await interaction.reply({content: `Something went wrong with the modal submission.`});
 });
