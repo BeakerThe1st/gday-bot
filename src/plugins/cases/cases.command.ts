@@ -67,7 +67,7 @@ useChatCommand(
             if (result.reason) {
                 currentStr += ` for ${result.reason}`;
             }
-            return acc + `\n${currentStr}`;
+            return acc + `\n- ${currentStr.replaceAll("\n", " ")}`;
         }, "");
 
         return `I found ${count.toLocaleString()} cases that match what you're looking for. ${
