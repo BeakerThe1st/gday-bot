@@ -2,7 +2,7 @@ import {
     ChatInputCommandInteraction,
     Interaction,
     InteractionReplyOptions,
-    MessagePayload,
+    MessagePayload, ModalBuilder,
     REST,
     Routes,
 } from "discord.js";
@@ -16,6 +16,7 @@ type InteractionReply =
     | string
     | MessagePayload
     | InteractionReplyOptions
+    | ModalBuilder
     | null;
 type CommandHandler = (
     interaction: ChatInputCommandInteraction,
@@ -66,16 +67,23 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     } catch (error) {
         response = `${error}`;
     }
-
-    try {
-        if (interaction.replied || interaction.deferred) {
-            await interaction.editReply(response);
-        } else {
-            await interaction.reply(response);
+        try {
+            if (interaction.replied || interaction.deferred) {
+                if (response instanceof ModalBuilder) {
+                    throw new Error(`Tried to reply with a modal to an already replied to interaction.`)
+                } else {
+                    await interaction.editReply(response);
+                }
+            } else {
+                if (response instanceof ModalBuilder) {
+                    await interaction.showModal(response);
+                } else {
+                    await interaction.reply(response);
+                }
+            }
+        } catch (error) {
+            useError(`${error}`);
         }
-    } catch (error) {
-        useError(`${error}`);
-    }
 });
 
 export const updateSlashCommands = () => {
