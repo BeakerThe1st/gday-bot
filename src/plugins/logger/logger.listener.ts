@@ -10,9 +10,12 @@ import {
     PartialMessage,
 } from "discord.js";
 import {log, LOG_THREADS} from "./logs";
+import {GUILDS} from "../../globals";
 
 //Deleted Message
 useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
+    if (message.guildId !== GUILDS.MAIN) return;
+    if (message.channelId === LOG_THREADS.DELETION) return;
     const embed = new EmbedBuilder()
         .setDescription(`:wastebasket: Message by ${message.author} (${message.author?.username ?? "No Username"}) deleted in ${message.channel}`)
         .setColor(Colors.DarkRed)
@@ -33,6 +36,7 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
 
 //Role Logs
 useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
+    if (newMember.guild.id !== GUILDS.MAIN) return;
     const [newRoles, oldRoles] = [newMember, oldMember].map(({roles}) => roles.cache);
     //addedRoles is all roles we didn't previously have, removedRules is all roles we did previously have
     const addedRoles = newRoles.filter((role, roleId) => !oldRoles.has(roleId));
