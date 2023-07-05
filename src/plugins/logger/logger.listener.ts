@@ -48,7 +48,7 @@ useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember,
         return;
     }
     const embed = new EmbedBuilder()
-        .setDescription(`:key: ${newMember} (${newMember.user.username}) was ${roleWasAdded ? "added to" : "removed from"} ${roleOfInterest} (${roleOfInterest.name})`)
+        .setDescription(`:key: ${newMember} (${newMember.user.username}) was ${roleWasAdded ? "added to" : "removed from"} ${roleOfInterest}`)
         .setFooter({text: `Member ID: ${newMember.id}`})
         .setColor(roleWasAdded ? Colors.Green : Colors.DarkRed)
         .setTimestamp(Date.now());
