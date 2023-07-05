@@ -2,10 +2,10 @@ import {Embed, EmbedBuilder} from "discord.js";
 import {useClient} from "../../hooks";
 
 export enum LOG_THREADS {
-    ROLE = "1126064307214487602",
-    DELETION = "1126064249035296879",
-    EDIT = "1126064213207568416",
-    JOIN_LEAVE = "1126064154730565693"
+    ROLE = "1126077128677523536",
+    DELETION = "1126077258436722768",
+    EDIT = "1126077292024713266",
+    JOIN_LEAVE = "1126077595658756096"
 }
 
 export const log = async (thread: LOG_THREADS, embed: EmbedBuilder) => {
