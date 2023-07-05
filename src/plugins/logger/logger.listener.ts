@@ -35,16 +35,18 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
 useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
     const [newRoles, oldRoles] = [oldMember, newMember].map(({roles}) => roles.cache);
     //addedRoles is all roles we didn't previously have, removedRules is all roles we did previously have
-    let addedRoles = newRoles.filter((role, roleId) => !oldRoles.has(roleId));
-    let removedRoles = oldRoles.filter((role, roleId) => !newRoles.has(roleId));
-    let roleOfInterest = addedRoles.size > 0 ? addedRoles.first() : removedRoles.first();
+    const addedRoles = newRoles.filter((role, roleId) => !oldRoles.has(roleId));
+    const removedRoles = oldRoles.filter((role, roleId) => !newRoles.has(roleId));
+    const roleWasAdded = addedRoles.size > 0;
+    const roleOfInterest = addedRoles.size > 0 ? addedRoles.first() : removedRoles.first();
     if (!roleOfInterest) {
         //No added role nor removed role, therefore this is not a role update
         return;
     }
     const embed = new EmbedBuilder()
-        .setDescription(`:key: ${newMember} (${newMember.user.username}) was removed from ${roleOfInterest}`)
-        .setFooter({text: `Member ID: ${newMember}`})
+        .setDescription(`:key: ${newMember} (${newMember.user.username}) was ${roleWasAdded ? "added to" : "removed from"} ${roleOfInterest}`)
+        .setFooter({text: `Member ID: ${newMember.id}`})
+        .setColor(roleWasAdded ? Colors.DarkRed : Colors.Green)
         .setTimestamp(Date.now());
     log(LOG_THREADS.ROLE, embed);
 });
