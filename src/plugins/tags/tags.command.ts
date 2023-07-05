@@ -121,7 +121,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
             return `Tag ${inlineCode(tagName!)} was successfully deleted.`;
         case "edit":
             const tag = await Tag.findOne({guild: guildId, name: tagName});
-            if (!tag) return `Tag not found!`;
+            if (!tag) return `${inlineCode(tagName!)} is not a valid tag!`;
             tagTitleInput.setValue(tag.name);
             tagContentInput.setValue(tag.content);
             modal.setTitle("Edit a tag").setCustomId("tagEdit-" + tag.name).addComponents(firstActionRow, secondActionRow);
