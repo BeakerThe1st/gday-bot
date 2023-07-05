@@ -1,17 +1,9 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, inlineCode} from "discord.js";
+import {ChatInputCommandInteraction, Events, inlineCode} from "discord.js";
 import {Tag} from "./Tag.model";
-
-/*
-const options = (await Tag.find({}, 'name').exec())
-    .map(({name}) => ({
-        name,
-        value: name
-    }));
-
- */
-
+import {useEvent} from "../../hooks";
+import Fuse from 'fuse.js';
 
 const builder = new SlashCommandBuilder()
     .setName("tag")
@@ -21,7 +13,7 @@ const builder = new SlashCommandBuilder()
         option
             .setName("name")
             .setDescription("The name of the tag you want to call.")
-            //.setChoices(...options)
+            .setAutocomplete(true)
             .setRequired(true)
     )
     .addUserOption((option) =>
@@ -39,11 +31,32 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         {name: tagName, guild: interaction.guild?.id},
         {$inc: {usesCount: 1}},
         {new: true});
-    if (!tag) throw new Error(`${inlineCode(tagName)} not found.`);
+    if (!tag) return `${inlineCode(tagName)} is not a valid tag.`;
     return {
         content: `${target ? `${target}\n` : ''}${tag.content}`,
         allowedMentions: {
             users: target ? [target.id] : []
         }
     }
+})
+
+useEvent(Events.InteractionCreate, async (interaction) => {
+    if (!interaction.isAutocomplete()) return;
+    if (interaction.commandName !== "tag") return;
+
+    //Weakened tags array with just name and content
+    const tags = (await Tag.find({guild: interaction.guildId}))
+        .map((document) => ({name: document.name, content: document.content}));
+    //fuuuuuseeeeeee
+    const fuse = new Fuse(tags, {includeScore: true, keys: ['name', 'content']});
+
+    const result = fuse.search(interaction.options.getFocused());
+
+    //Turn it into discord friendly options
+    const options = result
+        .map(({item}) => ({
+            name: item.name,
+            value: item.name
+        }));
+    await interaction.respond(options);
 })
