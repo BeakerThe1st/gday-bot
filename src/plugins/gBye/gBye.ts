@@ -1,4 +1,4 @@
-import {RESTJSONErrorCodes, Guild, inlineCode, User} from "discord.js";
+import {RESTJSONErrorCodes, Guild, inlineCode, User, time, GuildBan} from "discord.js";
 import {useClient} from "../../hooks";
 import {GByeConfig} from "./GByeConfig.model";
 
@@ -12,12 +12,12 @@ export const gByeGuilds = [
 ];
 
 export const fetchGbyeBans = async (user: User) => {
-    const bans = new Map<string, string | null | undefined>();
+    const bans: GuildBan[] = [];
     for (const gByeGuildId of gByeGuilds) {
         try {
             const guild = await useClient().client.guilds.fetch(gByeGuildId);
             const ban = await guild.bans.fetch(user);
-            bans.set(guild.id, ban.reason);
+            bans.push(ban);
         } catch (error: any) {
             if ("code" in error && error.code === RESTJSONErrorCodes.UnknownBan) {
                 //ignored - they just aren't banned
@@ -26,7 +26,7 @@ export const fetchGbyeBans = async (user: User) => {
             }
         }
     }
-    if (bans.size > 0) {
+    if (bans.length > 0) {
         return bans;
     }
     return null;
@@ -37,17 +37,13 @@ export const fetchGbyeBansString = async (user: User) => {
     if (!bans) {
         return null;
     }
-    const entries = Array.from(bans.entries());
-    const mapped = await Promise.all(entries.map(async ([guildId, reason]) => {
-        const friendlyReason = reason ? `for ${inlineCode(reason.replaceAll("\n", ""))}` : "- No reason specified.";
-        try {
-            const guildName = await useClient().client.guilds.fetch(guildId);
-            return `\n- ${guildName} ${friendlyReason}`;
-        } catch {
-            `\n- Unknown Guild ${friendlyReason}`;
-        }
-    }))
-    return mapped.join("");
+
+    const banStrings = bans.map((ban) => {
+        const { reason, guild } = ban;
+        const formattedReason = reason ? `for ${inlineCode(reason.replaceAll("\n", " "))}` : "- No reason specified.";
+        return `\n - ${guild.name} ${formattedReason}`;
+    })
+    return banStrings.join(" ");
 };
 
 export const getGbyeChannel = async (guild: Guild) => {
