@@ -41,7 +41,7 @@ export const fetchGbyeBansString = async (user: User) => {
     const banStrings = bans.map((ban) => {
         const { reason, guild } = ban;
         const formattedReason = reason ? `for ${inlineCode(reason.replaceAll("\n", " "))}` : "- No reason specified.";
-        return `\n - ${guild.name} ${formattedReason}`;
+        return `\n- ${guild.name} ${formattedReason}`;
     })
     return banStrings.join(" ");
 };
