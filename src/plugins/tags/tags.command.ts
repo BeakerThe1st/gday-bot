@@ -14,29 +14,28 @@ import { useEvent} from "../../hooks";
 import {Tag} from "./Tag.model";
 
 const builder = new SlashCommandBuilder()
-.setName("tags")
-.setDescription("Manages tags.")
+    .setName("tags")
+    .setDescription("Manages tags.")
     .setScope(SlashCommandScope.MAIN_GUILD)
-    .setDeferrable(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-.addSubcommand((subcommand) =>
-    subcommand
-        .setName("list")
-        .setDescription("Lists all tags for this server.")
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName("list")
+            .setDescription("Lists all tags for this server.")
+        )
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName("create")
+            .setDescription("Creates a tag with the given name and content.")
+        )
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName("delete")
+            .setDescription("Deletes a tag.")
+            .addStringOption((option) =>
+                option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
+        )
     )
-.addSubcommand((subcommand) => 
-    subcommand
-        .setName("create")
-        .setDescription("Creates a tag with the given name and content.")
-    )
-.addSubcommand((subcommand) => 
-subcommand
-    .setName("delete")
-    .setDescription("Deletes a tag.")
-    .addStringOption((option) => 
-        option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
-    )
-)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("edit")
@@ -71,7 +70,17 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     switch (subcommand) {
         case "list":
             const tags = await fetchTags(guildId);
-            if (!tags) return `No tags were found for this server.`
+            if (!tags) {
+                return "Crikey, there are no tags in this server mate!";
+            }
+            const tagStrings = tags.map((tag) => {
+                return `\n- ${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`
+            });
+            return {
+                content: `Here are all ya tags cobber: ${tagStrings.join("")}`,
+                allowedMentions: {parse: []}
+            }
+            /*if (!tags) return `No tags were found for this server.`
 
             const embeds : EmbedBuilder[] = [];
             let currentEmbed = new EmbedBuilder().setTitle("Tags List");
@@ -99,31 +108,20 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
                     isFirstElement = false;
                 }
             });
-            await interaction.reply({embeds});
-            return null;
-            break;
+            await interaction.reply({embeds});*/
         case "create":
             modal.setCustomId("tagCreate").setTitle("Create new tag").addComponents(firstActionRow, secondActionRow);
-            await interaction.showModal(modal);
-            return null;
-            break;
+            return modal;
         case "delete":
-            if (tagName) {
-                await deleteTag(guildId, tagName);
-                return `Tag ${inlineCode(tagName)} was successfully deleted.`
-            }
-            break;
+            await deleteTag(guildId, tagName!);
+            return `Tag ${inlineCode(tagName!)} was successfully deleted.`;
         case "edit":
             const tag = await Tag.findOne({guild: guildId, name: tagName});
             if (!tag) return `Tag not found!`;
             tagTitleInput.setValue(tag.name);
             tagContentInput.setValue(tag.content);
             modal.setTitle("Edit a tag").setCustomId("tagEdit-" + tag.name).addComponents(firstActionRow, secondActionRow);
-            await interaction.showModal(modal);
-            return null;
-        default:
-            // Should never get here, the throw error statement got our back anyway.
-            break;
+            return modal;
     }
     throw new Error(`Something went wrong with the tags command.`);
 });
@@ -143,4 +141,4 @@ useEvent(Events.InteractionCreate, async (interaction)  => {
         await interaction.reply({content:`Successfully updated tag ${inlineCode(oldName)}.`});
     }
     await interaction.reply({content:  `Something went wrong with the modal submission.`})
-})
+});
