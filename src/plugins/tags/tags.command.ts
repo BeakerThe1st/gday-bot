@@ -17,21 +17,23 @@ const builder = new SlashCommandBuilder()
     .setName("tags")
     .setDescription("Manages tags.")
     .setScope(SlashCommandScope.MAIN_GUILD)
+    .setDMPermission(false)
+    .setDeferrable(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("list")
-            .setDescription("Lists all tags for this server.")
+            .setDescription("Lists all tags for this server")
         )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("create")
-            .setDescription("Creates a tag with the given name and content.")
+            .setDescription("Displays the tag creation modal")
         )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("delete")
-            .setDescription("Deletes a tag.")
+            .setDescription("Deletes a tag")
             .addStringOption((option) =>
                 option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
         )
@@ -39,17 +41,16 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName("edit")
-            .setDescription("Edits a tag.")
+            .setDescription("Displays the tag editing modal")
             .addStringOption((option) =>
                 option.setName("name").setDescription("Name for the tag to delete").setRequired(true)
             )
     );
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    if (!interaction.guild) throw new Error(`This command can only be ran in guilds.`);
-
     const subcommand = interaction.options.getSubcommand();
-    const guildId = interaction.guild.id;
+    //DM permission is false, therefore I think we can assert guild as non-null?
+    const guildId = interaction.guild!.id;
     const tagName = interaction.options.getString("name", false);
 
     const modal = new ModalBuilder();
@@ -77,7 +78,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
                 return `\n- ${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`
             });
             return {
-                content: `Here are all ya tags cobber: ${tagStrings.join("")}`,
+                content: `Here are all ya tags cobber:\n ${tagStrings.join("")}`,
                 allowedMentions: {parse: []}
             }
             /*if (!tags) return `No tags were found for this server.`
