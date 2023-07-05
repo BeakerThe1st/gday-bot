@@ -29,7 +29,7 @@ export const deleteTag = async (guild: string, name: string) => {
     const tag = await Tag.findOne({guild, name});
     if (!tag) throw new Error(`Tag ${inlineCode(name)} not found.`);
     try {
-        await tag.delete();
+        await tag.deleteOne();
     } catch (e) {
         throw new Error(`Tag ${inlineCode(name)} could not be deleted.`)
     }
