@@ -38,7 +38,7 @@ export const fetchGbyeBansString = async (user: User) => {
         return null;
     }
     const entries = Array.from(bans.entries());
-    return await Promise.all(entries.map(async ([guildId, reason]) => {
+    const mapped = await Promise.all(entries.map(async ([guildId, reason]) => {
         const friendlyReason = reason ? `for ${inlineCode(reason.replaceAll("\n", ""))}` : "- No reason specified.";
         try {
             const guildName = await useClient().client.guilds.fetch(guildId);
@@ -46,7 +46,8 @@ export const fetchGbyeBansString = async (user: User) => {
         } catch {
             `\n- Unknown Guild ${friendlyReason}`;
         }
-    }));
+    }))
+    return mapped.join("");
 };
 
 export const getGbyeChannel = async (guild: Guild) => {
