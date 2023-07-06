@@ -1,7 +1,11 @@
 import {useEvent} from "../../../hooks";
 import {Events, Message} from "discord.js";
+import {GUILDS} from "../../../globals";
 
 useEvent(Events.MessageCreate, (message: Message) => {
+    if (message.guildId !== GUILDS.MAIN) {
+        return;
+    }
     const commands = ["ban", "kick", "mute"];
     const weCare = commands.some((command) => message.cleanContent.startsWith("!" + command));
     if (!weCare) {
