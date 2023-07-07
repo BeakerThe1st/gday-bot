@@ -66,6 +66,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
         .setCustomId("tagContentInput")
         .setLabel("Tag content")
         .setStyle(TextInputStyle.Paragraph)
+        .setMaxLength(500)
         .setRequired(true);
     const firstActionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(tagTitleInput);
     const secondActionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(tagContentInput);
