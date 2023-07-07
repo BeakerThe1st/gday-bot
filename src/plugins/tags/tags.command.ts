@@ -38,7 +38,7 @@ const builder = new SlashCommandBuilder()
             .setName("delete")
             .setDescription("Deletes a tag")
             .addStringOption((option) =>
-                option.setName("name").setDescription("Name for the tag to delete").setRequired(true),
+                option.setName("name").setDescription("Name for the tag to delete").setRequired(true).setAutocomplete(true),
             ),
     )
     .addSubcommand((subcommand) =>
@@ -46,7 +46,7 @@ const builder = new SlashCommandBuilder()
             .setName("edit")
             .setDescription("Displays the tag editing modal")
             .addStringOption((option) =>
-                option.setName("name").setDescription("Name for the tag to delete").setRequired(true),
+                option.setName("name").setDescription("Name for the tag to edit").setRequired(true).setAutocomplete(true),
             ),
     );
 
