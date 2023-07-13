@@ -60,10 +60,10 @@ useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember,
 //Nickname Logs
 useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
    if (newMember.guild.id !== GUILDS.MAIN) return;
-   const [oldNick, newNick] = [oldMember, newMember].map((member) => member.nickname);
-   if (oldNick === newNick || (oldNick === null && newNick === newMember.displayName)) return;
+   const [oldNick, newNick] = [oldMember, newMember].map((member) => member.displayName);
+   if (oldNick === newNick) return;
    const embed = new EmbedBuilder()
-       .setDescription(`:name_badge: ${newMember} (${newMember.user.username})'s nickname changed from ${inlineCode(oldNick ?? "null")} to ${inlineCode(newNick ?? "null")}`)
+       .setDescription(`:name_badge: ${newMember} (${newMember.user.username})'s nickname changed from ${inlineCode(oldNick)} to ${inlineCode(newNick)}`)
        .setTimestamp(Date.now())
        .setColor(Colors.Orange);
    log(LOG_THREADS.NICKNAME, embed);
