@@ -25,7 +25,7 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, txG
             await rxGuild.members.fetch(user);
             const channel = await getGbyeChannel(rxGuild);
             await channel?.send({
-                content: `# G'bye \n${user} was banned from ${txGuild.name}${reason ? ` for ${inlineCode(reason)}` : `. No reason specified`}.`,
+                content: `# G'bye \n${user} (${user.username}) was banned from ${txGuild.name}${reason ? ` for ${inlineCode(reason)}` : `. No reason specified`}.`,
                 allowedMentions: {parse: []},
             });
         } catch {
@@ -38,13 +38,13 @@ useEvent(Events.GuildMemberAdd, async (member: GuildMember) => {
     if (!gByeGuilds.includes(member.guild.id)) {
         return;
     }
-    const bans = await fetchGbyeBans(member.user);
-    if (!bans) {
+    const gByeBanString = await fetchGbyeBansString(member.user);
+    if (!gByeBanString) {
         return;
     }
     const channel = await getGbyeChannel(member.guild);
     await channel?.send({
-        content: `# G'bye \n${member} just joined your server, they are banned in:\n${await fetchGbyeBansString(member.user)}`,
+        content: `# G'bye \n${member} (${member.user.username}) just joined your server, they are banned in:\n${gByeBanString}`,
         allowedMentions: {parse: []},
     });
 });

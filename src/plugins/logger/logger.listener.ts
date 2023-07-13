@@ -1,13 +1,15 @@
 import {useEvent} from "../../hooks";
 import {
     Colors,
-    Embed,
     EmbedBuilder,
     Events,
     GuildMember,
+    inlineCode,
     Message,
     PartialGuildMember,
     PartialMessage,
+    time,
+    TimestampStyles,
 } from "discord.js";
 import {log, LOG_THREADS} from "./logs";
 import {GUILDS} from "../../globals";
@@ -53,4 +55,63 @@ useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember,
         .setColor(roleWasAdded ? Colors.Green : Colors.DarkRed)
         .setTimestamp(Date.now());
     log(LOG_THREADS.ROLE, embed);
+});
+
+//Nickname Logs
+useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
+   if (newMember.guild.id !== GUILDS.MAIN) return;
+   const [oldNick, newNick] = [oldMember, newMember].map((member) => member.nickname);
+   if (oldNick === newNick) return;
+   const embed = new EmbedBuilder()
+       .setDescription(`:name_badge: ${newMember} (${newMember.user.username})'s nickname changed from ${inlineCode(oldNick ?? oldMember.displayName)} to ${inlineCode(newNick ?? newMember.displayName)}`)
+       .setTimestamp(Date.now())
+       .setColor(Colors.Orange);
+   log(LOG_THREADS.NICKNAME, embed);
+});
+
+//Join Logs
+useEvent(Events.GuildMemberAdd, (member: GuildMember) => {
+    if (member.guild.id !== GUILDS.MAIN) return;
+    const { user } = member;
+    const embed = new EmbedBuilder()
+        .setDescription(`:inbox_tray: ${member} (${member.user.username}) joined the server\nAccount created: ${time(user.createdAt, TimestampStyles.RelativeTime)}`)
+        .setThumbnail(user.displayAvatarURL())
+        .setTimestamp(Date.now())
+        .setColor(Colors.Green);
+    log(LOG_THREADS.JOIN_LEAVE, embed);
+})
+
+//Leave Logs
+useEvent(Events.GuildMemberRemove, (member: GuildMember | PartialGuildMember) => {
+    if (member.guild.id !== GUILDS.MAIN) return;
+    const { user } = member;
+    const embed = new EmbedBuilder()
+        .setDescription(`:outbox_tray: ${member} (${member.user.username}) left the server`)
+        .setThumbnail(user.displayAvatarURL())
+        .setTimestamp(Date.now())
+        .setColor(Colors.DarkRed)
+    log(LOG_THREADS.JOIN_LEAVE, embed);
+});
+
+//Message Edit Logs
+
+useEvent(Events.MessageUpdate, (oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) => {
+    if (oldMessage.guildId !== GUILDS.MAIN) return;
+    const {author } = newMessage;
+    if (!author || author.bot) return;
+    const embed = new EmbedBuilder()
+        .setDescription(`:pencil: ${author} (${author?.username ?? "No Username"}) updated their message in ${newMessage.channel}`)
+        .addFields([
+            {
+                name: "Old Content",
+                value: `${oldMessage.cleanContent}`
+            },
+            {
+                name: "New Content",
+                value: `${newMessage.cleanContent}`
+            }
+        ])
+        .setTimestamp(Date.now())
+        .setColor(Colors.Orange)
+    log(LOG_THREADS.EDIT, embed);
 });
