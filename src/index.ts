@@ -44,11 +44,11 @@ const statuses: [ActivityType, string][] = [
     [ActivityType.Watching, "the sunset with a coldie"],
     [ActivityType.Competing, "a TimTam race"],
     [ActivityType.Watching, "the roos hop by"],
-    [ActivityType.Listening, "to some didgeridoo"],
+    [ActivityType.Listening, "some didgeridoo"],
     [ActivityType.Streaming, "Home and Away"],
     [ActivityType.Playing, "some cricket, legend"],
     [ActivityType.Watching, "the waves roll in, sheila"],
-    [ActivityType.Listening, "to the rustle of gum trees"],
+    [ActivityType.Listening, "the rustle of gum trees"],
     [ActivityType.Competing, "a BBQ competition"],
     [ActivityType.Streaming, "some classic INXS"],
 ];
