@@ -40,12 +40,12 @@ const builder = new SlashCommandBuilder()
             messages = messages.filter((message) => message.author.id === user.id);
         }
 
-        const ignoreFirst = !(!!user || !!specifiedChannel)
+        const ignoreFirst = !(!!user || (!!specifiedChannel && specifiedChannel.id !== interaction.channelId))
 
         messages = new Collection([...Array.from(messages.entries()).splice(~~ignoreFirst, amount)]);
 
         await channel.bulkDelete(messages, true);
-        return `Deleted ${messages.size} messages${user ? ` by ${user} (${user.username})`: ``}${specifiedChannel ? ` in ${channel}`: ``}`;
+        return `Deleted ${messages.size} message${messages.size !== 1 ? "s": ""}${user ? ` by ${user} (${user.username})`: ``}${specifiedChannel ? ` in ${channel}`: ``}`;
     });
     //     if (user) {
     //         if (!channel) {
