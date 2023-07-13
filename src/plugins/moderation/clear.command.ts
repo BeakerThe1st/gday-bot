@@ -7,7 +7,10 @@ import {
     ThreadChannel,
     userMention,
     channelMention,
-    Collection, Message, Snowflake, Channel
+    Collection,
+    Message,
+    Snowflake,
+    User,
 } from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
@@ -39,48 +42,50 @@ const builder = new SlashCommandBuilder()
         const user = interaction.options.getUser("user", false);
         const channel = interaction.options.getChannel("channel", false, [ChannelType.GuildText]) ?? interaction.channel;
         const amount = interaction.options.getInteger("amount", false) ?? 10;
-        const startDate = searchStartDate();
-
-        let messages = await channel.messages.fetch({ limit: 100, after: startDate});
-        let lastFetchedID = messages.last()?.id;
 
         if (user) {
-            let userMessages = messages.filter(msg => msg.author.id === user.id);
-            // Edge case: the amount of messages sent from the user in the first batch is higher than the amount we want to purge.
-            if (userMessages.size > amount) userMessages = getFirstMessagesFromCollection(userMessages, amount)
-            while (userMessages.size < amount && lastFetchedID) {
-                if (lastFetchedID) {
-                    messages = await channel.messages.fetch({ limit: 100, after: lastFetchedID});
-                    messages = messages.filter(msg => msg.author.id === user.id);
-                    if (messages.size === 0) break; // collection is empty after filtering so no more messages from that user
-                    userMessages.concat(messages);
-                    lastFetchedID = messages.last()?.id;
-                }
+            if (!interaction.options.getChannel("channel", false)) {
+                const guildChannels = interaction.guild.channels.cache.filter(ch => ch.isTextBased()) as Collection<String, GuildTextBasedChannel>
+                await guildChannels.forEach(async (channel)  => {
+                    const userMessages = await fetchChannelMessagesForUser(channel as GuildTextBasedChannel, user, amount);
+                    await channel.bulkDelete(userMessages, true);
+                })
+                await interaction.channel.send({
+                    content: `Successfully deleted ${amount} messages from ${userMention(user.id)} in all channels.`,
+                    allowedMentions: {
+                        parse: [],
+                    },
+                });
+                return null;
+            } else {
+                const userMessages = await fetchChannelMessagesForUser(channel as GuildTextBasedChannel, user, amount);
+                await channel.bulkDelete(userMessages, true);
+                await interaction.channel.send({
+                    content: `Successfully deleted ${amount} messages from ${userMention(user.id)} in ${channelMention(channel.id)}.`,
+                    allowedMentions: {
+                        parse: [],
+                    },
+                });
+                return null;
             }
-            await channel.bulkDelete(userMessages);
-            return `Successfully cleared ${userMessages.size} messages from ${userMention(user.id)}`;
         }
-
-        // For some reason bulkDelete deletes the output of the return statement too, so we have to delete one more message than amount.
-        messages = getFirstMessagesFromCollection(messages, amount+1);
-        await channel.bulkDelete(messages);
-        return `Successfully cleared ${amount} messages in ${channelMention(channel.id)}.`;
+        let messages = await channel.messages.fetch({limit: amount});
+        await channel.bulkDelete(messages, true);
+        return `Successfully deleted ${amount} messages in ${channelMention(channel.id)}.`;
     });
-    
-    const searchStartDate = () : string => {
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 14);
-        // See https://discord.com/developers/docs/reference#snowflake-ids-in-pagination-generating-a-snowflake-id-from-a-timestamp-example for conversion from timestamp to Snowflake.
-        const dateSnowflake = (BigInt(startDate.getTime()) - 1420070400000n) << 22n;
-        return dateSnowflake.toString();
-    }
 
-    const getFirstMessagesFromCollection = (collection: Collection<Snowflake, Message<true>>, amount: number) : Collection<Snowflake, Message<true>> => {
-        const keys = collection.firstKey(amount);
-        const values = collection.first(amount);
-        const messages = new Collection<Snowflake, Message<true>>();
-        for (let i = 0; i < keys.length; i++) {
-            messages.set(keys[i], values[i]);
-          }
-        return messages;
+    const fetchChannelMessagesForUser = async (channel: GuildTextBasedChannel, user: User, amount: number) : Promise<Collection<Snowflake, Message<true>>> => {
+        let messages = await channel.messages.fetch({limit: amount});
+        let lastFetchedID = messages.last()?.id;
+        let userMessages = messages.filter(msg => msg.author.id === user.id);
+        while (userMessages.size <= amount && lastFetchedID) {
+            if (lastFetchedID) {
+                messages = await channel.messages.fetch({ limit: 100, after: lastFetchedID});
+                lastFetchedID = messages.last()?.id;
+                messages = messages.filter(msg => msg.author.id === user.id);
+                if (messages.size === 0) break; // collection is empty after filtering so no more messages from that user
+                userMessages.concat(messages);
+            }
+        }
+        return userMessages;
     }
