@@ -61,7 +61,7 @@ useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember,
 useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
    if (newMember.guild.id !== GUILDS.MAIN) return;
    const [oldNick, newNick] = [oldMember, newMember].map((member) => member.nickname);
-   if (oldNick === newNick) return;
+   if (oldNick === newNick || (oldNick === null && newNick === newMember.displayName)) return;
    const embed = new EmbedBuilder()
        .setDescription(`:name_badge: ${newMember} (${newMember.user.username})'s nickname changed from ${inlineCode(oldNick ?? "null")} to ${inlineCode(newNick ?? "null")}`)
        .setTimestamp(Date.now())
