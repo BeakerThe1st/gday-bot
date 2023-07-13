@@ -8,8 +8,8 @@ import {SlashCommandBuilder, SlashCommandScope,} from "../../builders/SlashComma
 import {useChatCommand} from "../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
-    .setName("clean")
-    .setDescription("Bulk deletes messages from a given user/channel.")
+    .setName("clear")
+    .setDescription("Clears messages in a particular channel")
     .addIntegerOption((option) => 
         option.setName("amount")
         .setDescription("Amount of messages to fetch")
@@ -18,10 +18,10 @@ const builder = new SlashCommandBuilder()
         .setMaxValue(99)
     )
     .addUserOption((option) =>
-        option.setName("user").setDescription("User whose messages you want to purge.").setRequired(false)
+        option.setName("user").setDescription("User whose messages you want to clear").setRequired(false)
     )
     .addChannelOption((option) =>
-        option.setName("channel").setDescription("Channel").setRequired(false).addChannelTypes(ChannelType.GuildText)
+        option.setName("channel").setDescription("Channel to clear messages from").setRequired(false).addChannelTypes(ChannelType.GuildText)
     )
     .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
