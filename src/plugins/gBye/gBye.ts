@@ -9,6 +9,7 @@ export const gByeGuilds = [
     "549448381613998103", // Samsung
     "871642313561096194", // Nashy cab
     "1041118987787972678", // G'day server
+    "150662382874525696", // Microsoft Community
 ];
 
 export const fetchGbyeBans = async (user: User) => {
