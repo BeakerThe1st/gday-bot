@@ -41,7 +41,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         ])
     })
 
-    if (member instanceof GuildMember) {
+    if (member instanceof GuildMember && interaction.member instanceof GuildMember) {
         embed.setColor(member.displayHexColor);
         embed.setThumbnail(member.displayAvatarURL());
         embed.addFields({
@@ -52,7 +52,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                 `Flags: ${member.flags.toArray().map(name => inlineCode(name)).join(", ") || "None"}`,
             ])
         })
-        if (member.id === interaction.user.id || member.permissions.has(PermissionFlagsBits.BanMembers)) {
+        if (member.id === interaction.user.id || interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
             embed.addFields({
                 name: "Cases",
                 value: listify([`Received: ${await Case.count({target: user.id, guild: member.guild.id})}`, `Issued: ${await Case.count({executor: user.id, guild: member.guild.id})}`])
