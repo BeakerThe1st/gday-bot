@@ -6,7 +6,7 @@ import {
     Colors,
     EmbedBuilder,
     Guild,
-    GuildMember, inlineCode,
+    GuildMember, inlineCode, PermissionFlagsBits,
     time,
     TimestampStyles,
     User,
@@ -52,14 +52,16 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
             value: listify([
                 `Joined: ${time(member.joinedAt ?? new Date(), TimestampStyles.RelativeTime)}`,
                 `Roles: ${member.roles.cache.map(role => role.toString()).join(", ")}`,
-                `Flags: ${member.flags.toArray().map(name => inlineCode(name)).join(", ") || "None"}`
+                `Flags: ${member.flags.toArray().map(name => inlineCode(name)).join(", ") || "None"}`,
+                `Permissions: ${member.permissions.toArray().map(name => inlineCode(name)).join(", ") || "None"}`
             ])
         })
+        if (member.id === interaction.user.id || member.permissions.has(PermissionFlagsBits.BanMembers)) {
+            embed.addFields({
+                name: "Cases",
+                value: listify([`Received: ${await Case.count({target: user.id, guild: member.guild.id})}`, `Issued: ${await Case.count({executor: user.id, guild: member.guild.id})}`])
+            })
+        }
     }
-
-    embed.addFields({
-        name: "Cases",
-        value: listify([`Received: ${await Case.count({target: user.id})}`, `Issued: ${await Case.count({executor: user.id})}`])
-    })
     return {embeds: [embed]};
 });
