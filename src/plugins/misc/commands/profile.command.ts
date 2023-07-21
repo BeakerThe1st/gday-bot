@@ -53,7 +53,6 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                 `Joined: ${time(member.joinedAt ?? new Date(), TimestampStyles.RelativeTime)}`,
                 `Roles: ${member.roles.cache.map(role => role.toString()).join(", ")}`,
                 `Flags: ${member.flags.toArray().map(name => inlineCode(name)).join(", ") || "None"}`,
-                `Permissions: ${member.permissions.toArray().map(name => inlineCode(name)).join(", ") || "None"}`
             ])
         })
         if (member.id === interaction.user.id || member.permissions.has(PermissionFlagsBits.BanMembers)) {
