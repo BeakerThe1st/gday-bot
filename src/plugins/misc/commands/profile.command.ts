@@ -2,14 +2,11 @@ import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCom
 import {useChatCommand} from "../../../hooks/useChatCommand";
 import {
     ChatInputCommandInteraction,
-    codeBlock,
     Colors,
     EmbedBuilder,
-    Guild,
     GuildMember, inlineCode, PermissionFlagsBits,
     time,
     TimestampStyles,
-    User,
 } from "discord.js";
 import {listify} from "../../../utils";
 import {Case} from "../../cases/Case.model";
