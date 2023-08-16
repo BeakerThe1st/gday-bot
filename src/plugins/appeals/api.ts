@@ -63,6 +63,7 @@ app.post("/ban-appeal", async (req, res) => {
                 .setCustomId(`appeal-unban-${id}`),
         );
         await appealChannel.send({
+            content: `${id}`,
             embeds: [embed],
             //@ts-ignore
             components: [actionRow],
