@@ -1,9 +1,7 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, Events, inlineCode} from "discord.js";
+import {ChatInputCommandInteraction, EmbedBuilder, Events, inlineCode} from "discord.js";
 import {Tag} from "./Tag.model";
-import {useEvent} from "../../hooks";
-import Fuse from 'fuse.js';
 
 const builder = new SlashCommandBuilder()
     .setName("tag")
@@ -32,8 +30,11 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         {$inc: {usesCount: 1}},
         {new: true});
     if (!tag) return `${inlineCode(tagName)} is not a valid tag.`;
+    const embed = new EmbedBuilder()
+        .setDescription(tag.content);
     return {
-        content: `${target ? `${target}\n` : ''}${tag.content}`,
+        content: `${target ? `${target}\n` : ''}`,
+        embeds: [embed],
         allowedMentions: {
             users: target ? [target.id] : []
         }
