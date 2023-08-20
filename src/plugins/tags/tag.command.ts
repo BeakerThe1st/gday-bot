@@ -1,6 +1,6 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, EmbedBuilder, Events, inlineCode} from "discord.js";
+import {ChatInputCommandInteraction, Colors, EmbedBuilder, Events, inlineCode} from "discord.js";
 import {Tag} from "./Tag.model";
 
 const builder = new SlashCommandBuilder()
@@ -31,6 +31,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         {new: true});
     if (!tag) return `${inlineCode(tagName)} is not a valid tag.`;
     const embed = new EmbedBuilder()
+        .setColor(Colors.Blue)
         .setDescription(tag.content);
     return {
         content: `${target ? `${target}\n` : ''}`,
