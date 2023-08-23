@@ -1,4 +1,5 @@
 import {
+    ActionRow,
     ActionRowBuilder,
     ChatInputCommandInteraction,
     Events,
@@ -51,9 +52,6 @@ const builder = new SlashCommandBuilder()
     );
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    if (interaction.user.id === "560304577526628352") {
-        return "no";
-    }
     const subcommand = interaction.options.getSubcommand();
     //DM permission is false, therefore I think we can assert guild as non-null?
     const guildId = interaction.guild!.id;
@@ -71,6 +69,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
         .setStyle(TextInputStyle.Paragraph)
         .setMaxLength(550)
         .setRequired(true);
+
     const firstActionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(tagTitleInput);
     const secondActionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(tagContentInput);
 
