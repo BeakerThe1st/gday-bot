@@ -5,14 +5,13 @@ interface NextEvent {
     color: string;
 }
 
-
 //Timestamp is in ms
-export const NEXT_EVENT: null | NextEvent = null; /*{
-    name: "WWDC23",
-    timestamp: 1685984400000,
-    image: "https://media3.giphy.com/media/apZ1rCWXf427CwPjAU/giphy.gif",
-    color: "#b5dcca",
-};*/
+export const NEXT_EVENT: null | NextEvent = {
+    name: "Wonderlust",
+    timestamp: 1694538000000,
+    image: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGV4dXgwOTI3OWxvbDUxc3R0cTB1ZTJ3ZzdqamVycjdqbWtkbGQwNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rFojqMvKmk3ZCliupx/giphy.gif",
+    color: "#7cb1d6",
+};
 
 
 //THESE GUILD IDS ARE MIRRORED SlashCommandBuilder, CHANGE THEM THERE TOO
