@@ -12,7 +12,7 @@ useEvent("messageCreate", async (message: Message) => {
     }
     const roleCache = message.member?.roles.cache;
     if (roleCache) {
-        if (roleCache.has(ROLES.MAIN.mod_squad) || roleCache.has(ROLES.MAIN.plus)) {
+        if (roleCache.has(ROLES.MAIN.mod_squad)) {
             return;
         }
     }
