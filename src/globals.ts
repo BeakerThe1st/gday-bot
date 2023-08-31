@@ -29,7 +29,7 @@ export const CHANNELS = {
 export const ROLES = {
     MAIN: {
         established: "881503056091557978",
-        event_reserved: "1111076493834072165",
+        event_reserved: "1146906660212850769",
         mod_squad: "334889410006876161",
         plus: "338950814108483586",
     },
