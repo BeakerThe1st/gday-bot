@@ -1,7 +1,7 @@
-import {useClient, useEvent} from "../hooks";
-import {codeBlock, inlineCode, Message} from "discord.js";
-import {useOpenAI} from "../hooks/useOpenAI";
-import {GUILDS, ROLES} from "../globals";
+import {useClient, useEvent} from "../../hooks";
+import {codeBlock, inlineCode, Message, messageLink} from "discord.js";
+import {useOpenAI} from "../../hooks/useOpenAI";
+import {GUILDS, ROLES} from "../../globals";
 
 useEvent("messageCreate", async (message: Message) => {
     if (message.guildId !== GUILDS.MAIN) {
@@ -31,7 +31,12 @@ useEvent("messageCreate", async (message: Message) => {
     const matchedFlags = Object.entries(result.categories)
         .filter((value) => value[1])
         .map((value) => value[0]);
-    const logChannel = await useClient().client.channels.fetch("476924704528138271");
+    if (matchedFlags.includes("sexual")) {
+        const logChannel = await useClient().client.channels.fetch("476924704528138271");
+        if (logChannel?.isTextBased()) {
+            await logChannel.send(`# Potential sexual message\n${message.author} (${message.author.username}): ${inlineCode(message.cleanContent)}\n${messageLink(message.channelId, message.id)}`)
+        }
+    }
     /*const zeroTolerance = matchedFlags.some((flag => zeroToleranceFlags.includes(flag)));
     const zeroToleranceFlags = ["harassment/threatening", "hate/threatening", "self-harm/intent", "self-harm/instructions", "sexual/minors", "violence/graphic"];
     if (zeroTolerance) {
@@ -47,9 +52,9 @@ useEvent("messageCreate", async (message: Message) => {
         await message.delete();
         await message.channel.send(response);
     } else {*/
-    if (logChannel?.isTextBased()) {
+    /*if (logChannel?.isTextBased()) {
         await logChannel.send(`Message by ${message.author} flagged in ${message.channel} due to ${inlineCode(matchedFlags.join(", "))}\n${codeBlock(message.cleanContent)}`);
     }
-    await message.react("❗");
+    await message.react("❗");*/
     //}
 });
