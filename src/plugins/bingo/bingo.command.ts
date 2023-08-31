@@ -76,11 +76,12 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     }
 
     if (!board) {
-        board = await Bingo.create({user: userId, board: generateBoard()});
+        //board = await Bingo.create({user: userId, board: generateBoard()});
+        board = new Bingo({user: userId, board: generateBoard()});
     }
 
     return {
-        content: "Here's your Wonderlust bingo board!",
+        content: "Here's your Wonderlust bingo board! **SAVING IS DISABLED**",
         files: [await prettyBoard(board.board)],
     };
 });
