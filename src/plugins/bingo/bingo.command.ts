@@ -38,7 +38,7 @@ const prettyBoard = async (board: string[][]) => {
 
     const imageDir = path.join(process.cwd(), "/src/plugins/bingo/bingo_images/");
 
-    const bg = await loadImage(`${imageDir}/bg.png`);
+    const bg = await loadImage(`${imageDir}bg.png`);
     ctx.drawImage(bg, 0, 0, 600, 655);
 
     const SQUARE_WIDTH = 110;
