@@ -4,11 +4,6 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 import {bingoItems} from "./bingoItems";
 import {BingoCheck} from "./BingoCheck.model";
 
-const options = Array.from(bingoItems.keys()).map((key) => ({
-    name: key,
-    value: key,
-}));
-
 const builder = new SlashCommandBuilder()
     .setName("bingocheck")
     .setDescription("Checks/unchecks a bingo item")
@@ -17,12 +12,15 @@ const builder = new SlashCommandBuilder()
         option.setName("bingo_id")
             .setDescription("Bingo item ID")
             .setRequired(true)
-            .setChoices(...options))
+    )
     .setScope(SlashCommandScope.MAIN_GUILD);
 
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     const id = interaction.options.getString("bingo_id", true);
+    if (!Array.from(bingoItems.keys()).includes(id)) {
+        return "Not a bingo key!"
+    }
     const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
     let current = check.bingoEntries.get(id) ?? false;
     check.bingoEntries.set(id, !current);
