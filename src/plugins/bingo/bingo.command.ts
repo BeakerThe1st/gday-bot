@@ -71,17 +71,12 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     const userId = interaction.user.id;
     let board = await Bingo.findOne({user: userId});
 
-    if (userId !== "537861332532461579") {
-        return "Wonderlust bingo is yet to begin! Stay tuned!";
-    }
-
     if (!board) {
-        //board = await Bingo.create({user: userId, board: generateBoard()});
-        board = new Bingo({user: userId, board: generateBoard()});
+        board = await Bingo.create({user: userId, board: generateBoard()});
     }
 
     return {
-        content: "Here's your Wonderlust bingo board! **SAVING IS DISABLED**",
+        content: "Here's your Wonderlust bingo board!",
         files: [await prettyBoard(board.board)],
     };
 });
