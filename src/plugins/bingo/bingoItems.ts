@@ -7,7 +7,9 @@ const items =
         "usb4", "qi2", "health_sensor", "watch_pink", "watch_battery", "s9_chip", "ultra_refresh",
         "new_mac", "apm_2", "ap_price_down", "ap_announced", "icloud_increase", "under_90min",
         "vision", "good_mornang", "hf1", "appletv_content", "saving_life", "tim_white_shoes",
-        "eu_only"
+        "eu_only", "android_mentioned", "apple_park_night", "cameras_rearranged", "carplay",
+        "leather_gone", "meaningless_graph", "rainbow", "rcs_support", "someone_dances", "speed",
+        "third_party_demo", "underground_lab", "woaaw"
     ];
 
 
