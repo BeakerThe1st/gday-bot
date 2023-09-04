@@ -11,10 +11,8 @@ useEvent("messageCreate", async (message: Message) => {
         return;
     }
     const roleCache = message.member?.roles.cache;
-    if (roleCache) {
-        if (roleCache.has(ROLES.MAIN.mod_squad)) {
-            return;
-        }
+    if (roleCache && roleCache.has(ROLES.MAIN.mod_squad)) {
+        return;
     }
     if (message.author.bot) {
         return;
