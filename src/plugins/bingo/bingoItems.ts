@@ -19,7 +19,7 @@ export const bingoItems = new Map([
     ["brighter_display", "Brighter Display"],
     ["thinner_bezel", "Thinner Bezels"],
     ["mute_switch", "Updated Mute Switch"],
-    ["ticker_phone", "Thicker iPhone"],
+    ["thicker_phone", "Thicker iPhone"],
     ["sapphire_crystal", "Sapphire Crystal"],
     ["titanium", "Titanium Frame"],
     ["leather_gone", "No Leather iPhone Case"],
