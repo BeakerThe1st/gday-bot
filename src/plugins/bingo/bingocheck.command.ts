@@ -1,8 +1,9 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
-import {ChatInputCommandInteraction, PermissionFlagsBits} from "discord.js";
+import {ChatInputCommandInteraction, Colors, EmbedBuilder, PermissionFlagsBits} from "discord.js";
 import {useChatCommand} from "../../hooks/useChatCommand";
 import {bingoItems} from "./bingoItems";
 import {BingoCheck} from "./BingoCheck.model";
+import {useClient} from "../../hooks";
 
 const builder = new SlashCommandBuilder()
     .setName("bingocheck")
@@ -13,6 +14,7 @@ const builder = new SlashCommandBuilder()
             .setDescription("Bingo item ID")
             .setRequired(true)
     )
+    .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
 
@@ -25,7 +27,19 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     let current = check.bingoEntries.get(id) ?? false;
     check.bingoEntries.set(id, !current);
     await check.save();
-    return `Successfully ${current ? "un" : ""}checked \`${id}\``;
+    const logChannel = await useClient().client.channels.fetch("1141854934602612796")
+    if (logChannel?.isTextBased() && !current) {
+        logChannel.send({
+            files: [
+                "https://cdn.discordapp.com/attachments/1141854934602612796/1148446935804563589/image.png"
+            ],
+            embeds: [new EmbedBuilder()
+                .setDescription(`${bingoItems.get(id)} has been checked!\n\nView your personalised bingo board with </bingo:1146636308765212746>`)
+                .setColor(Colors.Green)
+            ]
+        })
+    }
+    return `${current ? "Unchecked" : "Checked"} \`${id}\``;
     /*const bingos = await Bingo.find();
     const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
     const filteredBingos = bingos.filter((bingo) => {
