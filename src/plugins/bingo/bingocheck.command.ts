@@ -1,5 +1,5 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
-import {ChatInputCommandInteraction, Colors, EmbedBuilder, PermissionFlagsBits} from "discord.js";
+import {bold, ChatInputCommandInteraction, Colors, EmbedBuilder, PermissionFlagsBits} from "discord.js";
 import {useChatCommand} from "../../hooks/useChatCommand";
 import {bingoItems} from "./bingoItems";
 import {BingoCheck} from "./BingoCheck.model";
@@ -31,7 +31,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     if (logChannel?.isTextBased() && !current) {
         logChannel.send({
             embeds: [new EmbedBuilder()
-                .setDescription(`${bingoItems.get(id)} has been checked!\n\nView your personalised bingo board with </bingo:1146636308765212746>`)
+                .setDescription(`${bold(bingoItems.get(id) ?? "A tile")} has been checked!\n\nView your personalised bingo board with </bingo:1146636308765212746>`)
                 .setColor(Colors.Green)
                 .setThumbnail(`https://rapple.xyz/bingo_images/${id}.png`)
             ]
