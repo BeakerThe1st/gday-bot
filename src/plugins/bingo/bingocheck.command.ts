@@ -30,12 +30,10 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     const logChannel = await useClient().client.channels.fetch("1141854934602612796")
     if (logChannel?.isTextBased() && !current) {
         logChannel.send({
-            files: [
-                "https://cdn.discordapp.com/attachments/1141854934602612796/1148446935804563589/image.png"
-            ],
             embeds: [new EmbedBuilder()
                 .setDescription(`${bingoItems.get(id)} has been checked!\n\nView your personalised bingo board with </bingo:1146636308765212746>`)
                 .setColor(Colors.Green)
+                .setThumbnail(`https://rapple.xyz/bingo_images/${id}.png`)
             ]
         })
     }
