@@ -27,7 +27,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     let current = check.bingoEntries.get(id) ?? false;
     check.bingoEntries.set(id, !current);
     await check.save();
-    const logChannel = await useClient().client.channels.fetch("1141854934602612796")
+    const logChannel = await useClient().client.channels.fetch("1150597671921401876")
     if (logChannel?.isTextBased() && !current) {
         logChannel.send({
             embeds: [new EmbedBuilder()
