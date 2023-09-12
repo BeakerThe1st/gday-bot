@@ -4,6 +4,7 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 import {bingoItems} from "./bingoItems";
 import {BingoCheck} from "./BingoCheck.model";
 import {useClient} from "../../hooks";
+import {Bingo} from "./Bingo.model";
 
 const builder = new SlashCommandBuilder()
     .setName("bingocheck")
@@ -19,7 +20,8 @@ const builder = new SlashCommandBuilder()
 
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    const id = interaction.options.getString("bingo_id", true);
+    return "nah fam";
+    /*const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoItems.keys()).includes(id)) {
         return "Not a bingo key!"
     }
@@ -37,7 +39,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
             ]
         })
     }
-    return `${current ? "Unchecked" : "Checked"} \`${id}\``;
+    return `${current ? "Unchecked" : "Checked"} \`${id}\``;*/
     /*const bingos = await Bingo.find();
     const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
     const filteredBingos = bingos.filter((bingo) => {
@@ -66,8 +68,12 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     })
     const rApple = await useClient().client.guilds.fetch("332309672486895637");
     for (const bingo of filteredBingos) {
-        const member = await rApple.members.fetch(bingo.user);
-        await member.roles.add("1115364645696454726")
+        try {
+            const member = await rApple.members.fetch(bingo.user);
+            await member.roles.add("1151232815111872552")
+        } catch {
+            //ignored
+        }
     }
-    return `Added role for ${filteredBingos.length} entries`*/
+    return `Applied role to ${filteredBingos.length} entries`;*/
 });
