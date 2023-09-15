@@ -17,8 +17,6 @@ const builder = new SlashCommandBuilder()
     )
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
-
-
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     return "nah fam";
     /*const id = interaction.options.getString("bingo_id", true);

@@ -6,12 +6,12 @@ interface NextEvent {
 }
 
 //Timestamp is in ms
-export const NEXT_EVENT: null | NextEvent = {
+export const NEXT_EVENT: null | NextEvent = null; /*{
     name: "Wonderlust",
     timestamp: 1694538000000,
     image: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGV4dXgwOTI3OWxvbDUxc3R0cTB1ZTJ3ZzdqamVycjdqbWtkbGQwNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rFojqMvKmk3ZCliupx/giphy.gif",
     color: "#7cb1d6",
-};
+};*/
 
 
 //THESE GUILD IDS ARE MIRRORED SlashCommandBuilder, CHANGE THEM THERE TOO
