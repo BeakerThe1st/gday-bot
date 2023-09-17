@@ -32,7 +32,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     ctx.drawImage(bg, 0, 0, 1012, 270);
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = "600 32px sans-serif"
+    ctx.font = "32px sf-pro"
 
     ctx.fillText(interaction.options.getString("text", true), 23, 94 + 23);
 
