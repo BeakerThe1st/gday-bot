@@ -16,8 +16,8 @@ const builder = new SlashCommandBuilder()
     )
     .addStringOption((option) =>
         option
-            .setName("message_id")
-            .setDescription("Message to reply to.")
+            .setName("reply_candidate")
+            .setDescription("Message ID to reply to.")
     )
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
