@@ -2,7 +2,8 @@ import {
     ChatInputCommandInteraction,
     Interaction,
     InteractionReplyOptions,
-    MessagePayload, ModalBuilder,
+    MessagePayload,
+    ModalBuilder,
     REST,
     Routes,
 } from "discord.js";
@@ -21,6 +22,7 @@ type InteractionReply =
 type CommandHandler = (
     interaction: ChatInputCommandInteraction,
 ) => InteractionReply | Promise<InteractionReply>;
+
 
 const commandHandlers = new Map<string, CommandHandler>();
 
@@ -59,6 +61,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
 
     let response;
 
+    //Get a response from the handler or exit if response is null
     try {
         response = await handler(interaction);
         if (!response) {
@@ -67,23 +70,28 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     } catch (error) {
         response = `${error}`;
     }
-        try {
-            if (interaction.replied || interaction.deferred) {
-                if (response instanceof ModalBuilder) {
-                    throw new Error(`Tried to reply with a modal to an already replied to interaction.`)
-                } else {
-                    await interaction.editReply(response);
-                }
+
+    //Send out the reply
+    try {
+        const alreadyReplied = interaction.replied || interaction.deferred
+        if (response instanceof ModalBuilder) {
+            //Handle modal responses
+            if (alreadyReplied) {
+                throw new Error(`Cannot reply with a modal to an already replied to interaction.`);
             } else {
-                if (response instanceof ModalBuilder) {
-                    await interaction.showModal(response);
-                } else {
-                    await interaction.reply(response);
-                }
+                await interaction.showModal(response);
             }
-        } catch (error) {
-            useError(`${error}`);
+        } else {
+            //Handle everything else
+            if (alreadyReplied) {
+                await interaction.editReply(response);
+            } else {
+                await interaction.reply(response);
+            }
         }
+    } catch (error) {
+        useError(`${error}`);
+    }
 });
 
 export const updateSlashCommands = () => {
