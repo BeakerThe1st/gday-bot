@@ -1,8 +1,9 @@
-import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention} from "discord.js";
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Events, Message, userMention} from "discord.js";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import {useClient} from "../../hooks";
+import {useClient, useEnv, useEvent} from "../../hooks";
+import {CHANNELS, GUILDS} from "../../globals";
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.get("/", (req, res) => {
 
 app.get("/guild-info", async (req, res) => {
     const {client} = useClient();
-    const guild = await client.guilds.fetch("332309672486895637");
+    const guild = await client.guilds.fetch(GUILDS.MAIN);
 
     res.status(200).json({
         iconURL: guild.iconURL({size: 128}),
@@ -27,6 +28,7 @@ app.get("/guild-info", async (req, res) => {
 
 app.post("/ban-appeal", async (req, res) => {
     const {tag, id, reason} = req.body;
+    exports.tag
     if (!tag || !id || !reason) {
         return res.status(400).json({
             error: "Missing required parameters",
@@ -34,8 +36,8 @@ app.post("/ban-appeal", async (req, res) => {
     }
     try {
         const {client} = useClient();
-        const appealChannel = await client.channels.fetch("700365232542973979");
-        const rApple = await client.guilds.fetch("332309672486895637");
+        const appealChannel = await client.channels.fetch(CHANNELS.MAIN.appeal);
+        const rApple = await client.guilds.fetch(GUILDS.MAIN);
         const ban = await rApple.bans.fetch(id);
         if (!appealChannel || !appealChannel.isTextBased()) {
             throw new Error("Could not find appeal channel");
@@ -45,7 +47,9 @@ app.post("/ban-appeal", async (req, res) => {
             .setDescription(`${userMention(id)}`)
             .setColor("Blue")
             .addFields(
-                {name: "User", value: `${tag} (${id})`, inline: true},
+                {
+                    name: "User", value: `${tag} (${id})`, inline: true
+                },
                 {
                     name: "Ban Reason",
                     value: ban.reason ?? "No reason found",
@@ -57,10 +61,6 @@ app.post("/ban-appeal", async (req, res) => {
                 },
             );
         const actionRow = new ActionRowBuilder().addComponents(
-            new ButtonBuilder()
-                .setLabel("Thread")
-                .setStyle(ButtonStyle.Secondary)
-                .setCustomId(`appeal-thread-${id}`),
             new ButtonBuilder()
                 .setLabel("Unban")
                 .setStyle(ButtonStyle.Success)
@@ -75,6 +75,16 @@ app.post("/ban-appeal", async (req, res) => {
                 users: [],
             },
         });
+        useEvent(Events.MessageCreate, (message: Message) => {
+            if (message.channelId !== CHANNELS.MAIN.appeal) {
+                return;
+            }
+            if (message.author.id == (useEnv("DISCORD_CLIENT_ID")))
+            message.startThread({
+                name: `${tag} - (${id})`
+            });
+            return
+            });
         return res.status(200).json("Submitted appeal");
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

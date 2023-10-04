@@ -22,6 +22,7 @@ export const GUILDS = {
 
 export const CHANNELS = {
     MAIN: {
+        appeal: "700365232542973979",
         case_log: "1126077157895053312",
         log: "1120432710830280784",
     },
