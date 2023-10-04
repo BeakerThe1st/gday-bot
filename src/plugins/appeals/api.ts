@@ -60,7 +60,7 @@ app.post("/ban-appeal", async (req, res) => {
             new ButtonBuilder()
                 .setLabel("Thread")
                 .setStyle(ButtonStyle.Secondary)
-                .setCustomId(`appeal-thread-${tag}-${id}`),
+                .setCustomId(`appeal-thread-${id}`),
             new ButtonBuilder()
                 .setLabel("Unban")
                 .setStyle(ButtonStyle.Success)

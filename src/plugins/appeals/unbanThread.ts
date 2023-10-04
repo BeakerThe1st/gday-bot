@@ -1,35 +1,38 @@
-import {useEvent} from "../../hooks";
-import {Interaction, Message} from "discord.js";
+import { useEvent } from "../../hooks";
+import { Interaction, userMention } from "discord.js";
 
 useEvent("interactionCreate", async (interaction: Interaction) => {
     if (!interaction.isButton()) {
         return;
     }
-    const {customId} = interaction;
-    const [interactionType, action, userTag, userId] = customId.split("-");
-    const {message} = interaction;
-    if (interactionType !== "appeal") {
+    const [interactionType, action, userId] = interaction.customId.split("-");
+    const message = interaction.message;
+    
+    if (interactionType !== "appeal" || action !== "thread") {
         return;
     }
-    if (action !== "thread") {
-        return;
-    }
+
+    const sendEphemeralReply = async (content: string) => {
+        await interaction.reply({
+            content: content,
+            ephemeral: true
+        });
+    };
+
     try {
-        await interaction.message.startThread ({
-            name: `Appeal Thread - ${userTag}`
-        })
-    } catch {
-        await interaction.reply({
-            content: `A thread was already created for <@${userId}>.`,
-            ephemeral: true,
+        await message.startThread({
+            name: `${userId}`
         });
-        return;
+        await sendEphemeralReply(`A thread for ${userMention(userId)} (${userId}) is created.`);
     }
-    if (message instanceof Message) {
-        await interaction.reply({
-            // Replace interaction.user with appealee's username.
-            content: `The thread for <@${userId}> is created.`,
-            ephemeral: true,
-        });
+    
+    catch (error) {
+        if (error && typeof error === "object" && "code" in error && error.code === "MessageExistingThread") {
+            await sendEphemeralReply(`The thread for ${userMention(userId)} (${userId}) already exists.`);
+        } else {
+            // Handle other possible errors with a custom message
+            await sendEphemeralReply(`An error occurred when creating this thread.`);
+            console.error(error);
+        }
     }
 });
