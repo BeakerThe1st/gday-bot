@@ -58,6 +58,10 @@ app.post("/ban-appeal", async (req, res) => {
             );
         const actionRow = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
+                .setLabel("Thread")
+                .setStyle(ButtonStyle.Secondary)
+                .setCustomId(`appeal-thread-${tag}-${id}`),
+            new ButtonBuilder()
                 .setLabel("Unban")
                 .setStyle(ButtonStyle.Success)
                 .setCustomId(`appeal-unban-${id}`),
