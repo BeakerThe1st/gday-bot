@@ -1,17 +1,13 @@
 import {useClient, useEvent} from "../../hooks";
-import {Interaction, Message} from "discord.js";
+import {Interaction} from "discord.js";
 import {GUILDS} from "../../globals";
 
 useEvent("interactionCreate", async (interaction: Interaction) => {
     if (!interaction.isButton()) {
         return;
     }
-    const {customId} = interaction;
-    const [interactionType, action, userId] = customId.split("-");
-    if (interactionType !== "appeal") {
-        return;
-    }
-    if (action !== "unban") {
+    const [interactionType, action, userId] = interaction.customId.split("-");
+    if (interactionType !== "appeal" || action !== "unban") {
         return;
     }
     await interaction.deferReply({ephemeral: true});
@@ -24,13 +20,10 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
         await interaction.reply("Could not unban user");
         return;
     }
-    const {message} = interaction;
-    if (message instanceof Message) {
-        await message.edit({
-            content: `<@${userId}> unbanned by ${interaction.user}`,
-            components: [],
-        });
-    }
+    await interaction.message.edit({
+        content: `<@${userId}> unbanned by ${interaction.user}`,
+        components: [],
+    });
     const unbanChannel = await client.channels.fetch("934958626257375244");
     if (unbanChannel?.isTextBased()) {
         await unbanChannel.send({
