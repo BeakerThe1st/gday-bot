@@ -121,7 +121,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
         } else {
             try {
                 await member.user.send(
-                    "Your Santa Squad application in r/Apple was denied. Please ensure you have a visible and recognisible santa hat in your profile and re-apply. If you changed your profile picture immediately before applying, please wait before applying again as sometimes Discord can take a while to update profile pictures. If you have any further questions, please read the info provided in the channel and then feel free to contact staff about why your application was denied.",
+                    "Your Santa Squad application in r/Apple was denied. Please ensure you have a visible and recognisable santa hat in your profile and re-apply. If you changed your profile picture immediately before applying, please wait before applying again as sometimes Discord can take a while to update profile pictures. If you have any further questions, please read the info provided in the channel and then feel free to contact staff about why your application was denied.",
                 );
             } catch {
                 `${member} was denied from Santa Squad but I was unable to DM them. Please contact them directly.`;
