@@ -1,4 +1,4 @@
-import {Embed, EmbedBuilder} from "discord.js";
+import {Embed, EmbedBuilder, MessageCreateOptions} from "discord.js";
 import {useClient} from "../../hooks";
 
 export enum LOG_THREADS {
@@ -9,10 +9,15 @@ export enum LOG_THREADS {
     NICKNAME = "1128915824200142888"
 }
 
-export const log = async (thread: LOG_THREADS, embed: EmbedBuilder) => {
+type LogItem = EmbedBuilder | MessageCreateOptions
+
+export const log = async (thread: LOG_THREADS, item: LogItem) => {
     const channel = await useClient().client.channels.fetch(thread);
+    if (item instanceof EmbedBuilder) {
+        item = {embeds: [item]}
+    }
     if (channel?.isTextBased()) {
-        await channel.send({embeds: [embed]});
+        await channel.send(item);
     } else {
         throw new Error(`${thread} is not a valid log thread.`)
     }
