@@ -41,18 +41,22 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
 //Bulk delete Logs
 useEvent(Events.MessageBulkDelete, (messages: Collection<string, Message | PartialMessage>, channel: GuildTextBasedChannel) => {
     if (channel.guildId !== GUILDS.MAIN) return;
-    const embed = new EmbedBuilder()
-        .setDescription(`:wastebasket: ${messages.size} messages deleted in ${channel}`)
-        .setColor(Colors.DarkRed)
-        .setTimestamp(Date.now());
     let fileContent = "";
+    const authors = new Set<string>();
     for (const [, message] of messages) {
         const { author } = message;
+        if (author?.id) {
+            authors.add(author.id);
+        }
         if (fileContent !== "") {
             fileContent += "\n";
         }
         fileContent += `[${message.createdTimestamp}] ${author?.username ?? "No Username"} (${author?.id ?? "No ID"}): ${message.cleanContent?.replaceAll("\n", "\n\t\t\t")}`;
     }
+    const embed = new EmbedBuilder()
+        .setDescription(`:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(authors).map((id) => inlineCode(id))}]`)
+        .setColor(Colors.DarkRed)
+        .setTimestamp(Date.now());
     log(LOG_THREADS.DELETION, {embeds: [embed], files: [{attachment: Buffer.from(fileContent), name:`${channel.guild.name.replace(/[\\W_]+/g, '')}-bulk-delete-${Date.now()}.txt`}]});
 })
 
