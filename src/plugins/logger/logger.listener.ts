@@ -54,7 +54,7 @@ useEvent(Events.MessageBulkDelete, (messages: Collection<string, Message | Parti
         fileContent += `[${message.createdTimestamp}] ${author?.username ?? "No Username"} (${author?.id ?? "No ID"}): ${message.cleanContent?.replaceAll("\n", "\n\t\t\t")}`;
     }
     const embed = new EmbedBuilder()
-        .setDescription(`:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(authors)}]`)
+        .setDescription(`:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(authors).map((id) => inlineCode(id))}]`)
         .setColor(Colors.DarkRed)
         .setTimestamp(Date.now());
     log(LOG_THREADS.DELETION, {embeds: [embed], files: [{attachment: Buffer.from(fileContent), name:`${channel.guild.name.replace(/[\\W_]+/g, '')}-bulk-delete-${Date.now()}.txt`}]});
