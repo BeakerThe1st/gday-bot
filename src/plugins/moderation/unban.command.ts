@@ -21,5 +21,5 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         throw new Error("This command can only be run in a guild.");
     }
     await interaction.guild.bans.remove(user, `${interaction.user.id}${reason ? ` ${reason}` : ""}`);
-    return `Successfully unbanned ${user}.`;
+    return `Unbanned ${user}.`;
 });

@@ -92,7 +92,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
             return modal;
         case "delete":
             await deleteTag(guildId, tagName!);
-            return `Tag ${inlineCode(tagName!)} was successfully deleted.`;
+            return `${inlineCode(tagName!)} deleted`;
         case "edit":
             const tag = await Tag.findOne({guild: guildId, name: tagName});
             if (!tag) return `${inlineCode(tagName!)} is not a valid tag!`;
@@ -112,11 +112,11 @@ useEvent(Events.InteractionCreate, async (interaction) => {
 
     if (interaction.customId.startsWith("tagCreate")) {
         const createdTag = await createTag(interaction.guild.id, interaction.user.id, tagName, tagContent);
-        await interaction.reply({content: `Successfully created tag ${inlineCode(createdTag.name)}.`});
+        await interaction.reply({content: `Created tag ${inlineCode(createdTag.name)}`});
     } else if (interaction.customId.startsWith("tagEdit")) {
         const oldName = interaction.customId.replace("tagEdit-", "");
         await editTag(interaction.guild.id, interaction.user.id, oldName, tagName, tagContent);
-        await interaction.reply({content: `Successfully updated tag ${inlineCode(oldName)}.`});
+        await interaction.reply({content: `Updated ${inlineCode(oldName)}`});
     }
     await interaction.reply({content: `Something went wrong with the modal submission.`});
 });

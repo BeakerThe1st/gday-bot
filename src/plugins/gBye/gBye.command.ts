@@ -48,7 +48,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
         if ("send" in channel) {
             config.set("channel", channel.id);
             await config.save();
-            return `Successfully set the G'bye output channel to ${channel}`;
+            return `The G'bye output channel has been set to ${channel}`;
         } else {
             throw new Error("G'bye output must be in a text channel");
         }

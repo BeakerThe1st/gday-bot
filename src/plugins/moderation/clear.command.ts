@@ -57,7 +57,7 @@ const builder = new SlashCommandBuilder()
     //                 const userMessages = await fetchChannelMessagesForUser(channel, user, amount);
     //                 await channel.bulkDelete(userMessages, true);
     //             }
-    //             return {content: `Successfully deleted ${amount} messages from ${userMention(user.id)} in all channels.`, allowedMentions: { parse: [] } };
+    //             return {content: `Deleted ${amount} messages from ${userMention(user.id)} in all channels.`, allowedMentions: { parse: [] } };
     //         } else {
     //             const userMessages = await fetchChannelMessagesForUser(channel, user, amount);
     //             await channel.bulkDelete(userMessages, true);

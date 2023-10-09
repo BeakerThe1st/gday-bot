@@ -24,5 +24,5 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         return `${member} is already established!`;
     }
     await member.roles.add(established);
-    return `Successfully established ${member}.`;
+    return `Established ${member}.`;
 });

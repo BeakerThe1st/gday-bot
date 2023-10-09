@@ -62,14 +62,12 @@ useChatCommand(
         if (subcommand === "delete") {
             givenCase.deleted = true;
             await givenCase.save();
-            return `Successfully deleted ${inlineCode(caseId)}`;
+            return `Deleted ${inlineCode(caseId)}`;
         } else if (subcommand === "reason") {
             const newReason = interaction.options.getString("new_reason", true);
             givenCase.reason = newReason;
             await givenCase.save();
-            return `Successfully set the reason to "${newReason}" for case ${inlineCode(
-                caseId,
-            )}`;
+            return `Changed ${inlineCode(caseId)}'s reason to "${newReason}"`;
         } else if (subcommand === "info") {
             const target = await interaction.client.users.fetch(givenCase.target);
             const embed = new EmbedBuilder()

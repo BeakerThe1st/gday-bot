@@ -85,14 +85,14 @@ useChatCommand(
                     return `Event mode is already running in this channel.`;
                 } else {
                     eventMode.startTimer();
-                    return `Successfully started event mode with a ${eventMode.timerInterval / 1000} second interval.`;
+                    return `Event mode started with a ${eventMode.timerInterval / 1000} second interval.`;
                 }
             case "stop":
                 if (!eventMode.isRunning()) {
                     return `Event mode is not currently running in this channel.`;
                 } else {
                     eventMode.stopTimer();
-                    return `Successfully stopped event mode.`;
+                    return `Event mode stopped.`;
                 }
             case "image":
                 const imageUrl = interaction.options.getString("image_url", true);

@@ -118,11 +118,11 @@ class PollCommand {
         if (previousVote === vote) {
             this.users.delete(user.id);
             this.updateMessage();
-            return `Successfully removed your vote.`;
+            return `Your vote has been removed.`;
         } else {
             this.users.set(user.id, vote);
             this.updateMessage();
-            return `Successfully voted ${vote}.`;
+            return `You have voted ${vote}.`;
         }
     };
 
