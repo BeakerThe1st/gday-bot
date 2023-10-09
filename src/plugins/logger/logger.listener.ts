@@ -1,9 +1,11 @@
 import {useEvent} from "../../hooks";
 import {
+    Collection,
     Colors,
     EmbedBuilder,
     Events,
     GuildMember,
+    GuildTextBasedChannel,
     inlineCode,
     Message,
     PartialGuildMember,
@@ -35,6 +37,24 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
     }
     log(LOG_THREADS.DELETION, embed);
 });
+
+//Bulk delete Logs
+useEvent(Events.MessageBulkDelete, (messages: Collection<string, Message | PartialMessage>, channel: GuildTextBasedChannel) => {
+    if (channel.guildId !== GUILDS.MAIN) return;
+    const embed = new EmbedBuilder()
+        .setDescription(`:wastebasket: ${messages.size} messages deleted in ${channel}`)
+        .setColor(Colors.DarkRed)
+        .setTimestamp(Date.now());
+    let fileContent = "";
+    for (const [, message] of messages) {
+        const { author } = message;
+        if (fileContent !== "") {
+            fileContent += "\n";
+        }
+        fileContent += `[${message.createdTimestamp}] ${author?.username ?? "No Username"} (${author?.id ?? "No ID"}): ${message.cleanContent?.replaceAll("\n", "\n\t\t\t")}`;
+    }
+    log(LOG_THREADS.DELETION, {embeds: [embed], files: [{attachment: Buffer.from(fileContent), name:`${channel.guild.name.replace(/[\\W_]+/g, '')}-bulk-delete-${Date.now()}.txt`}]});
+})
 
 //Role Logs
 useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
