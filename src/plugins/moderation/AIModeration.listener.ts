@@ -4,7 +4,7 @@ import {useOpenAI} from "../../hooks/useOpenAI";
 import {GUILDS, ROLES} from "../../globals";
 
 useEvent("messageCreate", async (message: Message) => {
-    if (message.guildId !== GUILDS.MAIN) {
+    /*if (message.guildId !== GUILDS.MAIN) {
         return;
     }
     if (message.author.bot) {
@@ -35,7 +35,7 @@ useEvent("messageCreate", async (message: Message) => {
             await logChannel.send(`# Potential sexual message\n${message.author} (${message.author.username}): ${inlineCode(message.cleanContent)}\n${messageLink(message.channelId, message.id)}`)
         }
     }
-    /*const zeroTolerance = matchedFlags.some((flag => zeroToleranceFlags.includes(flag)));
+    const zeroTolerance = matchedFlags.some((flag => zeroToleranceFlags.includes(flag)));
     const zeroToleranceFlags = ["harassment/threatening", "hate/threatening", "self-harm/intent", "self-harm/instructions", "sexual/minors", "violence/graphic"];
     if (zeroTolerance) {
         if (logChannel?.isTextBased()) {
