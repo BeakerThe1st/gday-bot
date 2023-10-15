@@ -12,7 +12,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const emoji = interaction.options.getString('emoji', true).trim();
 
     if (!emoji.startsWith(`<`) && !emoji.endsWith(">")) {
-        return "That cannot be jumbified.";
+        return "That cannot be jumbofied.";
     }
 
     const matches = emoji.match(/\d{15,}/g);
