@@ -15,14 +15,11 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         return "That cannot be jumbified.";
     }
 
-    const id = emoji.match(/\d{15,}/g);
-    if (!id) {
+    const matches = emoji.match(/\d{15,}/g);
+    if (!matches) {
         return "Invalid emoji format!";
     }
 
     const type = emoji.startsWith("<a:") ? "gif" : "png";
-
-    const emojiURL = `https://cdn.discordapp.com/emojis/${id}.${type}?quality=lossless`;
-    
-    return `${emojiURL}`
+    return `https://cdn.discordapp.com/emojis/${matches[0]}.${type}?quality=lossless`;
 });
