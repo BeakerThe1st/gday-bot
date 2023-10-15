@@ -12,6 +12,10 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const emoji = interaction.options.getString('emoji', true).trim();
     let emojiURL = null
 
+    if (!emoji.startsWith(`<`)) {
+        return "You can't jumbo-ify that, sorry!";
+    };
+
     if (emoji.startsWith("<") && emoji.endsWith(">")) {
         const id = emoji.match(/\d{15,}/g);
         if (!id) {
@@ -20,10 +24,6 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         const type = emoji.startsWith("<a:") ? "gif" : "png";
 
         emojiURL = `https://cdn.discordapp.com/emojis/${id}.${type}?quality=lossless`;
-    };
-    
-    if (!emoji.startsWith("<" || "<a:")) {
-        return "You can't jumbo-ify that, sorry!";
     };
     
     return `${emojiURL}`
