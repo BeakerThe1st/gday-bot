@@ -6,6 +6,7 @@ const builder = new SlashCommandBuilder()
     .setName("jumbo")
     .setDescription("Retrieves the image behind an emoji.")
     .addStringOption(option => option.setName("emoji").setDescription("Emoji to jumbo size.").setRequired(true))
+    .setDefaultMemberPermissions(PermissionFlagsBits.AttachFiles)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
