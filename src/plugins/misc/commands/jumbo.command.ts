@@ -4,7 +4,7 @@ import {useChatCommand} from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("jumbo")
-    .setDescription("Make G'day blow up an image.")
+    .setDescription("Retrieves the image behind an emoji.")
     .addStringOption(option => option.setName("emoji").setDescription("Emoji to jumbo size.").setRequired(true))
     .setScope(SlashCommandScope.MAIN_GUILD);
 
@@ -12,8 +12,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const emoji = interaction.options.getString('emoji', true).trim();
 
     if (!emoji.startsWith(`<`) && !emoji.endsWith(">")) {
-        return "You can't jumbo-ify that, sorry!";
-    };
+        return "That cannot be jumbified.";
+    }
 
     const id = emoji.match(/\d{15,}/g);
     if (!id) {
