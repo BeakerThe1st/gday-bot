@@ -1,28 +1,27 @@
 import {ChatInputCommandInteraction, PermissionFlagsBits, TextChannel} from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../../hooks/useChatCommand";
+import {chatEnabled} from "../../chat/chat";
 
 const builder = new SlashCommandBuilder()
     .setName("slowmode")
-    .setDescription("Set the Slow Mode duration in the current channel")
-    .addStringOption(option => option
-        .setName("duration")
-        .setDescription("Set the duration in seconds.")
+    .setDescription("Sets slowmode interval in the current channel")
+    .addIntegerOption(option => option
+        .setName("interval")
+        .setDescription("Slowmode interval in seconds.")
+        .setMinValue(0)
+        .setMaxValue(21600)
         .setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .setScope(SlashCommandScope.MAIN_GUILD)
     .setEphemeral(true);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
-    const duration = interaction.options.getString('duration', true)
-
-    if (!interaction.channel || !interaction.channel.isTextBased()) {
-        return "Channel undefined"
+    const interval = interaction.options.getInteger('interval', true)
+    const { channel } = interaction;
+    if (!(channel && "setRateLimitPerUser" in channel)) {
+        return "Slowmode cannot be set in this channel."
     }
-
-    const channel = interaction.channel as TextChannel
-
-    await channel.setRateLimitPerUser(parseInt(duration))
-
-    return `Slow mode was set to ${duration} seconds!`
+    await channel.setRateLimitPerUser(interval);
+    return interval === 0 ? "Slow mode disabled" : `Slow mode set to ${interval} seconds`
 });
