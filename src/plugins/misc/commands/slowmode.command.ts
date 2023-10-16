@@ -23,5 +23,5 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         return "Slowmode cannot be set in this channel."
     }
     await channel.setRateLimitPerUser(interval);
-    return interval === 0 ? "Slow mode disabled" : `Slow mode set to ${interval} seconds`
+    return interval === 0 ? "Slowmode disabled" : `Slowmode set to ${interval} seconds`
 });
