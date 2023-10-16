@@ -9,7 +9,7 @@ const builder = new SlashCommandBuilder()
         "Searches all cases in the guild, filtered by the given parameters.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(SlashCommandScope.GLOBAL)
     .addUserOption((option) =>
         option.setName("executor").setDescription("Case executor."),
     )

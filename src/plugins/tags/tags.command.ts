@@ -20,7 +20,7 @@ import {Tag} from "./Tag.model";
 const builder = new SlashCommandBuilder()
     .setName("tags")
     .setDescription("Manages tags.")
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(SlashCommandScope.GLOBAL)
     .setDMPermission(false)
     .setDeferrable(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)

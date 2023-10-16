@@ -15,7 +15,7 @@ const builder = new SlashCommandBuilder()
     .setName("case")
     .setDescription("Manages a given case.")
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(SlashCommandScope.GLOBAL)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("info")
@@ -53,10 +53,10 @@ useChatCommand(
         const caseId = interaction.options.getString("case_id", true);
         const givenCase = await Case.findById(caseId);
         if (!givenCase) {
-            return `${inlineCode(caseId)} is not a valid case ID.`;
+            return `${inlineCode(caseId)} is not a valid case ID`;
         }
         if (givenCase.guild !== interaction.guildId) {
-            return `${inlineCode(caseId)} is not from this guild.`;
+            return `${inlineCode(caseId)} is not from this guild`;
         }
         const subcommand = interaction.options.getSubcommand();
         if (subcommand === "delete") {

@@ -19,7 +19,7 @@ const builder = new SlashCommandBuilder()
             .setName("user")
             .setDescription("User to ping with the tag.")
     )
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(SlashCommandScope.GLOBAL);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const tagName = interaction.options.getString("name", true);

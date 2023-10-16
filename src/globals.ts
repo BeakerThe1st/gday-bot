@@ -25,6 +25,9 @@ export const CHANNELS = {
         case_log: "1126077157895053312",
         log: "1120432710830280784",
     },
+    STAFF: {
+        modmail_parent: "582568757575024640"
+    }
 };
 export const ROLES = {
     MAIN: {

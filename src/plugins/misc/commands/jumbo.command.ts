@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction, inlineCode, PermissionFlagsBits} from "discord.js";
+import {ChatInputCommandInteraction, PermissionFlagsBits} from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../../hooks/useChatCommand";
 
@@ -11,6 +11,8 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const emoji = interaction.options.getString('emoji', true).trim();
+
+    const emojis = emoji.split(">");
 
     if (!emoji.startsWith(`<`) && !emoji.endsWith(">")) {
         return "That cannot be jumbofied.";
