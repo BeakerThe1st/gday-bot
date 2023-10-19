@@ -15,6 +15,7 @@ import {
 } from "discord.js";
 import {log, LOG_THREADS} from "./logs";
 import {GUILDS} from "../../globals";
+import {createBulkMessageLogFile} from "../../utils";
 
 //Deleted Message
 useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
@@ -41,23 +42,16 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
 //Bulk delete Logs
 useEvent(Events.MessageBulkDelete, (messages: Collection<string, Message | PartialMessage>, channel: GuildTextBasedChannel) => {
     if (channel.guildId !== GUILDS.MAIN) return;
-    let fileContent = "";
+    messages = messages.reverse();
     const authors = new Set<string>();
     for (const [, message] of messages) {
-        const { author } = message;
-        if (author?.id) {
-            authors.add(author.id);
-        }
-        if (fileContent !== "") {
-            fileContent += "\n";
-        }
-        fileContent += `[${message.createdTimestamp}] ${author?.username ?? "No Username"} (${author?.id ?? "No ID"}): ${message.cleanContent?.replaceAll("\n", "\n\t\t\t")}`;
+        if (message.author?.id) authors.add(message.author.id);
     }
     const embed = new EmbedBuilder()
         .setDescription(`:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(authors).map((id) => inlineCode(id)).join(', ')}]`)
         .setColor(Colors.DarkRed)
         .setTimestamp(Date.now());
-    log(LOG_THREADS.DELETION, {embeds: [embed], files: [{attachment: Buffer.from(fileContent), name:`${channel.guild.name.replace(/[\\W_]+/g, '')}-bulk-delete-${Date.now()}.txt`}]});
+    log(LOG_THREADS.DELETION, {embeds: [embed], files: [{attachment: createBulkMessageLogFile(messages), name:`${channel.guild.name.replace(/[\\W_]+/g, '')}-bulk-delete-${Date.now()}.txt`}]});
 })
 
 //Role Logs
