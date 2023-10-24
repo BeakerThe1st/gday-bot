@@ -69,15 +69,14 @@ const prettyBoard = async (board: string[][]) => {
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
     const userId = interaction.user.id;
-    let board = await Bingo.findOne({user: userId});
+    /*let board = await Bingo.findOne({user: userId});
 
     if (!board) {
-        return "Unfortunately, you missed out on bingo this time around!"
-        //board = await Bingo.create({user: userId, board: generateBoard()});
-    }
+        board = await Bingo.create({user: userId, board: generateBoard()});
+    }*/
 
     return {
-        content: "Here's your Wonderlust bingo board!",
-        files: [await prettyBoard(board.board)],
+        content: "Here's your Wonderlust bingo board! **SAVING IS DISABLED**",
+        files: [await prettyBoard(generateBoard() /*board.board*/)],
     };
 });
