@@ -25,7 +25,6 @@ export const bingoItems = new Map([
     ["appletv_content", "AppleTV+ Content"],
     ["saving_life", "Story about an Apple product saving a life"],
     ["tim_white_shoes", "Tim Cook wears white shoes"],
-    ["eu_only", "\"Only in the EU\""],
     ["rainbow", "Rainbow Cameo"],
     ["underground_lab", "Underground Lab"],
     ["carplay", "Carplay Mentioned"],
