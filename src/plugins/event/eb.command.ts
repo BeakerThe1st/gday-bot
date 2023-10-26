@@ -24,7 +24,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     if (!(member instanceof GuildMember)) {
         throw new Error("Member is not a GuildMember");
     }
-    await member.roles.add("1146637608198352926");
+    await member.roles.add("1166975967433080894");
     const logChannel = await member.client.channels.fetch("1146637900553932860");
     if (logChannel?.isTextBased()) {
         await logChannel.send({
