@@ -6,6 +6,7 @@ import {Bingo} from "./Bingo.model";
 import {createCanvas, loadImage} from "canvas";
 import path from "path";
 import {BingoCheck} from "./BingoCheck.model";
+import {NEXT_EVENT} from "../../globals";
 
 const builder = new SlashCommandBuilder()
     .setName("bingo")
@@ -76,7 +77,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     }*/
 
     return {
-        content: "Here's your Wonderlust bingo board! **SAVING IS DISABLED**",
+        content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board! **SAVING IS DISABLED**`,
         files: [await prettyBoard(generateBoard() /*board.board*/)],
     };
 });
