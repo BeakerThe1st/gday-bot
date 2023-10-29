@@ -1,8 +1,10 @@
+import {ColorResolvable} from "discord.js";
+
 interface NextEvent {
     name: string;
     timestamp: number;
     image: string;
-    color: string;
+    color: ColorResolvable;
 }
 
 //Timestamp is in ms

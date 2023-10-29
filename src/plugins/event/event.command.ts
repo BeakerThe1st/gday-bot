@@ -22,7 +22,7 @@ useChatCommand(builder, () => {
                 afterEvent ? "started" : "starts"
             } at ${time(eventDate, TimestampStyles.ShortDateTime)}`,
         )
-        .setColor("Aqua")
+        .setColor(NEXT_EVENT?.color ?? "White")
         .setThumbnail(event.image)
         .addFields({
             name: "Time to Event",

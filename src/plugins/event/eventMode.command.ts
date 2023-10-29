@@ -138,7 +138,7 @@ class EventMode {
                 )}. Watch at the links below.`,
             )
             .setImage(this.image)
-            .setColor("Aqua");
+            .setColor(NEXT_EVENT?.color ?? "White");
         const actionRow = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
                 .setLabel("Apple Website")
