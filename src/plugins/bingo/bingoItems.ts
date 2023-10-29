@@ -1,35 +1,26 @@
 
 export const bingoItems = new Map([
-    // Free Space
+    ["3nm", "3nm Process"],
+    ["aaa_games", "AAA Games on Mac"],
     ["free_space", "Free Space"],
-
-    // iPhone
-    ["price_increase", "USD Price Increase"],
-
-    // Mac
-    ["new_mac", "New Mac"],
-
-    // AirPods
-    ["apm_2", "AirPods Max 2"],
-    ["ap_announced", "New AirPods Announced"],
-
-    // Troll
-    ["icloud_increase", "Base iCloud GB Increase"],
-    ["someone_dances", "Someone Dances"],
-    ["speed", "Superhuman Speed"],
-
-    // Other
-    ["under_90min", "Keynote under 90 minutes"],
-    ["vision", "Vision Pro Mentioned"],
-    ["hf1", "Hair Force One strikes again"],
-    ["appletv_content", "AppleTV+ Content"],
-    ["saving_life", "Story about an Apple product saving a life"],
-    ["tim_white_shoes", "Tim Cook wears white shoes"],
-    ["rainbow", "Rainbow Cameo"],
-    ["underground_lab", "Underground Lab"],
-    ["carplay", "Carplay Mentioned"],
+    ["imac_24", "Refreshed 24\" iMac"],
+    ["imac_pro", "New iMac Pro"],
+    ["ipad_air", "Refreshed iPad Air"],
+    ["ipad_mini", "Refreshed iPad Mini"],
+    ["ipad_pro", "Refreshed iPad Pros"],
+    ["m3_chip", "M3 Chip"],
+    ["m3_promax", "M3 Pro and Max Chips"],
+    ["mac_gaming", "Mac Gaming Segment"],
+    ["mac_testimonies", "New Mac Testimonies"],
+    ["macbook_pro", "Refreshed MacBook Pros"],
+    ["mba_13", "Refreshed 13\" Macbook Air"],
+    ["mba_15", "Refreshed 15\" Macbook Air"],
+    ["mbp_13", "13\" MBP Discontinued"],
     ["meaningless_graph", "Meaningless Graph"],
-    ["third_party_demo", "Boring Third Party Demo"],
-    ["woaaw", "\"Woaaw!\""],
-    ["apple_park_night", "Apple Park at Night"]
+    ["new_apm", "AirPods Max (2nd Gen)"],
+    ["new_display", "New Display"],
+    ["raytracing_hardware", "Ray Tracing Hardware"],
+    ["underground_lab", "Underground Lab"],
+    ["under_60", "Under 60 Minutes"],
+    ["vision_pro", "Vision Pro Segment"],
 ]);
