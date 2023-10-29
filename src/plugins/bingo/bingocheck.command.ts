@@ -1,6 +1,9 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
-import {ChatInputCommandInteraction, PermissionFlagsBits} from "discord.js";
+import {bold, ChatInputCommandInteraction, Colors, EmbedBuilder, PermissionFlagsBits} from "discord.js";
 import {useChatCommand} from "../../hooks/useChatCommand";
+import {bingoItems} from "./bingoItems";
+import {BingoCheck} from "./BingoCheck.model";
+import {useClient} from "../../hooks";
 const builder = new SlashCommandBuilder()
     .setName("bingocheck")
     .setDescription("Checks/unchecks a bingo item")
@@ -13,8 +16,7 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    return "nah fam";
-    /*const id = interaction.options.getString("bingo_id", true);
+    const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoItems.keys()).includes(id)) {
         return "Not a bingo key!"
     }
@@ -32,7 +34,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
             ]
         })
     }
-    return `${current ? "Unchecked" : "Checked"} \`${id}\``;*/
+    return `${current ? "Unchecked" : "Checked"} \`${id}\``;
     /*const bingos = await Bingo.find();
     const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
     const filteredBingos = bingos.filter((bingo) => {
