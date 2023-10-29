@@ -147,7 +147,7 @@ class EventMode {
             new ButtonBuilder()
                 .setLabel("YouTube")
                 .setStyle(ButtonStyle.Link)
-                .setURL("https://youtu.be/ZiP1l7jlIIA"),
+                .setURL("https://youtu.be/ctkW3V0Mh-k"),
             new ButtonBuilder()
                 .setLabel("Leaked Event Footage")
                 .setStyle(ButtonStyle.Link)
