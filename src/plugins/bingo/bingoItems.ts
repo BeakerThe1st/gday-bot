@@ -1,4 +1,3 @@
-
 export const bingoItems = new Map([
     ["3nm", "3nm Process"],
     ["aaa_games", "AAA Games on Mac"],
