@@ -41,7 +41,6 @@ const prettyBoard = async (board: string[][]) => {
 
     const bg = await loadImage(`${imageDir}bg.png`);
     ctx.drawImage(bg, 0, 0, 600, 655);
-    ctx.fillStyle = "white";
 
     const SQUARE_WIDTH = 110;
 
@@ -61,6 +60,7 @@ const prettyBoard = async (board: string[][]) => {
                 }
                 ctx.drawImage(image, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1);
             } catch {
+                ctx.fillStyle = "white";
                 ctx.fillText(col, x + 5, y + 20);
             }
         });
