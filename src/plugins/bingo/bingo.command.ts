@@ -42,21 +42,23 @@ const prettyBoard = async (board: string[][]) => {
     const bg = await loadImage(`${imageDir}bg.png`);
     ctx.drawImage(bg, 0, 0, 600, 655);
 
+    const X_OFFSET = 25;
+    const Y_OFFSET = 80;
     const SQUARE_WIDTH = 110;
 
     const check = await BingoCheck.findOne();
 
     board.forEach((row, rowIndex) => {
         row.forEach(async (col, colIndex) => {
-            const x = SQUARE_WIDTH * rowIndex + 25;
-            const y = SQUARE_WIDTH * colIndex + 80;
+            const x = SQUARE_WIDTH * rowIndex + X_OFFSET;
+            const y = SQUARE_WIDTH * colIndex + Y_OFFSET;
 
             try {
                 const isChecked = check?.bingoEntries.get(col) ?? false;
                 const image = await loadImage(`${imageDir}${col}.png`);
                 if (isChecked === true) {
                     const checkedImage = await loadImage(`${imageDir}checked.png`);
-                    ctx.drawImage(checkedImage, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
+                    ctx.drawImage(checkedImage, x - 1, y - 1, SQUARE_WIDTH + 2, SQUARE_WIDTH + 2);
                 }
                 ctx.drawImage(image, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
             } catch {
