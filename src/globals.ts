@@ -10,7 +10,7 @@ export const NEXT_EVENT: null | NextEvent = {
     name: "Scary Fast",
     timestamp: 1698710400000,
     image: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWVibTN5Y2ZiMGxuMzk4bmwzb2lyZmJjODNsN3dpMWhjcXA2b2FseiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DbEimmh5VeAM4Fu0Xc/giphy.gif",
-    color: "#dbdbdf",
+    color: "#8D8C9A",
 };
 
 
