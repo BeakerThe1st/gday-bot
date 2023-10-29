@@ -56,9 +56,9 @@ const prettyBoard = async (board: string[][]) => {
                 const image = await loadImage(`${imageDir}${col}.png`);
                 if (isChecked === true) {
                     const checkedImage = await loadImage(`${imageDir}checked.png`);
-                    ctx.drawImage(checkedImage, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1);
+                    ctx.drawImage(checkedImage, x + 1, y + 1, SQUARE_WIDTH - 2, SQUARE_WIDTH - 2);
                 }
-                ctx.drawImage(image, x + 1, y + 1, SQUARE_WIDTH - 1, SQUARE_WIDTH - 1);
+                ctx.drawImage(image, x + 1, y + 1, SQUARE_WIDTH - 2, SQUARE_WIDTH - 2);
             } catch {
                 ctx.fillStyle = "white";
                 ctx.fillText(col, x + 5, y + 20);
