@@ -41,6 +41,7 @@ const prettyBoard = async (board: string[][]) => {
 
     const bg = await loadImage(`${imageDir}bg.png`);
     ctx.drawImage(bg, 0, 0, 600, 655);
+    ctx.fillStyle = "white";
 
     const SQUARE_WIDTH = 110;
 
