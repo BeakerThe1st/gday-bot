@@ -69,15 +69,21 @@ const prettyBoard = async (board: string[][]) => {
 };
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
+    const PERSIST = false;
     const userId = interaction.user.id;
-    /*let board = await Bingo.findOne({user: userId});
+    let board;
+    if (PERSIST) {
+        board = await Bingo.findOne({user: userId});
+        if (!board) {
+            board = await Bingo.create({user: userId, board: generateBoard()});
+        }
+    } else {
+        board = {board: generateBoard()};
+    }
 
-    if (!board) {
-        board = await Bingo.create({user: userId, board: generateBoard()});
-    }*/
 
     return {
-        content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board! **SAVING IS DISABLED**`,
-        files: [await prettyBoard(generateBoard() /*board.board*/)],
+        content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board!${PERSIST ? "" : " **PERSISTENCE IS DISABLED**"}`,
+        files: [await prettyBoard(board.board)],
     };
 });
