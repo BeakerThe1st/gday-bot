@@ -1,6 +1,9 @@
 export const bingoItems = new Map([
     ["3nm", "3nm Process"],
     ["aaa_games", "AAA Games on Mac"],
+    ["apple_park_night", "Apple Park at Night"],
+    ["carbon_neutral", "Carbon Neutral"],
+    ["atv_segment", "Apple TV+ Segment"],
     ["free_space", "Free Space"],
     ["imac_24", "Refreshed 24\" iMac"],
     ["imac_pro", "New iMac Pro"],
