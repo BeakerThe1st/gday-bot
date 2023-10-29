@@ -72,7 +72,7 @@ const prettyBoard = async (board: string[][]) => {
 };
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    const PERSIST = false;
+    const PERSIST = true;
     const userId = interaction.user.id;
     let board;
     if (PERSIST) {
