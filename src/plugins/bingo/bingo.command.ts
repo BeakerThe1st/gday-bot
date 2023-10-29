@@ -54,11 +54,11 @@ const prettyBoard = async (board: string[][]) => {
             try {
                 const isChecked = check?.bingoEntries.get(col) ?? false;
                 const image = await loadImage(`${imageDir}${col}.png`);
-                ctx.drawImage(image, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
                 if (isChecked === true) {
                     const checkedImage = await loadImage(`${imageDir}checked.png`);
                     ctx.drawImage(checkedImage, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
                 }
+                ctx.drawImage(image, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
             } catch {
                 ctx.fillStyle = "white";
                 ctx.fillText(col, x + 5, y + 20);
