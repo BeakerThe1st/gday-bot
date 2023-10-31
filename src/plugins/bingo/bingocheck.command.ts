@@ -17,7 +17,6 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    return "nuh uh";
     /*const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoItems.keys()).includes(id)) {
         return "Not a bingo key!"
@@ -67,7 +66,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     for (const bingo of filteredBingos) {
         try {
             const member = await rApple.members.fetch(bingo.user);
-            await member.roles.add("1168712177201467402")
+            await member.roles.add("1168755442407706644")
         } catch {
             //ignored
         }
