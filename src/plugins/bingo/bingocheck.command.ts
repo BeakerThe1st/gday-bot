@@ -17,7 +17,6 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    return "nuh uh";
     /*const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoItems.keys()).includes(id)) {
         return "Not a bingo key!"
