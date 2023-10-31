@@ -4,6 +4,7 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 import {bingoItems} from "./bingoItems";
 import {BingoCheck} from "./BingoCheck.model";
 import {useClient} from "../../hooks";
+import {Bingo} from "./Bingo.model";
 const builder = new SlashCommandBuilder()
     .setName("bingocheck")
     .setDescription("Checks/unchecks a bingo item")
@@ -16,7 +17,7 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputCommandInteraction) => {
-    const id = interaction.options.getString("bingo_id", true);
+    /*const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoItems.keys()).includes(id)) {
         return "Not a bingo key!"
     }
@@ -34,8 +35,8 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
             ]
         })
     }
-    return `${current ? "Unchecked" : "Checked"} \`${id}\``;
-    /*const bingos = await Bingo.find();
+    return `${current ? "Unchecked" : "Checked"} \`${id}\``;*/
+    const bingos = await Bingo.find();
     const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
     const filteredBingos = bingos.filter((bingo) => {
         const {board} = bingo;
@@ -65,10 +66,10 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     for (const bingo of filteredBingos) {
         try {
             const member = await rApple.members.fetch(bingo.user);
-            await member.roles.add("1151232815111872552")
+            await member.roles.add("1168712177201467402")
         } catch {
             //ignored
         }
     }
-    return `Applied role to ${filteredBingos.length} entries`;*/
+    return `Applied role to ${filteredBingos.length} entries`;
 });

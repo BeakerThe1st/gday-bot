@@ -78,6 +78,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
     if (PERSIST) {
         board = await Bingo.findOne({user: userId});
         if (!board) {
+            return "You missed out on bingo this time, sorry!"
             board = await Bingo.create({user: userId, board: generateBoard()});
         }
     } else {
