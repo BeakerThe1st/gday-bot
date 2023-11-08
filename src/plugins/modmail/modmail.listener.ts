@@ -79,7 +79,7 @@ useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
 });
 
 useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
-    if (!(channel instanceof GuildChannel && channel.guildId == GUILDS.STAFF)) {
+    if (!("guildId" in channel && channel.guildId === GUILDS.STAFF)) {
         return;
     }
     MailThread.findOneAndDelete({channel: channel.id});
