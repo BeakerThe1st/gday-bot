@@ -4,7 +4,7 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle, Channel,
-    ChannelType, DMChannel,
+    ChannelType, DMChannel, EmbedBuilder,
     Events, GuildChannel, inlineCode,
     Interaction,
     Message,
@@ -22,8 +22,11 @@ export const forwardModmailMessage = async (message: Message) => {
                 .setStyle(ButtonStyle.Success)
                 .setCustomId(`modmail-create-${message.author.id}`)
         )
+        const embed = new EmbedBuilder()
+            .setTitle("# G'day from the r/Apple mod team!")
+            .setDescription("Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply.\n If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!");
         await message.reply({
-            content: `# G'day from the r/Apple mod team!\n\nThanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply.\n If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!\n`,
+            embeds: [embed],
             //@ts-ignore
             components: [actionRow]
         });
@@ -36,7 +39,7 @@ export const forwardModmailMessage = async (message: Message) => {
         await message.react("✅");
     } catch (error: any) {
         await message.react("⛔");
-        await message.reply(`There was an error sending your message. Please try again!`);
+        await message.reply(`There was an error sending this message. Please try again!`);
     }
 }
 useEvent(Events.MessageCreate, async (message: Message) => {
