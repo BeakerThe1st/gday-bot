@@ -28,7 +28,7 @@ mailThreadSchema.pre("save", async function() {
     });
     const embed = new EmbedBuilder()
         .setTitle(`New thread for ${resolvedAuthor.username}`)
-        .setDescription(`${userMention(resolvedAuthor.id)} (${resolvedAuthor.username})\nAccount Created: ${time(resolvedAuthor.createdAt)}`);
+        .setDescription(`${userMention(resolvedAuthor.id)} (${resolvedAuthor.username})\nAccount Created: ${time(resolvedAuthor.createdAt)}`)
         .setColor(Colors.Aqua)
     channel.send({embeds: [embed]});
     this.channel = channel.id;
