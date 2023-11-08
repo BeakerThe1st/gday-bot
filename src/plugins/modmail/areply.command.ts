@@ -28,7 +28,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         .setDescription(message)
     await user.send({embeds: [embed]});
     embed
-        .setFooter({text: `${interaction.user.username} → ${user.username}`})
+        .setFooter({text: `${interaction.user.username} → ${user.username} (anon.)`})
         .setTimestamp(Date.now());
     return {embeds: [embed]};
 });

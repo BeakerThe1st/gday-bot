@@ -4,7 +4,7 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle, Channel,
-    ChannelType, DMChannel, EmbedBuilder,
+    ChannelType, Colors, DMChannel, EmbedBuilder,
     Events, GuildChannel, inlineCode,
     Interaction,
     Message,
@@ -24,6 +24,7 @@ export const forwardModmailMessage = async (message: Message) => {
         )
         const embed = new EmbedBuilder()
             .setTitle("# G'day from the r/Apple mod team!")
+            .setColor(Colors.Aqua)
             .setDescription("Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply.\n If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!");
         await message.reply({
             embeds: [embed],

@@ -1,7 +1,7 @@
 import {model, Schema} from "mongoose";
 import {useClient} from "../../hooks";
 import {CHANNELS, GUILDS} from "../../globals";
-import {ChannelType, time, userMention} from "discord.js";
+import {ChannelType, Colors, Embed, EmbedBuilder, time, userMention} from "discord.js";
 import {forwardModmailMessage} from "./modmail.listener";
 
 export interface IMailThread {
@@ -26,11 +26,11 @@ mailThreadSchema.pre("save", async function() {
         type: ChannelType.GuildText,
         parent: CHANNELS.STAFF.modmail_parent
     });
-    channel.send(
-        `# New thread for ${resolvedAuthor.username}
-        ${userMention(resolvedAuthor.id)} (${resolvedAuthor.username})
-        Account Created: ${time(resolvedAuthor.createdAt)}
-    `);
+    const embed = new EmbedBuilder()
+        .setTitle(`New thread for ${resolvedAuthor.username}`)
+        .setDescription(`${userMention(resolvedAuthor.id)} (${resolvedAuthor.username})\nAccount Created: ${time(resolvedAuthor.createdAt)}`);
+        .setColor(Colors.Aqua)
+    channel.send({embeds: [embed]});
     this.channel = channel.id;
 })
 
