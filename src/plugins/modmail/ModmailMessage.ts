@@ -1,4 +1,4 @@
-import {EmbedBuilder} from "discord.js";
+import {Colors, EmbedBuilder} from "discord.js";
 
 interface ModmailMessageOptions {
     from: string;
@@ -25,6 +25,7 @@ export class ModmailMessage extends EmbedBuilder implements ModmailMessageOption
     }
     private build() {
         this.setTitle((this.anon ? "r/Apple Mod Team" : this.from) + ":");
+        this.setColor(Colors.Green)
         this.setDescription(this.body);
     }
     public addStaffFields() {

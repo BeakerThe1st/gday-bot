@@ -42,7 +42,7 @@ export const forwardModmailMessage = async (message: Message) => {
             to: "r/Apple Mod Team",
             body: message.cleanContent,
             attachments: message.attachments.map((value => value.url)),
-        });
+        }).addStaffFields();
         await mailChannel.send({embeds: [modmailMessage]});
         await message.react("✅");
     } catch (error: any) {
