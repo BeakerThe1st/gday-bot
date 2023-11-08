@@ -5,14 +5,14 @@ interface ModmailMessageOptions {
     to: string;
     body: string;
     anon?: boolean;
-    attachments: string[];
+    attachments?: string[];
 }
 export class ModmailMessage extends EmbedBuilder implements ModmailMessageOptions {
     from: string;
     to: string;
     body: string;
     anon?: boolean;
-    attachments: string[];
+    attachments?: string[];
     constructor(options: ModmailMessageOptions) {
         super();
         const { from, to, body, anon, attachments } = options;
