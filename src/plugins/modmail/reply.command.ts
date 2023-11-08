@@ -1,6 +1,6 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction} from "discord.js";
+import {ChatInputCommandInteraction, Colors, Embed, EmbedBuilder} from "discord.js";
 import {MailThread} from "./MailThread";
 import {useClient} from "../../hooks";
 
@@ -13,11 +13,6 @@ const builder = new SlashCommandBuilder()
             .setDescription("Message to send.")
             .setRequired(true)
     )
-    .addBooleanOption((option) =>
-        option
-            .setName("anonymous")
-            .setDescription("Reply anonymously.")
-    )
     .setScope(SlashCommandScope.STAFF_SERVER);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
@@ -26,9 +21,14 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         return "You can only reply within modmail threads.";
     }
     const message = interaction.options.getString("message", true);
-    const anon = interaction.options.getBoolean("anonymous") ?? false;
-    const reply = `## ${anon ? "r/Apple mod team" : interaction.user.username}:\n${message}`;
     const user = await useClient().client.users.fetch(thread.author);
-    await user.send(reply);
-    return reply;
+    const embed = new EmbedBuilder()
+        .setTitle(interaction.user.username + ":")
+        .setColor(Colors.Green)
+        .setDescription(message)
+    await user.send({embeds: [embed]});
+    embed
+        .setFooter({text: `${interaction.user.username} → ${user.username}`})
+        .setTimestamp(Date.now());
+    return {embeds: [embed]};
 });
