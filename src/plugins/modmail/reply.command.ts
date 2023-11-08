@@ -3,6 +3,7 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 import {ChatInputCommandInteraction, Colors, Embed, EmbedBuilder} from "discord.js";
 import {MailThread} from "./MailThread";
 import {useClient} from "../../hooks";
+import {ModmailMessage} from "./ModmailMessage";
 
 const builder = new SlashCommandBuilder()
     .setName("reply")
@@ -20,15 +21,14 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     if (!thread) {
         return "You can only reply within modmail threads.";
     }
-    const message = interaction.options.getString("message", true);
+    const body = interaction.options.getString("message", true);
     const user = await useClient().client.users.fetch(thread.author);
-    const embed = new EmbedBuilder()
-        .setTitle(interaction.user.username + ":")
-        .setColor(Colors.Green)
-        .setDescription(message)
-    await user.send({embeds: [embed]});
-    embed
-        .setFooter({text: `${interaction.user.username} → ${user.username}`})
-        .setTimestamp(Date.now());
-    return {embeds: [embed]};
+    const message = new ModmailMessage({
+        from: interaction.user.username,
+        to: user.username,
+        body
+    })
+    await user.send({embeds: [message]});
+    message.addStaffFields();
+    return {embeds: [message]};
 });

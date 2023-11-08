@@ -11,6 +11,7 @@ import {
 } from "discord.js";
 import {MailThread} from "./MailThread";
 import {GUILDS} from "../../globals";
+import {ModmailMessage} from "./ModmailMessage";
 
 export const forwardModmailMessage = async (message: Message) => {
     const thread = await MailThread.findOne({author: message.author.id});
@@ -36,7 +37,13 @@ export const forwardModmailMessage = async (message: Message) => {
     try {
         const mailChannel = await useClient().client.channels.fetch(thread.channel);
         if (!mailChannel?.isTextBased()) throw new Error();
-        await mailChannel.send(`## ${message.author.username}:\n ${message.cleanContent}\n\n${message.attachments.map(attachment => attachment.url).join("\n")}`);
+        const modmailMessage = new ModmailMessage({
+            from: message.author.username,
+            to: "r/Apple Mod Team",
+            body: message.cleanContent,
+            attachments: message.attachments.map((value => value.url)),
+        });
+        await mailChannel.send({embeds: [modmailMessage]});
         await message.react("✅");
     } catch (error: any) {
         await message.react("⛔");
