@@ -30,7 +30,7 @@ export class ModmailMessage extends EmbedBuilder implements ModmailMessageOption
     }
     public addStaffFields() {
         this
-            .setFooter({text: `${this.from} → ${this.to}${this.anon ? " (anon.)" : ""}`})
+            .setFooter({text: `${this.from}${this.anon ? " (anon.)" : ""} → ${this.to}`})
             .setTimestamp(Date.now());
         return this;
     }

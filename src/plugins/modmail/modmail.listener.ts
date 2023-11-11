@@ -4,7 +4,7 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle, Channel,
-    ChannelType, Colors, DMChannel, EmbedBuilder,
+    ChannelType, Colors, DiscordAPIError, DiscordjsErrorCodes, DMChannel, EmbedBuilder,
     Events, GuildChannel, inlineCode,
     Interaction,
     Message,
@@ -36,7 +36,7 @@ export const forwardModmailMessage = async (message: Message) => {
     }
     try {
         const mailChannel = await useClient().client.channels.fetch(thread.channel);
-        if (!mailChannel?.isTextBased()) throw new Error();
+        if (!mailChannel?.isTextBased()) throw new Error("Channel not found");
         const modmailMessage = new ModmailMessage({
             from: message.author.username,
             to: "r/Apple Mod Team",
@@ -46,7 +46,9 @@ export const forwardModmailMessage = async (message: Message) => {
         await mailChannel.send({embeds: [modmailMessage]});
         await message.react("✅");
     } catch (error: any) {
-        //TODO handle channel does not exist by deleting modmail thread and (maybe) trying to send message again
+        if (error.message === "Channel not found") {
+            await MailThread.findOneAndDelete({channel: thread.channel});
+        }
         await message.react("⛔");
         await message.reply(`There was an error sending this message. Please try again!`);
     }
