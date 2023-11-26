@@ -1,16 +1,20 @@
-import {useClient, useError, useEvent} from "../../hooks";
+import {useClient, useEvent} from "../../hooks";
 import {
-    ActionRow,
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonStyle, Channel,
-    ChannelType, Colors, DiscordAPIError, DiscordjsErrorCodes, DMChannel, EmbedBuilder,
-    Events, GuildChannel, inlineCode,
+    ButtonStyle,
+    ChannelType,
+    Colors,
+    DMChannel,
+    EmbedBuilder,
+    Events,
+    GuildChannel,
     Interaction,
     Message,
+    userMention,
 } from "discord.js";
 import {MailThread} from "./MailThread";
-import {GUILDS} from "../../globals";
+import {CHANNELS, GUILDS} from "../../globals";
 import {ModmailMessage} from "./ModmailMessage";
 
 export const forwardModmailMessage = async (message: Message) => {
@@ -26,7 +30,7 @@ export const forwardModmailMessage = async (message: Message) => {
         const embed = new EmbedBuilder()
             .setTitle("G'day from the r/Apple mod team!")
             .setColor(Colors.Aqua)
-            .setDescription("Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply.If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!");
+            .setDescription("Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply. If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!");
         await message.reply({
             embeds: [embed],
             //@ts-ignore
@@ -85,5 +89,26 @@ useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
     if (!("guildId" in channel && channel.guildId === GUILDS.STAFF)) {
         return;
     }
-    MailThread.findOneAndDelete({channel: channel.id});
+    const thread = await MailThread.findOneAndDelete({channel: channel.id});
+    if (!thread) {
+        return;
+    }
+    const modmailLog = await useClient().client.channels.fetch(CHANNELS.STAFF.modmail_logs);
+    if (modmailLog && "send" in modmailLog) {
+        const author = await useClient().client.users.fetch(thread.author);
+        await modmailLog.send({
+            embeds: [new EmbedBuilder()
+                .setTitle("Thread Superclosed")
+                .setColor(Colors.DarkRed)
+                .setDescription(`Modmail thread for ${userMention(thread.author)} (${author.username}) superclosed, no log generated.`)
+                .setTimestamp(Date.now()),
+            ],
+        });
+        await author.send({
+            embeds: [new EmbedBuilder()
+                .setTitle("Thread Closed")
+                .setColor(Colors.DarkRed)
+                .setDescription(`Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`)]
+        });
+    }
 });

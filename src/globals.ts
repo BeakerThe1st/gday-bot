@@ -28,7 +28,8 @@ export const CHANNELS = {
         log: "1120432710830280784",
     },
     STAFF: {
-        modmail_parent: "582568757575024640"
+        modmail_parent: "582568757575024640",
+        modmail_logs: "582572653710409748",
     }
 };
 export const ROLES = {
