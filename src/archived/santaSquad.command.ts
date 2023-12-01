@@ -16,7 +16,7 @@ import {useChatCommand} from "../hooks/useChatCommand";
 const builder = new SlashCommandBuilder()
     .setName("sendsanta")
     .setDescription("Send santa application")
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
@@ -117,7 +117,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
 
         await interaction.message.delete();
         if (c2 === "accept") {
-            await member.roles.add("1045677894757789696");
+            await member.roles.add("1180094772380192848");
         } else {
             try {
                 await member.user.send(
