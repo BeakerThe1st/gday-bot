@@ -1,4 +1,4 @@
-import {useEvent} from "../hooks";
+import {useEvent} from "../../../hooks";
 import {
     ActionRowBuilder,
     ButtonBuilder,
@@ -10,8 +10,8 @@ import {
     PermissionFlagsBits,
     userMention,
 } from "discord.js";
-import {SlashCommandBuilder, SlashCommandScope} from "../builders/SlashCommandBuilder";
-import {useChatCommand} from "../hooks/useChatCommand";
+import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
+import {useChatCommand} from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("sendsanta")
