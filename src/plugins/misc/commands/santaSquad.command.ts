@@ -58,7 +58,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
             throw new Error("Bad Apps Channel");
         }
         const embed = new EmbedBuilder()
-            .setTitle(interaction.user.tag)
+            .setTitle(interaction.user.username)
             .setColor("Red")
             .setDescription(
                 `${userMention(
