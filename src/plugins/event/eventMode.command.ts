@@ -139,7 +139,7 @@ class EventMode {
             )
             .setImage(this.image)
             .setColor(NEXT_EVENT?.color ?? "White");
-        const actionRow = new ActionRowBuilder().addComponents(
+        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setLabel("Apple Website")
                 .setStyle(ButtonStyle.Link)
@@ -153,7 +153,6 @@ class EventMode {
                 .setStyle(ButtonStyle.Link)
                 .setURL("https://youtu.be/ZoG5jJ3E8rg"),
         );
-        //@ts-ignore
         return {embeds: [embed], components: [actionRow]};
     }
 

@@ -94,7 +94,7 @@ class PollCommand {
                 },
             )
             .setColor("Blurple");
-        const actionRow = new ActionRowBuilder()
+        const actionRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId("poll-yes")
@@ -108,7 +108,6 @@ class PollCommand {
             .toJSON();
         return {
             embeds: [embed],
-            //@ts-ignore
             components: [actionRow],
         };
     };

@@ -20,7 +20,7 @@ import {ModmailMessage} from "./ModmailMessage";
 export const forwardModmailMessage = async (message: Message) => {
     const thread = await MailThread.findOne({author: message.author.id});
     if (!thread) {
-        const actionRow = new ActionRowBuilder().addComponents(
+        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setLabel("Create thread")
                 .setEmoji("✅")
@@ -33,7 +33,6 @@ export const forwardModmailMessage = async (message: Message) => {
             .setDescription("Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply. If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!");
         await message.reply({
             embeds: [embed],
-            //@ts-ignore
             components: [actionRow]
         });
         return;

@@ -56,7 +56,7 @@ app.post("/ban-appeal", async (req, res) => {
                     value: reason,
                 },
             );
-        const actionRow = new ActionRowBuilder().addComponents(
+        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setLabel("Unban")
                 .setStyle(ButtonStyle.Success)
@@ -65,7 +65,6 @@ app.post("/ban-appeal", async (req, res) => {
         await appealChannel.send({
             content: `${id}`,
             embeds: [embed],
-            //@ts-ignore
             components: [actionRow],
             allowedMentions: {
                 users: [],

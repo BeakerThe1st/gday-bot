@@ -21,7 +21,7 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const {channel} = interaction;
-    const actionRow = new ActionRowBuilder().addComponents(
+    const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setLabel("Apply for Santa Squad")
             .setEmoji("🎅")
@@ -32,7 +32,6 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         channel.send({
             content:
                 "**Please read the information above before applying for Santa Squad.**",
-            //@ts-ignore
             components: [actionRow],
         });
     } else {
@@ -66,7 +65,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
                 )} Ho ho ho sleigh queens! Please only accept if the santa hat is recognisable and visible.`,
             )
             .setThumbnail(interaction.member.displayAvatarURL());
-        const actionRow = new ActionRowBuilder().addComponents(
+        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
             new ButtonBuilder()
                 .setLabel("Accept")
                 .setEmoji("🎅")
@@ -77,7 +76,6 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
                 .setStyle(ButtonStyle.Danger)
                 .setCustomId(`santa-deny-${interaction.user.id}`),
         );
-        //@ts-ignore
         await apps.send({embeds: [embed], components: [actionRow]});
     } catch (error) {
         await interaction.reply({
