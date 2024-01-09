@@ -5,7 +5,7 @@ import Fuse from "fuse.js";
 
 useEvent(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isAutocomplete()) return;
-    if (!["tag", "tags"].includes(interaction.commandName)) return;
+    if (!["tag", "tags", "treply"].includes(interaction.commandName)) return;
 
     //Weakened tags array with just name and content
     const tags = (await Tag.find({guild: interaction.guildId}))
