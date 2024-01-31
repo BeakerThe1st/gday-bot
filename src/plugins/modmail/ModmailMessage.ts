@@ -26,12 +26,25 @@ export class ModmailMessage extends EmbedBuilder implements ModmailMessageOption
     private build() {
         this.setTitle((this.anon ? "r/Apple Mod Team" : this.from) + ":");
         this.setColor(Colors.Green)
-        this.setDescription(this.body);
+        if (this.body) {
+            this.setDescription(this.body);
+        }
+        if (this.attachments) {
+            this.setImage(this.attachments[0]);
+        } else {
+            const urlMatch = this.body.match(/\bhttps?:\/\/\S+/gi);
+            if (urlMatch) {
+                this.setImage(urlMatch[0]);
+            }
+        }
     }
     public addStaffFields() {
         this
             .setFooter({text: `${this.from}${this.anon ? " (anon.)" : ""} → ${this.to}`})
             .setTimestamp(Date.now());
+        if (this.to !== "r/Apple Mod Team") {
+            this.setColor(Colors.Red);
+        }
         return this;
     }
 }

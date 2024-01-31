@@ -42,7 +42,7 @@ loadFilesFromFolder("./plugins");
 client.login(useEnv("DISCORD_TOKEN"));
 
 
-const statuses: [ActivityType, string][] = [
+/*const statuses: [ActivityType, string][] = [
     [ActivityType.Watching, "the sunset with a coldie"],
     [ActivityType.Competing, "a TimTam race"],
     [ActivityType.Watching, "the roos hop by"],
@@ -53,8 +53,8 @@ const statuses: [ActivityType, string][] = [
     [ActivityType.Listening, "the rustle of gum trees"],
     [ActivityType.Competing, "a BBQ competition"],
     [ActivityType.Streaming, "some classic INXS"],
-];
-//const statuses: [ActivityType, string][] = [[ActivityType.Playing, "DM to contact staff"]];
+];*/
+const statuses: [ActivityType, string][] = [[ActivityType.Playing, "DM to contact staff"]];
 
 useEvent("ready", async (client: Client) => {
     try {

@@ -74,14 +74,15 @@ useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
     if (c1 !== "modmail" || c2 !== "create") {
         return;
     }
+    await interaction.deferReply({ ephemeral: true });
     let thread = await MailThread.findOne({author: c3});
     if (thread) {
-        await interaction.reply({content: `You already have an open thread, simply send your message in this channel and it'll go straight to the mod team!`, ephemeral: true});
+        await interaction.editReply(`You already have an open thread, simply send your message in this channel and it'll go straight to the mod team!`);
         return;
     }
     const initialMessage = await interaction.message.fetchReference();
     await MailThread.create({author: c3, initialMessage: initialMessage.id});
-    await interaction.reply({content: `Thread created!`, ephemeral: true})
+    await interaction.editReply(`Thread created!`)
 });
 
 useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {

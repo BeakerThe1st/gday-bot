@@ -105,7 +105,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction: ChatInputComm
 });
 
 useEvent(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isModalSubmit() || !interaction.guild) return;
+    if (!interaction.isModalSubmit() || !interaction.guild || !interaction.customId.startsWith("tag")) return;
 
     const tagName = interaction.fields.getTextInputValue("tagTitleInput");
     const tagContent = interaction.fields.getTextInputValue("tagContentInput");
