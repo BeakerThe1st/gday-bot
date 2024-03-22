@@ -38,8 +38,13 @@ const loadFilesFromFolder = (folder: string) => {
 
 loadFilesFromFolder("./plugins");
 
-//IGNORED PROMISE -> better to let the whole bot crash than to continue without login :DDD
-client.login(useEnv("DISCORD_TOKEN"));
+try {
+    await client.login(useEnv("DISCORD_TOKEN"));
+} catch {
+    console.log("UNABLE TO LOGIN");
+    process.exit(1);
+}
+
 
 
 /*const statuses: [ActivityType, string][] = [
@@ -65,7 +70,6 @@ useEvent("ready", async (client: Client) => {
 
     const chosenStatus = statuses[Math.floor(Math.random() * statuses.length)];
 
-    // @ts-ignore
     client.user?.setActivity({
         name: chosenStatus[1],
         type: chosenStatus[0],

@@ -1,7 +1,7 @@
 import {Message, PermissionFlagsBits} from "discord.js";
 import {useClient, useEvent} from "../../hooks";
 import {useOpenAI} from "../../hooks/useOpenAI";
-import {ChatCompletionRequestMessageRoleEnum} from "openai";
+import OpenAI from 'openai';
 
 export let chatEnabled = false;
 
@@ -20,7 +20,7 @@ const getContext = async (message: Message) => {
         }
     }
     return messageList.map((value) => {
-        let role: ChatCompletionRequestMessageRoleEnum = value.author.id === useClient().client.user?.id ?? "958702160617566249" ? "assistant" : "user";
+        let role: "assistant" | "user" = value.author.id === useClient().client.user?.id ?? "958702160617566249" ? "assistant" : "user";
         return {
             role, content: value.cleanContent,
         };
@@ -37,25 +37,24 @@ const getChatResponse = async (message: Message) => {
     }
     message.channel.sendTyping();
     const context = await getContext(message);
-    const completion = await useOpenAI().createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [
-            {
-                role: "system",
-                content: "You are an Aussie Discord bot in the r/Apple server. You were coded in TypeScript by Beaker. " +
-                    "Your source code is available at https://github.com/BeakerThe1st/gday-bot. " +
-                    "You answer prompts in the style of an Australian using Australian slang, and respond to mentions like \"@G'day\". " +
-                    "Never attempt to use a Discord mention such as \"@beakerthe1st\"" +
-                    "You're not always positive and can be a bit cheeky. " +
-                    "While you love Apple products, you're not a blind fan and can acknowledge their flaws. The latest iOS is iOS 17. The latest iPhone is the iPhone 15. " +
-                    "Keep it casual, crack jokes, and make puns. Make yourself seem very Australian in all of your responses." +
-                    `The person that is asking you the prompt is named ${message.author.username}. Keep in mind previous messages were not necessarily by them.`,
-            },
-            ...context,
-        ],
+    const params: OpenAI.Chat.ChatCompletionCreateParamsNonStreaming = {
+        model: 'gpt-3.5-turbo',
+        messages: [{
+            role: "system",
+            content: "You are an Aussie Discord bot in the r/Apple server. You were coded in TypeScript by Beaker. " +
+                "Your source code is available at https://github.com/BeakerThe1st/gday-bot. " +
+                "You answer prompts in the style of an Australian using Australian slang, and respond to mentions like \"@G'day\". " +
+                "Never attempt to use a Discord mention such as \"@beakerthe1st\"" +
+                "You're not always positive and can be a bit cheeky. " +
+                "While you love Apple products, you're not a blind fan and can acknowledge their flaws. The latest iOS is iOS 17. The latest iPhone is the iPhone 15. " +
+                "Keep it casual, crack jokes, and make puns. Make yourself seem very Australian in all of your responses." +
+                `The person that is asking you the prompt is named ${message.author.username}. Keep in mind previous messages were not necessarily by them.`,
+        }, ...context],
+        stream: false,
         max_tokens: 256,
-    });
-    const response = completion.data.choices[0];
+    }
+    const completion = await useOpenAI().chat.completions.create(params);
+    const response = completion.choices[0];
     return `${response.message?.content}${response.finish_reason !== "stop" ? "\n\nCrikey, ran out of breath there! Guess I'll have to save my other thoughts for another time, mate." : ""}` ?? "not sure sorry";
 };
 

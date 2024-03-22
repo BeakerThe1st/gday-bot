@@ -1,11 +1,9 @@
 import {useEnv} from "./useEnv";
-import {Configuration, OpenAIApi} from "openai";
+import OpenAI from "openai";
 
-const configuration = new Configuration({
-    apiKey: useEnv("OPENAI_KEY"),
-});
-
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI({
+    apiKey: useEnv("OPENAI_KEY")
+})
 
 export const useOpenAI = () => {
     return openai;

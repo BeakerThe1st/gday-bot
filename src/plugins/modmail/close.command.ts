@@ -12,7 +12,7 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const thread = await MailThread.findOneAndDelete({channel: interaction.channelId});
-    if (!thread) {
+    if (!thread?.value) {
         return "You can only close modmail threads.";
     }
     //return "Thread closed.";
@@ -20,7 +20,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         return "That command can only be run in a channel!";
     }
     const messages = await interaction.channel.messages.fetch();
-    const author = await useClient().client.users.fetch(thread.author);
+    const author = await useClient().client.users.fetch(thread.value.author);
     const {username: authorUsername} = author;
     const logChannel = await useClient().client.channels.fetch(CHANNELS.STAFF.modmail_logs);
     if (!logChannel?.isTextBased()) {
@@ -30,7 +30,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         embeds: [new EmbedBuilder()
             .setTitle("Thread Closed")
             .setColor(Colors.DarkRed)
-            .setDescription(`Modmail thread for ${userMention(thread.author)} (${authorUsername}) closed by ${interaction.user.username}`)
+            .setDescription(`Modmail thread for ${userMention(thread.value.author)} (${authorUsername}) closed by ${interaction.user.username}`)
             .setTimestamp(Date.now()),
         ],
         files: [

@@ -90,17 +90,17 @@ useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
         return;
     }
     const thread = await MailThread.findOneAndDelete({channel: channel.id});
-    if (!thread) {
+    if (!thread?.value) {
         return;
     }
     const modmailLog = await useClient().client.channels.fetch(CHANNELS.STAFF.modmail_logs);
     if (modmailLog && "send" in modmailLog) {
-        const author = await useClient().client.users.fetch(thread.author);
+        const author = await useClient().client.users.fetch(thread.value.author);
         await modmailLog.send({
             embeds: [new EmbedBuilder()
                 .setTitle("Thread Superclosed")
                 .setColor(Colors.DarkRed)
-                .setDescription(`Modmail thread for ${userMention(thread.author)} (${author.username}) superclosed, no log generated.`)
+                .setDescription(`Modmail thread for ${userMention(thread.value.author)} (${author.username}) superclosed, no log generated.`)
                 .setTimestamp(Date.now()),
             ],
         });
