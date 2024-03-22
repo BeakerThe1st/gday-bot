@@ -4,7 +4,7 @@ import {useChatCommand} from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("say")
-    .setDescription("Make G'day say a message.")
+    .setDescription("Makes me, G’day, have a chinwag and say a message, like having a yarn with a mate.\n")
     .addStringOption((option) =>
         option.setName("message").setDescription("Message to say").setRequired(true),
     )

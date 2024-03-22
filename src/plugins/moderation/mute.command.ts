@@ -12,7 +12,7 @@ import parse from "parse-duration";
 
 const builder = new SlashCommandBuilder()
     .setName("mute")
-    .setDescription("Mutes user for the specified duration.")
+    .setDescription("Puts a user on mute for a bit, like when ya mum tells ya to be quiet.")
     .addUserOption((option) =>
         option.setName("user").setDescription("User to be muted.").setRequired(true),
     )

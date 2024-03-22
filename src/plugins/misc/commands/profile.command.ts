@@ -13,7 +13,7 @@ import {Case} from "../../cases/Case.model";
 
 const builder = new SlashCommandBuilder()
     .setName("profile")
-    .setDescription("Views a user's profile")
+    .setDescription("Takes a squiz at a user's profile, like having a stickybeak.")
     .addUserOption(option => option
         .setName("user")
         .setDescription("The user to view the profile for")

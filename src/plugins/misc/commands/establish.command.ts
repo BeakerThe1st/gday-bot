@@ -5,7 +5,7 @@ import {ROLES} from "../../../globals";
 
 const builder: SlashCommandBuilder = new SlashCommandBuilder()
     .setName("establish")
-    .setDescription("Gives a user image perms via the established role")
+    .setDescription("Hooks a user up with the image role, good on ya mate!")
     .addUserOption((option) =>
         option
             .setName("user")
@@ -17,7 +17,7 @@ const builder: SlashCommandBuilder = new SlashCommandBuilder()
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const member = interaction.options.getMember("user");
     if (!(member instanceof GuildMember)) {
-        throw new Error("User is not a GuildMember");
+        throw new Error("User is not a member of the guild");
     }
     const established = ROLES.MAIN.established;
     if (member.roles.cache.has(established)) {

@@ -5,7 +5,7 @@ import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashComman
 const builder = new SlashCommandBuilder()
     .setName("eb")
     .setDescription(
-        "Event blocklists a user.",
+        "Keep someone buttoned up tighter than a kangaroo's pouch during the event.",
     )
     .addUserOption((option) =>
         option

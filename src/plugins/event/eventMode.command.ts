@@ -21,15 +21,15 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setScope(SlashCommandScope.MAIN_GUILD)
     .addSubcommand((subcommand) =>
-        subcommand.setName("start").setDescription("Starts event mode."),
+        subcommand.setName("start").setDescription("Kicks off event mode, time to throw another shrimp on the barbie!"),
     )
     .addSubcommand((subcommand) =>
-        subcommand.setName("stop").setDescription("Stops event mode."),
+        subcommand.setName("stop").setDescription("Puts a stop to event mode, like closing up shop after a ripper day."),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("prompt")
-            .setDescription("Displays the event mode prompt."),
+            .setDescription("Pops up the prompt for event mode, time to crack open a cold one."),
     )
     .addSubcommandGroup((group) =>
         group
@@ -38,7 +38,7 @@ const builder = new SlashCommandBuilder()
             .addSubcommand((subcommand) =>
                 subcommand
                     .setName("image")
-                    .setDescription("Sets event mode prompt image.")
+                    .setDescription("Sets the image for the event mode prompt, fair dinkum.")
                     .addStringOption((option) =>
                         option
                             .setName("image_url")
@@ -49,7 +49,7 @@ const builder = new SlashCommandBuilder()
             .addSubcommand((subcommand) =>
                 subcommand
                     .setName("interval")
-                    .setDescription("Sets interval between event mode prompts.")
+                    .setDescription("Sets how long between event mode prompts, like timing your snag on the barbie just right.")
                     .addNumberOption((option) =>
                         option
                             .setName("interval")

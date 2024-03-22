@@ -15,7 +15,7 @@ import {useEvent} from "../../../hooks";
 
 const builder = new SlashCommandBuilder()
     .setName("poll")
-    .setDescription("Creates a poll.")
+    .setDescription("Gets the convo going with a poll, find out what the mob reckons.")
     .addStringOption((option) =>
         option
             .setName("question")

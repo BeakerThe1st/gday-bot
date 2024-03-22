@@ -4,7 +4,7 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("unban")
-    .setDescription("Unbans user with the given ID")
+    .setDescription("Gives a user a fair go by unbanning them with the given ID, everyone deserves a second chance.")
     .addUserOption((option) =>
         option.setName("user").setDescription("User to unban").setRequired(true),
     )

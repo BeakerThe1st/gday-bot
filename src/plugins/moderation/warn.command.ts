@@ -5,7 +5,7 @@ import {Case, CaseType} from "../cases/Case.model";
 
 const builder = new SlashCommandBuilder()
     .setName("warn")
-    .setDescription("Warns user.")
+    .setDescription("Gives a bloke a warning, letting 'em know to pull their head in.")
     .addUserOption((option) =>
         option.setName("user").setDescription("User to be warned.").setRequired(true)
     )

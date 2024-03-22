@@ -5,7 +5,7 @@ import {chatEnabled} from "../../chat/chat";
 
 const builder = new SlashCommandBuilder()
     .setName("slowmode")
-    .setDescription("Sets slowmode interval in the current channel")
+    .setDescription("Slows things down in the current channel, like taking it easy on a hot arvo.")
     .addIntegerOption(option => option
         .setName("interval")
         .setDescription("Slowmode interval in seconds.")

@@ -5,7 +5,7 @@ import {EmbedBuilder, time, TimestampStyles} from "discord.js";
 
 const builder = new SlashCommandBuilder()
     .setName("event")
-    .setDescription("Displays information about the next Apple event.")
+    .setDescription("Throws up info on the next Apple event!")
     .setScope(SlashCommandScope.MAIN_GUILD);
 
 useChatCommand(builder, () => {

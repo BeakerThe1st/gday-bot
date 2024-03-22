@@ -15,7 +15,7 @@ import {useChatCommand} from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("sendsanta")
-    .setDescription("Send santa application")
+    .setDescription("Throws the Santa squad button into the current channel, getting into the festive spirit, mate.")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setScope(SlashCommandScope.MAIN_GUILD);
 

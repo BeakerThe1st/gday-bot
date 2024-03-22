@@ -5,7 +5,7 @@ import {Tag} from "./Tag.model";
 
 const builder = new SlashCommandBuilder()
     .setName("tag")
-    .setDescription("Calls a tag.")
+    .setDescription("Digs out a tag for a bit of a chat, like calling out a mate.")
     .setDeferrable(false)
     .addStringOption((option) =>
         option

@@ -6,7 +6,7 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 const builder = new SlashCommandBuilder()
     .setName("cases")
     .setDescription(
-        "Searches all cases in the guild, filtered by the given parameters.",
+        "Has a squiz at all the cases in the guild, filtered by your specs.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
     .setScope(SlashCommandScope.GLOBAL)
@@ -51,7 +51,7 @@ useChatCommand(
         const count = await Case.countDocuments(filter);
 
         if (count < 1) {
-            return `There are no cases that match your search query! 🤠`;
+            return `Sorry mate, couldn't find any cases that match your search! 🤠`;
         }
         const results = await Case.find(filter)
             .sort({createdAtTimestamp: "desc"})
@@ -70,8 +70,10 @@ useChatCommand(
             return acc + `\n- ${currentStr.replaceAll("\n", " ")}`;
         }, "");
 
-        return `I found ${count.toLocaleString()} cases that match what you're looking for. ${
-            count > 6 ? "Here are the latest 6!" : "Here they are!"
-        } \n${resultsList}`;
+        if (count > 6) {
+            return `Strewth! Found ${count.toLocaleString()} cases that match what you're after. Check out the latest 6!\n${resultsList}`;
+        } else {
+            return `Found ${count.toLocaleString()} cases that fit the bill. Here ya go cobber!\n${resultsList}`
+        }
     },
 );

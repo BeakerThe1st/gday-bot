@@ -19,7 +19,7 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName("info")
-            .setDescription("Shows information about a given case.")
+            .setDescription("Spills the beans on all the deets for a particular case, aye.")
             .addStringOption((option) =>
                 option.setName("case_id").setDescription("Case ID").setRequired(true),
             ),
@@ -27,7 +27,7 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName("reason")
-            .setDescription("Updates the reason on a given case.")
+            .setDescription("Gives ya the chance to change the story on a case, just like a good yarn.")
             .addStringOption((option) =>
                 option.setName("case_id").setDescription("Case ID").setRequired(true),
             )
@@ -41,7 +41,7 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName("delete")
-            .setDescription("Delets a given case.")
+            .setDescription("Fair dinkum deletes a specific case, no worries.")
             .addStringOption((option) =>
                 option.setName("case_id").setDescription("Case ID").setRequired(true),
             ),

@@ -27,17 +27,17 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName("list")
-            .setDescription("Lists all tags for this server"),
+            .setDescription("Lays out all the tags for this guild, like a menu at your local pub."),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("create")
-            .setDescription("Displays the tag creation modal"),
+            .setDescription("Shows the tag creation modal, where you can whip up a ripper tag."),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("delete")
-            .setDescription("Deletes a tag")
+            .setDescription("Boots a tag out the door, like tossing out the rubbish.")
             .addStringOption((option) =>
                 option.setName("name").setDescription("Name for the tag to delete").setRequired(true).setAutocomplete(true),
             ),
@@ -45,7 +45,7 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((subcommand) =>
         subcommand
             .setName("edit")
-            .setDescription("Displays the tag editing modal")
+            .setDescription("Brings up the tag editing modal, time to give those tags a bit of a spruce up.")
             .addStringOption((option) =>
                 option.setName("name").setDescription("Name for the tag to edit").setRequired(true).setAutocomplete(true),
             ),

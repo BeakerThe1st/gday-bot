@@ -12,7 +12,7 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((command) => (
         command
             .setName("set_channel")
-            .setDescription("Sets the G'bye output channel.")
+            .setDescription("Locks in the channel where all the G’bye action goes down, mate.")
             .addChannelOption((option) => (
                 option
                     .setName("channel")
@@ -23,7 +23,7 @@ const builder = new SlashCommandBuilder()
     .addSubcommand((command) => (
         command
             .setName("standing")
-            .setDescription("Shows a user's G'bye standing.")
+            .setDescription("Spills the beans on a user’s G’bye status, like knowing if they're a legend or not.")
             .addUserOption((option) => (
                 option
                     .setName("user")

@@ -9,7 +9,7 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("clear")
-    .setDescription("Clears messages in a particular channel")
+    .setDescription("Clears out messages in a channel, clean up like a true blue Aussie.")
     .addIntegerOption((option) => 
         option.setName("amount")
         .setDescription("Amount of messages to fetch")

@@ -4,7 +4,7 @@ import {useChatCommand} from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("jumbo")
-    .setDescription("Retrieves the image behind an emoji.")
+    .setDescription("Grabs the big version of an emoji, 'cause size matters, mate.")
     .addStringOption(option => option.setName("emoji").setDescription("Emoji to jumbo size.").setRequired(true))
     .setDefaultMemberPermissions(PermissionFlagsBits.AttachFiles)
     .setScope(SlashCommandScope.MAIN_GUILD);
