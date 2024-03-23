@@ -1,0 +1,24 @@
+name: Deploy to DigitalOcean Droplet
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: Setup node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18.x
+    - name: Install dependencies
+      run: npm install
+    - name: Build
+      run: npm run build
+    - name: Restart process
+      run: pm2 restart gday-bot
