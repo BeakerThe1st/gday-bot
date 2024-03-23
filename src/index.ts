@@ -59,7 +59,7 @@ try {
     [ActivityType.Competing, "a BBQ competition"],
     [ActivityType.Streaming, "some classic INXS"],
 ];*/
-const statuses: [ActivityType, string][] = [[ActivityType.Playing, "DM to contact staff"]];
+const statuses: [ActivityType, string][] = [[ActivityType.Playing, "DM to contact staff."]];
 
 useEvent("ready", async (client: Client) => {
     try {
