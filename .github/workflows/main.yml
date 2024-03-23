@@ -18,6 +18,7 @@ jobs:
         node-version: 18.x
     - name: Install dependencies
       run: npm install
+    - run: pwd
     - name: Build
       run: npm run build
     - name: Restart process
