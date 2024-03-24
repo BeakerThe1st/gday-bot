@@ -1,7 +1,7 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, Colors, Embed, EmbedBuilder, Message, userMention} from "discord.js";
-import {MailThread} from "./MailThread";
+import {ChatInputCommandInteraction, codeBlock, Colors, Embed, EmbedBuilder, Message, userMention} from "discord.js";
+import {IMailThread, MailThread} from "./MailThread";
 import {useClient} from "../../hooks";
 import {CHANNELS} from "../../globals";
 
@@ -11,16 +11,17 @@ const builder = new SlashCommandBuilder()
     .setScope(SlashCommandScope.STAFF_SERVER);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
-    const thread = await MailThread.findOneAndDelete({channel: interaction.channelId});
-    if (!thread?.value) {
+    const thread: unknown = await MailThread.findOneAndDelete({channel: interaction.channelId}) as unknown;
+    if (!thread) {
         return "You can only close modmail threads.";
     }
-    //return "Thread closed.";
+    const castThread = thread as IMailThread;
+
     if (!interaction.channel) {
         return "That command can only be run in a channel!";
     }
     const messages = await interaction.channel.messages.fetch();
-    const author = await useClient().client.users.fetch(thread.value.author);
+    const author = await useClient().client.users.fetch(castThread.author);
     const {username: authorUsername} = author;
     const logChannel = await useClient().client.channels.fetch(CHANNELS.STAFF.modmail_logs);
     if (!logChannel?.isTextBased()) {
@@ -30,7 +31,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         embeds: [new EmbedBuilder()
             .setTitle("Thread Closed")
             .setColor(Colors.DarkRed)
-            .setDescription(`Modmail thread for ${userMention(thread.value.author)} (${authorUsername}) closed by ${interaction.user.username}`)
+            .setDescription(`Modmail thread for ${userMention(castThread.author)} (${authorUsername}) closed by ${interaction.user.username}`)
             .setTimestamp(Date.now()),
         ],
         files: [
