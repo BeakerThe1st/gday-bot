@@ -93,7 +93,6 @@ useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Gu
 useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Guild) => {
     if (guild.id !== GUILDS.MAIN) return;
     if (entry.action !== AuditLogEvent.MemberUpdate) return;
-    console.dir(entry);
     const [change] = entry.changes;
     if (change.key !== "nick") return;
     if (!(entry.target instanceof User)) return;
@@ -103,7 +102,7 @@ useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Gu
         return;
     }
     const embed = new EmbedBuilder()
-        .setDescription(`:name_badge: ${entry.target}'s nickname changed from ${inlineCode(newNick)} to ${inlineCode(oldNick)} by ${entry.executor}`)
+        .setDescription(`:name_badge: ${entry.target}'s nickname changed from ${inlineCode(oldNick)} to ${inlineCode(newNick)} by ${entry.executor}`)
         .setColor(Colors.Orange);
     log(LOG_THREADS.NICKNAME, embed);
 })
