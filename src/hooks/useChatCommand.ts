@@ -94,7 +94,7 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
     }
 });
 
-export const updateSlashCommands = () => {
+export const updateSlashCommands = async () => {
         const rest = new REST({version: "10"}).setToken(useEnv("DISCORD_TOKEN"));
         const clientId = useEnv("DISCORD_CLIENT_ID");
         for (const [scope, builders] of buildersByScope) {
@@ -102,26 +102,29 @@ export const updateSlashCommands = () => {
                 scope === SlashCommandScope.GLOBAL
                     ? Routes.applicationCommands(clientId)
                     : Routes.applicationGuildCommands(clientId, scope);
-            (async () => {
-                try {
-                    await rest.put(route, {
-                        body: builders.map((builder) => builder.toJSON()),
-                    });
-                } catch (error) {
-                    useError(`${error}`);
-                }
-            })();
+            try {
+                await rest.put(route, {
+                    body: builders.map((builder) => builder.toJSON()),
+                });
+            } catch (error) {
+                useError(`${error}`);
+            }
         }
 };
 
 setTimeout(updateSlashCommands, 5000);
 
 if (process.env.NODE_ENV === "development") {
-    const commandCleanup = () => {
+    const commandCleanup = async () => {
+        setTimeout(() => {
+            console.error("Slash command cleanup incomplete, exiting anyway.");
+            process.exit(1);
+        }, 5000);
         for (const scope of buildersByScope.keys()) {
             buildersByScope.set(scope, []);
         }
-        updateSlashCommands();
+        await updateSlashCommands();
+        process.exit(0);
     }
     process.on("SIGTERM", commandCleanup);
     process.on("SIGINT", commandCleanup);

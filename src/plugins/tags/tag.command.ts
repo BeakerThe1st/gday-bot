@@ -1,6 +1,6 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, Colors, EmbedBuilder, inlineCode} from "discord.js";
+import {ChatInputCommandInteraction, Colors, EmbedBuilder, inlineCode, userMention} from "discord.js";
 import {Tag} from "./Tag.model";
 
 const builder = new SlashCommandBuilder()
@@ -34,7 +34,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         .setColor(Colors.Blue)
         .setDescription(tag.content);
     return {
-        content: `${target ? `${target}\n` : ''}`,
+        content: `${target ? `${userMention(target.id)}\n` : ''}`,
         embeds: [embed],
         allowedMentions: {
             users: target ? [target.id] : []

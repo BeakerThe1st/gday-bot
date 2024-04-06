@@ -64,6 +64,11 @@ if (process.env.NODE_ENV === "development") {
     statuses = [[ActivityType.Playing, "DM to contact staff."]];
 }
 
+// @ts-ignore
+User.prototype.toString = function(): string {
+    return `<@${this.id}> (${this.username})`
+}
+
 useEvent("ready", async (client: Client) => {
     try {
         await mongoose.connect(useEnv("MONGO_URI"));
