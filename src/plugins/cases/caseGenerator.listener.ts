@@ -68,7 +68,7 @@ useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, gui
         throw new Error("Missing an ID for case generation");
     }
 
-    const generatedCase = await Case.create({
+    await Case.create({
         type: caseType,
         guild: guild.id,
         deleted: false,
