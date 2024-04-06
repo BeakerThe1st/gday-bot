@@ -28,13 +28,19 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
         .setTimestamp(Date.now());
     const {cleanContent, attachments, embeds} = message;
     if (cleanContent) {
-        embed.addFields({ name: "Content", value: cleanContent});
+        embed.addFields({name: "Content", value: cleanContent});
     }
     if (attachments && attachments.size > 0) {
-        embed.addFields({name: "Attachments", value: `- ${attachments.map((attachment) => attachment.url).join("\n- ")}`});
+        embed.addFields({
+            name: "Attachments",
+            value: `- ${attachments.map((attachment) => attachment.url).join("\n- ")}`
+        });
     }
     if (embeds && embeds.length > 0) {
-        embed.addFields({name: "Embeds", value: `${embeds.map((embed) => `- ${embed.title ?? "No Title"}: ${embed.description ?? "No Description"}`).join("\n- ")}`})
+        embed.addFields({
+            name: "Embeds",
+            value: `${embeds.map((embed) => `- ${embed.title ?? "No Title"}: ${embed.description ?? "No Description"}`).join("\n- ")}`
+        })
     }
     log(LOG_THREADS.DELETION, embed);
 });
@@ -51,7 +57,13 @@ useEvent(Events.MessageBulkDelete, (messages: Collection<string, Message | Parti
         .setDescription(`:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(authors).map((id) => inlineCode(id)).join(', ')}]`)
         .setColor(Colors.DarkRed)
         .setTimestamp(Date.now());
-    log(LOG_THREADS.DELETION, {embeds: [embed], files: [{attachment: createBulkMessageLogFile(messages), name:`${channel.guild.name.replace(/[\\W_]+/g, '')}-bulk-delete-${Date.now()}.txt`}]});
+    log(LOG_THREADS.DELETION, {
+        embeds: [embed],
+        files: [{
+            attachment: createBulkMessageLogFile(messages),
+            name: `${channel.guild.name.replace(/[\\W_]+/g, '')}-bulk-delete-${Date.now()}.txt`
+        }]
+    });
 })
 
 //Role Logs
@@ -77,20 +89,20 @@ useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember,
 
 //Nickname Logs
 useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
-   if (newMember.guild.id !== GUILDS.MAIN) return;
-   const [oldNick, newNick] = [oldMember, newMember].map((member) => member.displayName);
-   if (oldNick === newNick) return;
-   const embed = new EmbedBuilder()
-       .setDescription(`:name_badge: ${newMember} (${newMember.user.username})'s nickname changed from ${inlineCode(oldNick)} to ${inlineCode(newNick)}`)
-       .setTimestamp(Date.now())
-       .setColor(Colors.Orange);
-   log(LOG_THREADS.NICKNAME, embed);
+    if (newMember.guild.id !== GUILDS.MAIN) return;
+    const [oldNick, newNick] = [oldMember, newMember].map((member) => member.displayName);
+    if (oldNick === newNick) return;
+    const embed = new EmbedBuilder()
+        .setDescription(`:name_badge: ${newMember} (${newMember.user.username})'s nickname changed from ${inlineCode(oldNick)} to ${inlineCode(newNick)}`)
+        .setTimestamp(Date.now())
+        .setColor(Colors.Orange);
+    log(LOG_THREADS.NICKNAME, embed);
 });
 
 //Join Logs
 useEvent(Events.GuildMemberAdd, (member: GuildMember) => {
     if (member.guild.id !== GUILDS.MAIN) return;
-    const { user } = member;
+    const {user} = member;
     const embed = new EmbedBuilder()
         .setDescription(`:inbox_tray: ${member} (${member.user.username}) joined the server\nAccount created: ${time(user.createdAt, TimestampStyles.RelativeTime)}`)
         .setThumbnail(user.displayAvatarURL())
@@ -102,7 +114,7 @@ useEvent(Events.GuildMemberAdd, (member: GuildMember) => {
 //Leave Logs
 useEvent(Events.GuildMemberRemove, (member: GuildMember | PartialGuildMember) => {
     if (member.guild.id !== GUILDS.MAIN) return;
-    const { user } = member;
+    const {user} = member;
     const embed = new EmbedBuilder()
         .setDescription(`:outbox_tray: ${member} (${member.user.username}) left the server`)
         .setThumbnail(user.displayAvatarURL())
@@ -115,7 +127,7 @@ useEvent(Events.GuildMemberRemove, (member: GuildMember | PartialGuildMember) =>
 
 useEvent(Events.MessageUpdate, (oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) => {
     if (oldMessage.guildId !== GUILDS.MAIN) return;
-    const {author } = newMessage;
+    const {author} = newMessage;
     if (!author || author.bot) return;
     const embed = new EmbedBuilder()
         .setDescription(`:pencil: ${author} (${author?.username ?? "No Username"}) updated their message in ${newMessage.channel}`)

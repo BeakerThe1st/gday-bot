@@ -80,7 +80,7 @@ useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
     if (c1 !== "modmail" || c2 !== "create") {
         return;
     }
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ephemeral: true});
     let thread = await MailThread.findOne({author: c3});
     if (thread) {
         await interaction.editReply(`You already have an open thread, simply send your message in this channel and it'll go straight to the mod team!`);

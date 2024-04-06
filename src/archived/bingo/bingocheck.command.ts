@@ -1,10 +1,10 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
-import {bold, ChatInputCommandInteraction, Colors, EmbedBuilder, PermissionFlagsBits} from "discord.js";
+import {ChatInputCommandInteraction, PermissionFlagsBits} from "discord.js";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {bingoItems} from "./bingoItems";
 import {BingoCheck} from "./BingoCheck.model";
 import {useClient} from "../../hooks";
 import {Bingo} from "./Bingo.model";
+
 const builder = new SlashCommandBuilder()
     .setName("bingocheck")
     .setDescription("Checks/unchecks a bingo item")

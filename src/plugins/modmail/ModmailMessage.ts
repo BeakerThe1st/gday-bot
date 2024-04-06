@@ -7,15 +7,17 @@ interface ModmailMessageOptions {
     anon?: boolean;
     attachments?: string[];
 }
+
 export class ModmailMessage extends EmbedBuilder implements ModmailMessageOptions {
     from: string;
     to: string;
     body: string;
     anon?: boolean;
     attachments?: string[];
+
     constructor(options: ModmailMessageOptions) {
         super();
-        const { from, to, body, anon, attachments } = options;
+        const {from, to, body, anon, attachments} = options;
         this.from = from;
         this.to = to;
         this.body = body;
@@ -23,6 +25,17 @@ export class ModmailMessage extends EmbedBuilder implements ModmailMessageOption
         this.attachments = attachments;
         this.build();
     }
+
+    public addStaffFields() {
+        this
+            .setFooter({text: `${this.from}${this.anon ? " (anon.)" : ""} → ${this.to}`})
+            .setTimestamp(Date.now());
+        if (this.to !== "r/Apple Mod Team") {
+            this.setColor(Colors.Red);
+        }
+        return this;
+    }
+
     private build() {
         this.setTitle((this.anon ? "r/Apple Mod Team" : this.from) + ":");
         this.setColor(Colors.Green)
@@ -37,14 +50,5 @@ export class ModmailMessage extends EmbedBuilder implements ModmailMessageOption
                 this.setImage(urlMatch[0]);
             }
         }
-    }
-    public addStaffFields() {
-        this
-            .setFooter({text: `${this.from}${this.anon ? " (anon.)" : ""} → ${this.to}`})
-            .setTimestamp(Date.now());
-        if (this.to !== "r/Apple Mod Team") {
-            this.setColor(Colors.Red);
-        }
-        return this;
     }
 }
