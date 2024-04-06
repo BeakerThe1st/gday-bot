@@ -95,7 +95,6 @@ useEvent("interactionCreate", async (interaction: Interaction) => {
 });
 
 export const updateSlashCommands = () => {
-    setTimeout(() => {
         const rest = new REST({version: "10"}).setToken(useEnv("DISCORD_TOKEN"));
         const clientId = useEnv("DISCORD_CLIENT_ID");
         for (const [scope, builders] of buildersByScope) {
@@ -113,9 +112,20 @@ export const updateSlashCommands = () => {
                 }
             })();
         }
-    }, 5000);
 };
 
-updateSlashCommands();
+setTimeout(updateSlashCommands, 5000);
+
+if (process.env.NODE_ENV === "development") {
+    const commandCleanup = () => {
+        for (const scope of buildersByScope.keys()) {
+            buildersByScope.set(scope, []);
+        }
+        updateSlashCommands();
+    }
+    process.on("SIGTERM", commandCleanup);
+    process.on("SIGINT", commandCleanup);
+    process.on("exit", commandCleanup);
+}
 
 

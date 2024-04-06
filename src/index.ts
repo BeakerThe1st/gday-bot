@@ -46,19 +46,23 @@ try {
 }
 
 
-/*const statuses: [ActivityType, string][] = [
-    [ActivityType.Watching, "the sunset with a coldie"],
-    [ActivityType.Competing, "a TimTam race"],
-    [ActivityType.Watching, "the roos hop by"],
-    [ActivityType.Listening, "some didgeridoo"],
-    [ActivityType.Streaming, "Home and Away"],
-    [ActivityType.Playing, "some cricket, legend"],
-    [ActivityType.Watching, "the waves roll in, sheila"],
-    [ActivityType.Listening, "the rustle of gum trees"],
-    [ActivityType.Competing, "a BBQ competition"],
-    [ActivityType.Streaming, "some classic INXS"],
-];*/
-const statuses: [ActivityType, string][] = [[ActivityType.Playing, "DM to contact staff."]];
+let statuses: [ActivityType, string][];
+if (process.env.NODE_ENV === "development") {
+    statuses = [
+        [ActivityType.Watching, "the sunset with a coldie"],
+        [ActivityType.Competing, "a TimTam race"],
+        [ActivityType.Watching, "the roos hop by"],
+        [ActivityType.Listening, "some didgeridoo"],
+        [ActivityType.Streaming, "Home and Away"],
+        [ActivityType.Playing, "some cricket, legend"],
+        [ActivityType.Watching, "the waves roll in, sheila"],
+        [ActivityType.Listening, "the rustle of gum trees"],
+        [ActivityType.Competing, "a BBQ competition"],
+        [ActivityType.Streaming, "some classic INXS"],
+    ];
+} else {
+    statuses = [[ActivityType.Playing, "DM to contact staff."]];
+}
 
 useEvent("ready", async (client: Client) => {
     try {
