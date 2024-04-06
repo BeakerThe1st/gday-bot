@@ -48,7 +48,7 @@ useChatCommand(
         if (type) {
             filter.type = type;
         }
-        const count = await Case.countDocuments(filter);
+        const count = await Case.count(filter);
 
         if (count < 1) {
             return `Sorry mate, couldn't find any cases that match your search! 🤠`;
