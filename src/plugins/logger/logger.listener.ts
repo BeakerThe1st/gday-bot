@@ -101,8 +101,12 @@ useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Gu
     if (newNick === oldNick) {
         return;
     }
+    let description = `:name_badge: ${entry.target}'s nickname changed from ${inlineCode(oldNick)} to ${inlineCode(newNick)}`;
+    if (entry.executor) {
+        description += ` by ${entry.executor}`;
+    }
     const embed = new EmbedBuilder()
-        .setDescription(`:name_badge: ${entry.target}'s nickname changed from ${inlineCode(oldNick)} to ${inlineCode(newNick)} by ${entry.executor}`)
+        .setDescription(description)
         .setColor(Colors.Orange);
     log(LOG_THREADS.NICKNAME, embed);
 })
