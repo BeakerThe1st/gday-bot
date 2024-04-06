@@ -1,9 +1,12 @@
 import {useEvent} from "../../hooks";
 import {
+    AuditLogEvent, codeBlock,
     Collection,
     Colors,
     EmbedBuilder,
     Events,
+    Guild,
+    GuildAuditLogsEntry,
     GuildMember,
     GuildTextBasedChannel,
     inlineCode,
@@ -11,7 +14,7 @@ import {
     PartialGuildMember,
     PartialMessage,
     time,
-    TimestampStyles,
+    TimestampStyles, User,
 } from "discord.js";
 import {log, LOG_THREADS} from "./logs";
 import {GUILDS} from "../../globals";
@@ -67,25 +70,25 @@ useEvent(Events.MessageBulkDelete, (messages: Collection<string, Message | Parti
 })
 
 //Role Logs
-useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
-    if (newMember.guild.id !== GUILDS.MAIN) return;
-    const [newRoles, oldRoles] = [newMember, oldMember].map(({roles}) => roles.cache);
-    //addedRoles is all roles we didn't previously have, removedRules is all roles we did previously have
-    const addedRoles = newRoles.filter((role, roleId) => !oldRoles.has(roleId));
-    const removedRoles = oldRoles.filter((role, roleId) => !newRoles.has(roleId));
-    const roleWasAdded = addedRoles.size > 0;
-    const roleOfInterest = roleWasAdded ? addedRoles.first() : removedRoles.first();
-    if (!roleOfInterest) {
-        //No added role nor removed role, therefore this is not a role update
-        return;
+useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Guild) => {
+    if (guild.id !== GUILDS.MAIN) return;
+    if (entry.action !== AuditLogEvent.MemberRoleUpdate) return;
+    console.dir(entry);
+    const change = entry.changes[0];
+    let description = `:key: ${entry.target}`;
+    if (entry.target instanceof User) {
+        description += ` (${entry.target.username})`
     }
+    description += `'s roles updated by ${entry.executor}`;
+    if (entry.executor instanceof User) {
+        description += ` (${entry.executor.username})`;
+    }
+
     const embed = new EmbedBuilder()
-        .setDescription(`:key: ${newMember} (${newMember.user.username}) was ${roleWasAdded ? "added to" : "removed from"} ${roleOfInterest}`)
-        .setFooter({text: `Member ID: ${newMember.id}`})
-        .setColor(roleWasAdded ? Colors.Green : Colors.DarkRed)
-        .setTimestamp(Date.now());
+        .setDescription(`${description}\n${codeBlock("json", JSON.stringify(change, null, 2))}`)
+        .setColor(Colors.Aqua);
     log(LOG_THREADS.ROLE, embed);
-});
+})
 
 //Nickname Logs
 useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
