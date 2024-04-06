@@ -2,7 +2,7 @@ import {useClient, useEnv, useEvent} from "./hooks";
 import "./env";
 import fs from "fs";
 import path from "path";
-import {ActivityType, Client, GatewayIntentBits, Partials} from "discord.js";
+import {ActivityType, Client, GatewayIntentBits, Partials, User} from "discord.js";
 import mongoose from "mongoose";
 
 const client = new Client({
