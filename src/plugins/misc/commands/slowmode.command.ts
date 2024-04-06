@@ -1,7 +1,6 @@
 import {ChatInputCommandInteraction, PermissionFlagsBits, TextChannel} from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../../hooks/useChatCommand";
-import {chatEnabled} from "../../chat/chat";
 
 const builder = new SlashCommandBuilder()
     .setName("slowmode")
