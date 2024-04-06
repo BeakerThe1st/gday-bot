@@ -30,7 +30,7 @@ mailThreadSchema.pre("save", async function() {
         .setTitle(`New thread for ${resolvedAuthor.username}`)
         .setDescription(`${userMention(resolvedAuthor.id)} (${resolvedAuthor.username})\nAccount Created: ${time(resolvedAuthor.createdAt)}`)
         .setColor(Colors.Aqua)
-    channel.send({embeds: [embed]});
+    channel.send({embeds: [embed], content: "@here", allowedMentions: {parse: ["everyone"]}});
     this.channel = channel.id;
 })
 
