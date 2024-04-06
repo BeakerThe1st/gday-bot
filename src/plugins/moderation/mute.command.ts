@@ -38,10 +38,6 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
 
     const member = await interaction.guild.members.fetch(user);
 
-    /*const lastMutedTimestamp = member.communicationDisabledUntilTimestamp;
-
-    if (lastMutedTimestamp && lastMutedTimestamp > Date.now()) return `${userMention(member.id)} is already muted!`*/
-
     await member.timeout(parsedDuration, `${interaction.user.id}${reason ? ` ${reason}` : ""}`);
     const timestamp = Math.floor(Date.now() / 1000 + parsedDuration / 1000);
     return `${userMention(member.id)} has been muted${reason ? ` for ${inlineCode(reason)}` : ""}. Expiry: ${time(timestamp, TimestampStyles.RelativeTime)}`;
