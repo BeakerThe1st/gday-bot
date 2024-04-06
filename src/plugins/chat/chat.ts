@@ -1,7 +1,6 @@
 import {Message, PermissionFlagsBits} from "discord.js";
 import {useClient, useEvent} from "../../hooks";
 import {useOpenAI} from "../../hooks/useOpenAI";
-import {Tag} from "../tags/Tag.model";
 
 const getContext = async (message: Message) => {
     const messageList: Message[] = [message];
@@ -60,7 +59,7 @@ const getChatResponse = async (message: Message) => {
                 function: {
                     function: toolFunctions.getTime,
                     description: "Returns the current time as a string.",
-                    parameters: { type: 'object', properties: {} },
+                    parameters: {type: 'object', properties: {}},
                 },
             },
             {
@@ -68,7 +67,7 @@ const getChatResponse = async (message: Message) => {
                 function: {
                     function: toolFunctions.getDate,
                     description: "Returns the current date as a string.",
-                    parameters: { type: 'object', properties: {}}
+                    parameters: {type: 'object', properties: {}}
                 }
             },
         ]

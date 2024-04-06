@@ -1,5 +1,4 @@
 import {
-    ActionRow,
     ActionRowBuilder,
     ChatInputCommandInteraction,
     Events,

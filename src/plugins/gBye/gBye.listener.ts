@@ -1,6 +1,6 @@
 import {useClient, useEvent} from "../../hooks";
 import {AuditLogEvent, Events, Guild, GuildAuditLogsEntry, GuildMember, inlineCode, User} from "discord.js";
-import {fetchGbyeBans, fetchGbyeBansString, gByeGuilds, getGbyeChannel} from "./gBye";
+import {fetchGbyeBansString, gByeGuilds, getGbyeChannel} from "./gBye";
 
 useEvent(Events.GuildAuditLogEntryCreate, async (entry: GuildAuditLogsEntry, txGuild: Guild) => {
     if (entry.action !== AuditLogEvent.MemberBanAdd) {

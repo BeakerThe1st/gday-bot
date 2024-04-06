@@ -1,7 +1,5 @@
-import {useClient, useEvent} from "../../hooks";
-import {codeBlock, inlineCode, Message, messageLink} from "discord.js";
-import {useOpenAI} from "../../hooks/useOpenAI";
-import {GUILDS, ROLES} from "../../globals";
+import {useEvent} from "../../hooks";
+import {Message} from "discord.js";
 
 useEvent("messageCreate", async (message: Message) => {
     /*if (message.guildId !== GUILDS.MAIN) {

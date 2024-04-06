@@ -133,7 +133,7 @@ class EventMode {
                 `The event ${
                     Date.now() > eventDate.getTime() ? "began" : "begins"
                 } ${time(
-                    eventDate,  
+                    eventDate,
                     TimestampStyles.RelativeTime,
                 )}. Watch at the links below.`,
             )

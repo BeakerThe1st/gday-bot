@@ -1,4 +1,4 @@
-import {Embed, EmbedBuilder, MessageCreateOptions} from "discord.js";
+import {EmbedBuilder, MessageCreateOptions} from "discord.js";
 import {useClient} from "../../hooks";
 
 export enum LOG_THREADS {

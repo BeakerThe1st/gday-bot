@@ -18,6 +18,6 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const embed = new EmbedBuilder()
         .setColor(0x333333)
         .setTitle(`Lookin' at the mug of ${user.username}`)
-        .setImage(user.displayAvatarURL({ extension: 'png', size: 2048, forceStatic: false }));
+        .setImage(user.displayAvatarURL({extension: 'png', size: 2048, forceStatic: false}));
     return {embeds: [embed]};
 })

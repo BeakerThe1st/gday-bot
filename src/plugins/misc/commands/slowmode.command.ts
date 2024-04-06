@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction, PermissionFlagsBits, TextChannel} from "discord.js";
+import {ChatInputCommandInteraction, PermissionFlagsBits} from "discord.js";
 import {SlashCommandBuilder, SlashCommandScope} from "../../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../../hooks/useChatCommand";
 
@@ -17,7 +17,7 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const interval = interaction.options.getInteger('interval', true)
-    const { channel } = interaction;
+    const {channel} = interaction;
     if (!(channel && "setRateLimitPerUser" in channel)) {
         return "Slowmode cannot be set in this channel."
     }

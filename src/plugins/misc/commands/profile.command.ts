@@ -4,7 +4,9 @@ import {
     ChatInputCommandInteraction,
     Colors,
     EmbedBuilder,
-    GuildMember, inlineCode, PermissionFlagsBits,
+    GuildMember,
+    inlineCode,
+    PermissionFlagsBits,
     time,
     TimestampStyles,
 } from "discord.js";
@@ -55,7 +57,10 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         if (member.id === interaction.user.id || interaction.member.permissions.has(PermissionFlagsBits.BanMembers)) {
             embed.addFields({
                 name: "Cases",
-                value: listify([`Received: ${await Case.countDocuments({target: user.id, guild: member.guild.id})}`, `Issued: ${await Case.countDocuments({executor: user.id, guild: member.guild.id})}`])
+                value: listify([`Received: ${await Case.countDocuments({
+                    target: user.id,
+                    guild: member.guild.id
+                })}`, `Issued: ${await Case.countDocuments({executor: user.id, guild: member.guild.id})}`])
             })
         }
     }

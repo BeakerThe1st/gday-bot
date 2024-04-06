@@ -3,13 +3,13 @@ import {useChatCommand} from "../../hooks/useChatCommand";
 import {
     ActionRowBuilder,
     ChatInputCommandInteraction,
-    Colors,
-    Embed,
-    EmbedBuilder,
     Events,
     Interaction,
-    ModalBuilder, SelectMenuBuilder, SelectMenuOptionBuilder,
-    TextInputBuilder, TextInputStyle,
+    ModalBuilder,
+    SelectMenuBuilder,
+    SelectMenuOptionBuilder,
+    TextInputBuilder,
+    TextInputStyle,
 } from "discord.js";
 import {MailThread} from "./MailThread";
 import {useClient, useEvent} from "../../hooks";

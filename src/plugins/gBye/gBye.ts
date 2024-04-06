@@ -1,4 +1,4 @@
-import {RESTJSONErrorCodes, Guild, inlineCode, User, time, GuildBan} from "discord.js";
+import {Guild, GuildBan, inlineCode, RESTJSONErrorCodes, User} from "discord.js";
 import {useClient} from "../../hooks";
 import {GByeConfig} from "./GByeConfig.model";
 
@@ -40,7 +40,7 @@ export const fetchGbyeBansString = async (user: User) => {
     }
 
     const banStrings = bans.map((ban) => {
-        const { reason, guild } = ban;
+        const {reason, guild} = ban;
         const formattedReason = reason ? `for ${inlineCode(reason.replaceAll("\n", " "))}` : "- No reason specified.";
         return `\n- ${guild.name} ${formattedReason}`;
     })

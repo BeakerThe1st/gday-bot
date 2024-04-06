@@ -1,6 +1,6 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, Colors, EmbedBuilder, Events, inlineCode} from "discord.js";
+import {ChatInputCommandInteraction, Colors, EmbedBuilder, inlineCode} from "discord.js";
 import {Tag} from "./Tag.model";
 
 const builder = new SlashCommandBuilder()

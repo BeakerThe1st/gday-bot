@@ -46,7 +46,6 @@ try {
 }
 
 
-
 /*const statuses: [ActivityType, string][] = [
     [ActivityType.Watching, "the sunset with a coldie"],
     [ActivityType.Competing, "a TimTam race"],

@@ -17,7 +17,7 @@ useEvent(Events.InteractionCreate, async (interaction) => {
 
     //Turn it into discord friendly options
     const options = result
-            .map(({item}) => ({
+        .map(({item}) => ({
             name: item.name,
             value: item.name
         }));
