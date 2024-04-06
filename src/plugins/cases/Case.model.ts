@@ -23,6 +23,7 @@ export interface ICase {
     reason?: string;
     createdAtTimestamp: string;
     userNotified: boolean;
+    imported: boolean;
 }
 
 const caseSchema = new Schema<ICase>({
@@ -44,6 +45,10 @@ const caseSchema = new Schema<ICase>({
         },
     },
     userNotified: Boolean,
+    imported: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 //ID creation middleware
@@ -66,6 +71,10 @@ friendlyNames.set(CaseType.WARN, "warned in");
 friendlyNames.set(CaseType.UNBAN, "unbanned from");
 caseSchema.pre("save", async function () {
     if (!this.isNew) return;
+    if (this.imported) {
+        this.userNotified = false;
+        return;
+    }
     try {
         const user = await useClient().client.users.fetch(this.target);
         const guild = await useClient().client.guilds.fetch(this.guild);
@@ -94,7 +103,7 @@ caseSchema.pre("save", async function () {
     );
     if (channel?.isTextBased()) {
         const embed = new EmbedBuilder()
-            .setTitle("✅ New Case Generated")
+            .setTitle(`✅ New Case ${this.imported ? "Imported" : "Generated"}`)
             .addFields({name: "Type", value: this.type, inline: true})
             .setColor("Fuchsia")
             .setFooter({text: `${this._id} • ${this.userNotified ? "User has been notified" : "User has not been notified"}`});
