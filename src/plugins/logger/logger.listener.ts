@@ -1,6 +1,6 @@
 import {useEvent} from "../../hooks";
 import {
-    AuditLogEvent, codeBlock,
+    AuditLogEvent,
     Collection,
     Colors,
     EmbedBuilder,
@@ -13,19 +13,26 @@ import {
     Message,
     PartialGuildMember,
     PartialMessage,
+    roleMention,
     time,
-    TimestampStyles, User,
+    TimestampStyles,
+    User,
 } from "discord.js";
 import {log, LOG_THREADS} from "./logs";
 import {GUILDS} from "../../globals";
 import {createBulkMessageLogFile} from "../../utils";
+
+// @ts-ignore
+User.prototype.toString = function(): string {
+    return `<@${this.id}> (${this.username})`
+}
 
 //Deleted Message
 useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
     if (message.guildId !== GUILDS.MAIN) return;
     if (message.channelId === LOG_THREADS.DELETION) return;
     const embed = new EmbedBuilder()
-        .setDescription(`:wastebasket: Message by ${message.author} (${message.author?.username ?? "No Username"}) deleted in ${message.channel}`)
+        .setDescription(`:wastebasket: Message by ${message.author} deleted in ${message.channel}`)
         .setColor(Colors.DarkRed)
         .setFooter({text: `Message ID: ${message.id}`})
         .setTimestamp(Date.now());
@@ -73,41 +80,40 @@ useEvent(Events.MessageBulkDelete, (messages: Collection<string, Message | Parti
 useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Guild) => {
     if (guild.id !== GUILDS.MAIN) return;
     if (entry.action !== AuditLogEvent.MemberRoleUpdate) return;
-    console.dir(entry);
-    const change = entry.changes[0];
-    let description = `:key: ${entry.target}`;
-    if (entry.target instanceof User) {
-        description += ` (${entry.target.username})`
-    }
-    description += `'s roles updated by ${entry.executor}`;
-    if (entry.executor instanceof User) {
-        description += ` (${entry.executor.username})`;
-    }
-
+    const [change] = entry.changes;
+    //@ts-ignore
+    let description = `:key: ${entry.target} was ${change.key === "$add" ? "added to" : "removed from"} ${roleMention(change.new[0].id)} by ${entry.executor}`;
     const embed = new EmbedBuilder()
-        .setDescription(`${description}\n${codeBlock("json", JSON.stringify(change, null, 2))}`)
-        .setColor(Colors.Aqua);
+        .setDescription(description)
+        .setColor(change.key === "$add" ? Colors.Green : Colors.Red);
     log(LOG_THREADS.ROLE, embed);
 })
 
 //Nickname Logs
-useEvent(Events.GuildMemberUpdate, (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
-    if (newMember.guild.id !== GUILDS.MAIN) return;
-    const [oldNick, newNick] = [oldMember, newMember].map((member) => member.displayName);
-    if (oldNick === newNick) return;
+useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Guild) => {
+    if (guild.id !== GUILDS.MAIN) return;
+    if (entry.action !== AuditLogEvent.MemberUpdate) return;
+    console.dir(entry);
+    const [change] = entry.changes;
+    if (change.key !== "nick") return;
+    if (!(entry.target instanceof User)) return;
+    const newNick = (change.new ?? entry.target.displayName) as string;
+    const oldNick = (change.old ?? entry.target.displayName) as string;
+    if (newNick === oldNick) {
+        return;
+    }
     const embed = new EmbedBuilder()
-        .setDescription(`:name_badge: ${newMember} (${newMember.user.username})'s nickname changed from ${inlineCode(oldNick)} to ${inlineCode(newNick)}`)
-        .setTimestamp(Date.now())
+        .setDescription(`:name_badge: ${entry.target}'s nickname changed from ${inlineCode(newNick)} to ${inlineCode(oldNick)} by ${entry.executor}`)
         .setColor(Colors.Orange);
     log(LOG_THREADS.NICKNAME, embed);
-});
+})
 
 //Join Logs
 useEvent(Events.GuildMemberAdd, (member: GuildMember) => {
     if (member.guild.id !== GUILDS.MAIN) return;
     const {user} = member;
     const embed = new EmbedBuilder()
-        .setDescription(`:inbox_tray: ${member} (${member.user.username}) joined the server\nAccount created: ${time(user.createdAt, TimestampStyles.RelativeTime)}`)
+        .setDescription(`:inbox_tray: ${member} joined the server\nAccount created: ${time(user.createdAt, TimestampStyles.RelativeTime)}`)
         .setThumbnail(user.displayAvatarURL())
         .setTimestamp(Date.now())
         .setColor(Colors.Green);
@@ -119,7 +125,7 @@ useEvent(Events.GuildMemberRemove, (member: GuildMember | PartialGuildMember) =>
     if (member.guild.id !== GUILDS.MAIN) return;
     const {user} = member;
     const embed = new EmbedBuilder()
-        .setDescription(`:outbox_tray: ${member} (${member.user.username}) left the server`)
+        .setDescription(`:outbox_tray: ${member} left the server`)
         .setThumbnail(user.displayAvatarURL())
         .setTimestamp(Date.now())
         .setColor(Colors.DarkRed)
@@ -127,13 +133,12 @@ useEvent(Events.GuildMemberRemove, (member: GuildMember | PartialGuildMember) =>
 });
 
 //Message Edit Logs
-
 useEvent(Events.MessageUpdate, (oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) => {
     if (oldMessage.guildId !== GUILDS.MAIN) return;
     const {author} = newMessage;
     if (!author || author.bot) return;
     const embed = new EmbedBuilder()
-        .setDescription(`:pencil: ${author} (${author?.username ?? "No Username"}) updated their message in ${newMessage.channel}`)
+        .setDescription(`:pencil: ${author} updated their message in ${newMessage.channel}`)
         .addFields([
             {
                 name: "Old Content",
