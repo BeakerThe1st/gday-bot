@@ -14,6 +14,11 @@ const builder = new SlashCommandBuilder()
             .setDescription("Message to send.")
             .setRequired(true)
     )
+    .addAttachmentOption((option) =>
+        option
+            .setName("attachment")
+            .setDescription("Attachment to attach.")
+    )
     .setScope(SlashCommandScope.STAFF_SERVER);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
@@ -22,11 +27,13 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         return "You can only reply within modmail threads.";
     }
     const body = interaction.options.getString("message", true);
+    const attachment = interaction.options.getAttachment("attachment");
     const user = await useClient().client.users.fetch(thread.author);
     const message = new ModmailMessage({
         from: interaction.user.username,
         to: user.username,
-        body
+        body,
+        attachments: (attachment ? [attachment.url] : undefined)
     })
     await user.send({embeds: [message]});
     message.addStaffFields();

@@ -14,6 +14,11 @@ const builder = new SlashCommandBuilder()
             .setDescription("Message to send.")
             .setRequired(true)
     )
+    .addAttachmentOption((option) =>
+        option
+            .setName("attachment")
+            .setDescription("Attachment to attach.")
+    )
     .setScope(SlashCommandScope.STAFF_SERVER);
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
@@ -23,11 +28,13 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     }
     const input = interaction.options.getString("message", true);
     const user = await useClient().client.users.fetch(thread.author);
+    const attachment = interaction.options.getAttachment("attachment");
     const message = new ModmailMessage({
         from: interaction.user.username,
         to: user.username,
         body: input,
-        anon: true
+        anon: true,
+        attachments: (attachment ? [attachment.url] : undefined)
     });
     await user.send({embeds: [message]});
     message.addStaffFields();
