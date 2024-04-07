@@ -21,6 +21,8 @@ const client = new Client({
     },
     partials: [Partials.GuildMember, Partials.Channel],
 });
+client.setMaxListeners(100);
+
 useClient().setClient(client);
 const loadFilesFromFolder = (folder: string) => {
     const folderUrl = new URL(folder, import.meta.url);
