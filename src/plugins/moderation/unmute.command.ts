@@ -1,6 +1,6 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ChatInputCommandInteraction, GuildMember, userMention} from "discord.js";
+import {ChatInputCommandInteraction, GuildMember, PermissionFlagsBits, userMention} from "discord.js";
 
 const builder = new SlashCommandBuilder()
     .setName("unmute")
@@ -8,6 +8,7 @@ const builder = new SlashCommandBuilder()
     .addUserOption((option) =>
         option.setName("user").setDescription("User to unmute.").setRequired(true)
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
     .setScope(SlashCommandScope.MAIN_GUILD)
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
