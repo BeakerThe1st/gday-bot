@@ -16,13 +16,13 @@ import {
 import {MailThread} from "./MailThread";
 import {CHANNELS, GUILDS} from "../../globals";
 import {ModmailMessage} from "./ModmailMessage";
-import {ModmailUser} from "./ModmailUser";
+import {RAppleUser} from "../rApple/RAppleUser";
 
 export const forwardModmailMessage = async (message: Message) => {
     const thread = await MailThread.findOne({author: message.author.id});
     if (!thread) {
-        const modmailUser = await ModmailUser.findOne({userId: message.author.id});
-        if (modmailUser?.blocklisted) {
+        const rAppleUser = await RAppleUser.findOne({userId: message.author.id});
+        if (rAppleUser?.modmailBlocklisted) {
             await message.reply("You have been blocked from creating new modmail threads.");
             return;
         }

@@ -1,6 +1,6 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {useChatCommand} from "../../hooks/useChatCommand";
-import {ModmailUser} from "./ModmailUser";
+import {RAppleUser} from "../rApple/RAppleUser";
 
 const builder = new SlashCommandBuilder()
     .setName("blocklist")
@@ -26,28 +26,26 @@ const builder = new SlashCommandBuilder()
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
     const action = interaction.options.getSubcommand();
     const target = interaction.options.getUser("user", true);
-    let modmailUser = await ModmailUser.findOne({userId: target.id})
-    if (!modmailUser) {
-        modmailUser = new ModmailUser({
+    let rAppleUser = await RAppleUser.findOne({userId: target.id})
+    if (!rAppleUser) {
+        rAppleUser = new RAppleUser({
             userId: target.id,
-            blocklisted: false,
-            threadCount: 0
         })
     }
     let message;
     if (action == "add") {
-        if (modmailUser.blocklisted == true) {
+        if (rAppleUser.modmailBlocklisted == true) {
             return `${target} is already blocklisted.`
         }
-        modmailUser.blocklisted = true;
+        rAppleUser.modmailBlocklisted = true;
         message = `Added ${target} to the blocklist.`
     } else {
-        if (modmailUser.blocklisted == false) {
+        if (rAppleUser.modmailBlocklisted == false) {
             return `${target} is not blocklisted.`
         }
-        modmailUser.blocklisted = false;
+        rAppleUser.modmailBlocklisted = false;
         message = `Removed ${target} from the blocklist.`
     }
-    await modmailUser.save();
+    await rAppleUser.save();
     return message;
 })
