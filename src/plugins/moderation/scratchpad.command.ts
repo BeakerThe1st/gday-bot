@@ -96,19 +96,3 @@ useInteraction(async (interaction: Interaction) => {
         allowedMentions: {parse: []}
     };
 });
-
-useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
-
-
-    let rAppleUser = await RAppleUser.findOne({userId: targetId})
-    if (!rAppleUser) {
-        rAppleUser = new RAppleUser({userId: targetId});
-    }
-    rAppleUser.scratchpad = interaction.fields.getField("text").value;
-    await rAppleUser.save();
-    interaction.reply({
-        content: `Edited ${userMention(targetId)}'s scratchpad`,
-        ephemeral: true,
-        allowedMentions: {parse: []}
-    });
-});
