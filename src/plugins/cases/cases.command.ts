@@ -2,6 +2,7 @@ import {bold, ChatInputCommandInteraction, PermissionFlagsBits, userMention} fro
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {Case} from "./Case.model";
 import {useChatCommand} from "../../hooks/useChatCommand";
+import {RAppleUser} from "../rApple/RAppleUser";
 
 const builder = new SlashCommandBuilder()
     .setName("cases")
@@ -49,15 +50,23 @@ useChatCommand(
             filter.type = type;
         }
         const count = await Case.count(filter);
+        let hasScratchpad = false;
+
+        if (target) {
+            const user = await RAppleUser.findOne({userId: target.id});
+            if (user?.scratchpad) {
+                hasScratchpad = true;
+            }
+        }
 
         if (count < 1) {
-            return `Sorry mate, couldn't find any cases that match your search! 🤠`;
+            return `Sorry mate, couldn't find any cases that match your search${hasScratchpad ? ` but they've got a scratchpad entry` : ""}! 🤠`;
         }
         const results = await Case.find(filter)
             .sort({createdAtTimestamp: "desc"})
             .limit(6);
 
-        const resultsList = results.reduce((acc, result) => {
+        let resultsList = results.reduce((acc, result) => {
             let currentStr = `${bold(result._id)} - ${result.type} on ${userMention(
                 result.target,
             )}`;
@@ -69,6 +78,10 @@ useChatCommand(
             }
             return acc + `\n- ${currentStr.replaceAll("\n", " ")}`;
         }, "");
+
+        if (hasScratchpad) {
+            resultsList += `\n\n📝 User has scratchpad entry`;
+        }
 
         if (count > 6) {
             return `Strewth! Found ${count.toLocaleString()} cases that match what you're after. Check out the latest 6!\n${resultsList}`;
