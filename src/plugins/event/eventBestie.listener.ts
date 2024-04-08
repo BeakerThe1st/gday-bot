@@ -3,7 +3,8 @@ import {Typing} from "discord.js";
 import {useEvent} from "../../hooks";
 
 useEvent("typingStart", async (typing: Typing) => {
-    if (!NEXT_EVENT) {
+    return;
+    /*if (!NEXT_EVENT) {
         return;
     }
 
@@ -22,5 +23,5 @@ useEvent("typingStart", async (typing: Typing) => {
     const {roles} = typing.member;
     if (!roles.cache.has(ROLES.MAIN.event_reserved)) {
         await roles.add(ROLES.MAIN.event_reserved);
-    }
+    }*/
 });
