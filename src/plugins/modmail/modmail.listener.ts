@@ -1,7 +1,6 @@
 import {useClient, useEvent} from "../../hooks";
 import {
-    ActionRowBuilder,
-    ButtonBuilder,
+    ButtonInteraction,
     ButtonStyle,
     ChannelType,
     Colors,
@@ -9,7 +8,6 @@ import {
     EmbedBuilder,
     Events,
     GuildChannel,
-    Interaction,
     Message,
     userMention,
 } from "discord.js";
@@ -17,6 +15,8 @@ import {MailThread} from "./MailThread";
 import {CHANNELS, GUILDS} from "../../globals";
 import {ModmailMessage} from "./ModmailMessage";
 import {RAppleUser} from "../rApple/RAppleUser";
+import {GdayButtonBuilder} from "../../builders/GdayButtonBuilder";
+import {useButton} from "../../hooks/useButton";
 
 export const forwardModmailMessage = async (message: Message) => {
     const thread = await MailThread.findOne({author: message.author.id});
@@ -26,20 +26,20 @@ export const forwardModmailMessage = async (message: Message) => {
             await message.reply("You have been blocked from creating new modmail threads.");
             return;
         }
-        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-                .setLabel("Create thread")
-                .setEmoji("✅")
-                .setStyle(ButtonStyle.Success)
-                .setCustomId(`modmail-create-${message.author.id}`)
-        )
         const embed = new EmbedBuilder()
             .setTitle("G'day from the r/Apple mod team!")
             .setColor(Colors.Aqua)
             .setDescription("Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply. If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!");
         await message.reply({
             embeds: [embed],
-            components: [actionRow]
+            components: [
+                new GdayButtonBuilder("modmail:create")
+                    .setLabel("Create thread")
+                    .setEmoji("✅")
+                    .setStyle(ButtonStyle.Success)
+                    .addArg(message.author.id)
+                    .asActionRow()
+            ]
         });
         return;
     }
@@ -72,24 +72,17 @@ useEvent(Events.MessageCreate, async (message: Message) => {
     await forwardModmailMessage(message);
 });
 
-useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
-    if (!interaction.isButton()) {
-        return;
-    }
-    const [c1, c2, c3] = interaction.customId.split("-");
-    if (c1 !== "modmail" || c2 !== "create") {
-        return;
-    }
+useButton("modmail:create", async (interaction: ButtonInteraction, args) => {
+    const [userId] = args;
     await interaction.deferReply({ephemeral: true});
-    let thread = await MailThread.findOne({author: c3});
+    let thread = await MailThread.findOne({author: userId});
     if (thread) {
-        await interaction.editReply(`You already have an open thread, simply send your message in this channel and it'll go straight to the mod team!`);
-        return;
+        return `You already have an open thread, simply send your message in this channel and it'll go straight to the mod team!`;
     }
     const initialMessage = await interaction.message.fetchReference();
-    await MailThread.create({author: c3, initialMessage: initialMessage.id});
-    await interaction.editReply(`Thread created!`)
-});
+    await MailThread.create({author: userId, initialMessage: initialMessage.id});
+    return `Thread created!`;
+})
 
 useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
     if (!("guildId" in channel && channel.guildId === GUILDS.STAFF)) {

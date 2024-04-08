@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import {model, Schema} from "mongoose";
 
 export interface IRAppleUser {
     userId: String,

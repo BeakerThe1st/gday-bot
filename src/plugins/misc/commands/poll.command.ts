@@ -4,14 +4,15 @@ import {
     ActionRowBuilder,
     BaseMessageOptions,
     ButtonBuilder,
+    ButtonInteraction,
     ButtonStyle,
     ChatInputCommandInteraction,
     EmbedBuilder,
-    Interaction,
     Message,
     User,
 } from "discord.js";
-import {useEvent} from "../../../hooks";
+import {GdayButtonBuilder} from "../../../builders/GdayButtonBuilder";
+import {useButton} from "../../../hooks/useButton";
 
 const builder = new SlashCommandBuilder()
     .setName("poll")
@@ -36,25 +37,13 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     return poll.getMessage();
 });
 
-useEvent("interactionCreate", async (interaction: Interaction) => {
-    if (!interaction.isButton()) {
-        return;
-    }
-    const [type, action] = interaction.customId.split("-");
-    if (type !== "poll") {
-        return;
-    }
+useButton("poll:vote", async (interaction: ButtonInteraction, args) => {
     await interaction.deferReply({ephemeral: true});
-
     const poll = polls.get(interaction.message.id);
     if (!poll) {
-        await interaction.editReply("That poll can no longer be found.");
-        return;
+        throw new Error("That poll no longer exists");
     }
-
-    await interaction.editReply(
-        poll.setVote(interaction.user, action as "yes" | "no"),
-    );
+    return poll.setVote(interaction.user, args[0] as "yes" | "no")
 });
 
 class PollCommand {
@@ -96,14 +85,14 @@ class PollCommand {
             .setColor("Blurple");
         const actionRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
-                new ButtonBuilder()
-                    .setCustomId("poll-yes")
+                new GdayButtonBuilder("poll:vote")
                     .setStyle(ButtonStyle.Success)
-                    .setLabel("Yes"),
-                new ButtonBuilder()
-                    .setCustomId("poll-no")
+                    .setLabel("Yes")
+                    .addArg("yes"),
+                new GdayButtonBuilder("poll:vote")
                     .setStyle(ButtonStyle.Danger)
-                    .setLabel("No"),
+                    .setLabel("No")
+                    .addArg("no"),
             )
             .toJSON();
         return {

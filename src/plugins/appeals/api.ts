@@ -1,8 +1,9 @@
-import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, userMention} from "discord.js";
+import {ButtonStyle, EmbedBuilder, userMention} from "discord.js";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import {useClient} from "../../hooks";
+import {GdayButtonBuilder} from "../../builders/GdayButtonBuilder";
 
 const app = express();
 
@@ -56,22 +57,21 @@ app.post("/ban-appeal", async (req, res) => {
                     value: reason,
                 },
             );
-        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-                .setLabel("Unban")
-                .setStyle(ButtonStyle.Success)
-                .setCustomId(`appeal-unban-${id}`),
-        );
         await appealChannel.send({
             content: `${id}`,
             embeds: [embed],
-            components: [actionRow],
+            components: [
+                new GdayButtonBuilder("appeal:unban")
+                    .setLabel("Unban")
+                    .setStyle(ButtonStyle.Success)
+                    .addArg(id)
+                    .asActionRow()
+            ],
             allowedMentions: {
                 users: [],
             },
         });
         return res.status(200).json("Submitted appeal");
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         if (error.code === 50035) {
             return res.status(400).json({

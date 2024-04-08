@@ -67,7 +67,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // @ts-ignore
-User.prototype.toString = function(): string {
+User.prototype.toString = function (): string {
     return `<@${this.id}> (${this.username})`
 }
 

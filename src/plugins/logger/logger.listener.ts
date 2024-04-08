@@ -91,7 +91,6 @@ useEvent(Events.GuildAuditLogEntryCreate, (entry: GuildAuditLogsEntry, guild: Gu
     const [change] = entry.changes;
     if (change.key !== "nick") return;
     if (!(entry.target instanceof User)) return;
-    console.dir(entry);
     const newNick = (change.new ?? entry.target.displayName) as string;
     const oldNick = (change.old ?? entry.target.displayName) as string;
     if (newNick === oldNick) {

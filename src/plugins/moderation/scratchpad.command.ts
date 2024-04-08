@@ -1,15 +1,23 @@
 import {SlashCommandBuilder, SlashCommandScope} from "../../builders/SlashCommandBuilder";
 import {
     ActionRowBuilder,
-    ButtonBuilder, ButtonStyle,
+    ButtonInteraction,
+    ButtonStyle,
     ChatInputCommandInteraction,
-    codeBlock, Events, Interaction, ModalBuilder,
-    PermissionFlagsBits, TextInputBuilder, TextInputStyle,
+    codeBlock,
+    Events,
+    Interaction,
+    ModalBuilder,
+    PermissionFlagsBits,
+    TextInputBuilder,
+    TextInputStyle,
     userMention
 } from "discord.js";
 import {useChatCommand} from "../../hooks/useChatCommand";
 import {RAppleUser} from "../rApple/RAppleUser";
 import {useEvent} from "../../hooks";
+import {GdayButtonBuilder} from "../../builders/GdayButtonBuilder";
+import {useButton} from "../../hooks/useButton";
 
 const builder = new SlashCommandBuilder()
     .setName("scratchpad")
@@ -33,29 +41,21 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     } else {
         message += ` is empty.`;
     }
-    const actionRow = new ActionRowBuilder<ButtonBuilder>()
-        .addComponents(
-            new ButtonBuilder()
-                .setCustomId(`scratchpad-edit-${targetId}`)
-                .setEmoji("📝")
-                .setStyle(ButtonStyle.Secondary)
-                .setLabel("Edit")
-        )
     return {
         content: `${message}`,
-        components: [actionRow]
+        components: [
+            new GdayButtonBuilder("scratchpad:edit")
+                .setLabel("Edit")
+                .setStyle(ButtonStyle.Secondary)
+                .setEmoji("📝")
+                .addArg(targetId)
+                .asActionRow()
+        ]
     };
 })
 
-useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
-    if (!interaction.isButton()) {
-        return;
-    }
-    const [type, action, targetId] = interaction.customId.split("-");
-    if (type !== "scratchpad" || action !== "edit") {
-        return;
-    }
-    const target = await interaction.client.users.fetch(targetId);
+useButton("scratchpad:edit", async (interaction: ButtonInteraction, args) => {
+    const target = await interaction.client.users.fetch(args[0]);
     const rAppleUser = await RAppleUser.findOne({userId: target.id})
     const textField = new TextInputBuilder()
         .setCustomId("text")
@@ -64,13 +64,15 @@ useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
         .setValue((rAppleUser?.scratchpad) ?? "")
         .setStyle(TextInputStyle.Paragraph)
         .setRequired(false)
-    const modal = new ModalBuilder()
+    return new ModalBuilder()
         .setCustomId(`${interaction.customId}`)
         .setTitle(`Scratchpad for ${target.username}`)
-        .addComponents([
-            new ActionRowBuilder<TextInputBuilder>().addComponents(textField)
-        ])
-    interaction.showModal(modal);
+        .addComponents(
+            [
+                new ActionRowBuilder<TextInputBuilder>()
+                    .addComponents(textField)
+            ]
+        )
 })
 
 useEvent(Events.InteractionCreate, async (interaction: Interaction) => {

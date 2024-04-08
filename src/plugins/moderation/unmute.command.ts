@@ -13,7 +13,7 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const member = interaction.options.getMember("user");
-    if (!(member instanceof GuildMember) ) {
+    if (!(member instanceof GuildMember)) {
         return `${member} is not a GuildMember.`;
     }
     if (!member.isCommunicationDisabled()) {
