@@ -18,6 +18,7 @@ import {RAppleUser} from "../rApple/RAppleUser";
 import {useEvent} from "../../hooks";
 import {GdayButtonBuilder} from "../../builders/GdayButtonBuilder";
 import {useButton} from "../../hooks/useButton";
+import {useInteraction} from "../../hooks/useInteraction";
 
 const builder = new SlashCommandBuilder()
     .setName("scratchpad")
@@ -75,14 +76,30 @@ useButton("scratchpad:edit", async (interaction: ButtonInteraction, args) => {
         )
 })
 
-useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
+useInteraction(async (interaction: Interaction) => {
     if (!interaction.isModalSubmit()) {
-        return;
+        return null;
     }
-    const [type, action, targetId] = interaction.customId.split("-");
-    if (type !== "scratchpad" || action !== "edit") {
-        return;
+    const [prefix, targetId] = interaction.customId.split("-");
+    if (prefix !== "scratchpad:edit") {
+        return null;
     }
+    let rAppleUser = await RAppleUser.findOne({userId: targetId})
+    if (!rAppleUser) {
+        rAppleUser = new RAppleUser({userId: targetId});
+    }
+    rAppleUser.scratchpad = interaction.fields.getField("text").value;
+    await rAppleUser.save();
+    return {
+        content: `Edited ${userMention(targetId)}'s scratchpad`,
+        ephemeral: true,
+        allowedMentions: {parse: []}
+    };
+});
+
+useEvent(Events.InteractionCreate, async (interaction: Interaction) => {
+
+
     let rAppleUser = await RAppleUser.findOne({userId: targetId})
     if (!rAppleUser) {
         rAppleUser = new RAppleUser({userId: targetId});
