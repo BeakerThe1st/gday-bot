@@ -2,9 +2,9 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 
-
+// noinspection JSUnusedGlobalSymbols
 export default [
-  {languageOptions: { globals: globals.node }},
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
+    { languageOptions: { globals: globals.node } },
+    pluginJs.configs.recommended,
+    ...tseslint.configs.recommended
 ];
