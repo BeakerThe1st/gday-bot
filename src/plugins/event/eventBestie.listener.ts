@@ -1,10 +1,9 @@
-import {GUILDS, NEXT_EVENT, ROLES} from "../../globals";
-import {Typing} from "discord.js";
-import {useEvent} from "../../hooks";
+import { Typing } from "discord.js";
+import { useEvent } from "../../hooks";
 
 useEvent("typingStart", async (typing: Typing) => {
-    return;
-    /*if (!NEXT_EVENT) {
+  return;
+  /*if (!NEXT_EVENT) {
         return;
     }
 

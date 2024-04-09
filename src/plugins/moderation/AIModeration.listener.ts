@@ -1,8 +1,8 @@
-import {useEvent} from "../../hooks";
-import {Message} from "discord.js";
+import { useEvent } from "../../hooks";
+import { Message } from "discord.js";
 
 useEvent("messageCreate", async (message: Message) => {
-    /*if (message.guildId !== GUILDS.MAIN) {
+  /*if (message.guildId !== GUILDS.MAIN) {
         return;
     }
     if (message.author.bot) {
@@ -48,9 +48,9 @@ useEvent("messageCreate", async (message: Message) => {
         await message.delete();
         await message.channel.send(response);
     } else {*/
-    /*if (logChannel?.isTextBased()) {
+  /*if (logChannel?.isTextBased()) {
         await logChannel.send(`Message by ${message.author} flagged in ${message.channel} due to ${inlineCode(matchedFlags.join(", "))}\n${codeBlock(message.cleanContent)}`);
     }
     await message.react("❗");*/
-    //}
+  //}
 });
