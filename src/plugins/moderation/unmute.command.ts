@@ -22,7 +22,7 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const member = interaction.options.getMember("user");
     if (!(member instanceof GuildMember)) {
         return `${member} is not a GuildMember.`;

@@ -24,7 +24,7 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.GLOBAL);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const message = interaction.options.getString("message", true);
     if (!interaction.channel) {
         throw new Error("Channel undefined.");

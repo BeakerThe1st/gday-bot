@@ -23,7 +23,7 @@ const builder = new SlashCommandBuilder()
     )
     .setScope(SlashCommandScope.STAFF_SERVER);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const target = interaction.options.getUser("user", true);
     const thread = await MailThread.findOne({ author: target.id });
     if (thread) {

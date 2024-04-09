@@ -34,7 +34,7 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const targetId = interaction.options.getUser("user", true).id;
     let rAppleUser = await RAppleUser.findOne({ userId: targetId });
     if (!rAppleUser) {
@@ -59,7 +59,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     };
 });
 
-useButton("scratchpad:edit", async (interaction: ButtonInteraction, args) => {
+useButton("scratchpad:edit", async (interaction, args) => {
     const target = await interaction.client.users.fetch(args[0]);
     const rAppleUser = await RAppleUser.findOne({ userId: target.id });
     const textField = new TextInputBuilder()

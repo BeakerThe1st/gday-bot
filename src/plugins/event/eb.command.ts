@@ -24,7 +24,7 @@ const builder = new SlashCommandBuilder()
     .setScope(SlashCommandScope.MAIN_GUILD)
     .setEphemeral(true);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const member = interaction.options.getMember("user");
     if (!(member instanceof GuildMember)) {
         throw new Error("Member is not a GuildMember");

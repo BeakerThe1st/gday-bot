@@ -32,7 +32,7 @@ const builder = new SlashCommandBuilder()
 
 const polls = new Map<string, PollCommand>();
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const message = await interaction.fetchReply();
     const poll = new PollCommand(
         interaction.options.getString("question", true),
@@ -42,7 +42,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     return poll.getMessage();
 });
 
-useButton("poll:vote", async (interaction: ButtonInteraction, args) => {
+useButton("poll:vote", async (interaction, args) => {
     await interaction.deferReply({ ephemeral: true });
     const poll = polls.get(interaction.message.id);
     if (!poll) {

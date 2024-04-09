@@ -19,7 +19,7 @@ const builder = new SlashCommandBuilder()
     .setDescription("Closes a modmail thread.")
     .setScope(SlashCommandScope.STAFF_SERVER);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const thread: unknown = (await MailThread.findOneAndDelete({
         channel: interaction.channelId,
     })) as unknown;

@@ -27,7 +27,7 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const { channel } = interaction;
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
@@ -48,7 +48,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     return "Sent.";
 });
 
-useButton("santa:apply", async (interaction: ButtonInteraction) => {
+useButton("santa:apply", async (interaction) => {
     const apps = await useClient().client.channels.fetch(
         CHANNELS.MAIN.santa_applications,
     );
@@ -84,31 +84,28 @@ useButton("santa:apply", async (interaction: ButtonInteraction) => {
     return `Thanks for applying for Santa Squad! Please wait patiently for us to review your application! 💪🎅`;
 });
 
-useButton(
-    "santa:accept",
-    async (interaction: ButtonInteraction, [outcome, userId]) => {
-        await interaction.deferReply({ ephemeral: true });
-        const member = await interaction.guild?.members.fetch(userId);
-        if (!member) {
-            throw new Error(`Not a GuildMember`);
-        }
-        if (interaction.channel?.isTextBased()) {
-            interaction.channel.send(
-                `${interaction.user} ${outcome === "accept" ? "accepted" : "denied"} ${member.user} for Santa Squad!`,
+useButton("santa:accept", async (interaction, [outcome, userId]) => {
+    await interaction.deferReply({ ephemeral: true });
+    const member = await interaction.guild?.members.fetch(userId);
+    if (!member) {
+        throw new Error(`Not a GuildMember`);
+    }
+    if (interaction.channel?.isTextBased()) {
+        interaction.channel.send(
+            `${interaction.user} ${outcome === "accept" ? "accepted" : "denied"} ${member.user} for Santa Squad!`,
+        );
+    }
+    await interaction.message.delete();
+    if (outcome === "accept") {
+        await member.roles.add(ROLES.MAIN.santa_squad);
+    } else {
+        try {
+            await member.user.send(
+                "Your Santa Squad application in r/Apple was denied. Please ensure you have a visible and recognisable santa hat in your profile and re-apply. If you changed your profile picture immediately before applying, please wait before applying again as sometimes Discord can take a while to update profile pictures. If you have any further questions, please read the info provided in the channel and then feel free to contact staff about why your application was denied.",
             );
+        } catch {
+            return `${member} was denied from Santa Squad but I was unable to DM them. Please contact them directly.`;
         }
-        await interaction.message.delete();
-        if (outcome === "accept") {
-            await member.roles.add(ROLES.MAIN.santa_squad);
-        } else {
-            try {
-                await member.user.send(
-                    "Your Santa Squad application in r/Apple was denied. Please ensure you have a visible and recognisable santa hat in your profile and re-apply. If you changed your profile picture immediately before applying, please wait before applying again as sometimes Discord can take a while to update profile pictures. If you have any further questions, please read the info provided in the channel and then feel free to contact staff about why your application was denied.",
-                );
-            } catch {
-                return `${member} was denied from Santa Squad but I was unable to DM them. Please contact them directly.`;
-            }
-        }
-        return "Done";
-    },
-);
+    }
+    return "Done";
+});

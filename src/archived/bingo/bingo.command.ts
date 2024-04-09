@@ -89,28 +89,25 @@ const prettyBoard = async (board: string[][]) => {
     });
 };
 
-useChatCommand(
-    builder as SlashCommandBuilder,
-    async (interaction: ChatInputCommandInteraction) => {
-        const PERSIST = true;
-        const userId = interaction.user.id;
-        let board;
-        if (PERSIST) {
-            board = await Bingo.findOne({ user: userId });
-            if (!board) {
-                return "You missed out on bingo this time, sorry!";
-                board = await Bingo.create({
-                    user: userId,
-                    board: generateBoard(),
-                });
-            }
-        } else {
-            board = { board: generateBoard() };
+useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+    const PERSIST = true;
+    const userId = interaction.user.id;
+    let board;
+    if (PERSIST) {
+        board = await Bingo.findOne({ user: userId });
+        if (!board) {
+            return "You missed out on bingo this time, sorry!";
+            board = await Bingo.create({
+                user: userId,
+                board: generateBoard(),
+            });
         }
+    } else {
+        board = { board: generateBoard() };
+    }
 
-        return {
-            content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board!${PERSIST ? "" : " **PERSISTENCE IS DISABLED**"}`,
-            files: [await prettyBoard(board.board)],
-        };
-    },
-);
+    return {
+        content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board!${PERSIST ? "" : " **PERSISTENCE IS DISABLED**"}`,
+        files: [await prettyBoard(board.board)],
+    };
+});

@@ -38,62 +38,59 @@ const builder = new SlashCommandBuilder()
             ),
     );
 
-useChatCommand(
-    builder as SlashCommandBuilder,
-    async (interaction: ChatInputCommandInteraction) => {
-        const executor = interaction.options.getUser("executor");
-        const target = interaction.options.getUser("target");
-        const type = interaction.options.getString("type");
-        let filter: any = {
-            deleted: false,
-        };
-        if (executor) {
-            filter.executor = executor.id;
-        }
-        if (target) {
-            filter.target = target.id;
-        }
-        if (type) {
-            filter.type = type;
-        }
-        const count = await Case.count(filter);
-        let hasScratchpad = false;
+useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+    const executor = interaction.options.getUser("executor");
+    const target = interaction.options.getUser("target");
+    const type = interaction.options.getString("type");
+    let filter: any = {
+        deleted: false,
+    };
+    if (executor) {
+        filter.executor = executor.id;
+    }
+    if (target) {
+        filter.target = target.id;
+    }
+    if (type) {
+        filter.type = type;
+    }
+    const count = await Case.count(filter);
+    let hasScratchpad = false;
 
-        if (target) {
-            const user = await RAppleUser.findOne({ userId: target.id });
-            if (user?.scratchpad) {
-                hasScratchpad = true;
-            }
+    if (target) {
+        const user = await RAppleUser.findOne({ userId: target.id });
+        if (user?.scratchpad) {
+            hasScratchpad = true;
         }
+    }
 
-        if (count < 1) {
-            return `Sorry mate, couldn't find any cases that match your search${hasScratchpad ? ` but they've got a scratchpad entry` : ""}! 🤠`;
+    if (count < 1) {
+        return `Sorry mate, couldn't find any cases that match your search${hasScratchpad ? ` but they've got a scratchpad entry` : ""}! 🤠`;
+    }
+    const results = await Case.find(filter)
+        .sort({ createdAtTimestamp: "desc" })
+        .limit(6);
+
+    let resultsList = results.reduce((acc, result) => {
+        let currentStr = `${bold(result._id)} - ${result.type} on ${userMention(
+            result.target,
+        )}`;
+        if (result.executor) {
+            currentStr += ` by ${userMention(result.executor)}`;
         }
-        const results = await Case.find(filter)
-            .sort({ createdAtTimestamp: "desc" })
-            .limit(6);
-
-        let resultsList = results.reduce((acc, result) => {
-            let currentStr = `${bold(result._id)} - ${result.type} on ${userMention(
-                result.target,
-            )}`;
-            if (result.executor) {
-                currentStr += ` by ${userMention(result.executor)}`;
-            }
-            if (result.reason) {
-                currentStr += ` for ${result.reason}`;
-            }
-            return acc + `\n- ${currentStr.replaceAll("\n", " ")}`;
-        }, "");
-
-        if (hasScratchpad) {
-            resultsList += `\n\n📝 User has scratchpad entry`;
+        if (result.reason) {
+            currentStr += ` for ${result.reason}`;
         }
+        return acc + `\n- ${currentStr.replaceAll("\n", " ")}`;
+    }, "");
 
-        if (count > 6) {
-            return `Strewth! Found ${count.toLocaleString()} cases that match what you're after. Check out the latest 6!\n${resultsList}`;
-        } else {
-            return `Found ${count.toLocaleString()} cases that fit the bill. Here ya go cobber!\n${resultsList}`;
-        }
-    },
-);
+    if (hasScratchpad) {
+        resultsList += `\n\n📝 User has scratchpad entry`;
+    }
+
+    if (count > 6) {
+        return `Strewth! Found ${count.toLocaleString()} cases that match what you're after. Check out the latest 6!\n${resultsList}`;
+    } else {
+        return `Found ${count.toLocaleString()} cases that fit the bill. Here ya go cobber!\n${resultsList}`;
+    }
+});

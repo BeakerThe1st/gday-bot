@@ -40,7 +40,7 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setScope(SlashCommandScope.GLOBAL);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     if (
         !interaction.guild ||
         !interaction.channel ||

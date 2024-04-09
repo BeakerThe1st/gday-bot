@@ -29,7 +29,7 @@ const builder = new SlashCommandBuilder()
     )
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const member = interaction.options.getMember("user");
     const user = interaction.options.getUser("user", true);
     const embed = new EmbedBuilder()
@@ -85,7 +85,10 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                         target: user.id,
                         guild: member.guild.id,
                     })}`,
-                    `Issued: ${await Case.countDocuments({ executor: user.id, guild: member.guild.id })}`,
+                    `Issued: ${await Case.countDocuments({
+                        executor: user.id,
+                        guild: member.guild.id,
+                    })}`,
                 ]),
             });
         }

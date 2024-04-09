@@ -23,7 +23,7 @@ const builder = new SlashCommandBuilder()
     .setDeferrable(false)
     .setScope(SlashCommandScope.STAFF_SERVER);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const thread = await MailThread.findOne({ channel: interaction.channelId });
     if (!thread) {
         return "You can only reply within modmail threads.";

@@ -20,7 +20,7 @@ const builder = new SlashCommandBuilder()
     )
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const user = interaction.options.getUser("user", false) ?? interaction.user;
     const embed = new EmbedBuilder()
         .setColor(0x333333)

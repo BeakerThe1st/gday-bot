@@ -22,7 +22,7 @@ const builder = new SlashCommandBuilder()
     .setScope(SlashCommandScope.MAIN_GUILD)
     .setEphemeral(true);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const interval = interaction.options.getInteger("interval", true);
     const { channel } = interaction;
     if (!(channel && "setRateLimitPerUser" in channel)) {

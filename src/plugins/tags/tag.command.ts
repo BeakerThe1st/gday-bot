@@ -30,7 +30,7 @@ const builder = new SlashCommandBuilder()
     )
     .setScope(SlashCommandScope.GLOBAL);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const tagName = interaction.options.getString("name", true);
     const target = interaction.options.getUser("user");
     if (!interaction.guild)

@@ -82,56 +82,47 @@ const builder = new SlashCommandBuilder()
 
 const eventModes: Map<string, EventMode> = new Map();
 
-useChatCommand(
-    builder as SlashCommandBuilder,
-    (interaction: ChatInputCommandInteraction) => {
-        if (!interaction.channel) {
-            throw new Error("That command must only be run in a channel.");
-        }
-        const { channelId } = interaction;
-        let eventMode = eventModes.get(channelId);
-        if (!eventMode) {
-            eventMode = new EventMode(interaction.channel);
-            eventModes.set(channelId, eventMode);
-        }
+useChatCommand(builder as SlashCommandBuilder, (interaction) => {
+    if (!interaction.channel) {
+        throw new Error("That command must only be run in a channel.");
+    }
+    const { channelId } = interaction;
+    let eventMode = eventModes.get(channelId);
+    if (!eventMode) {
+        eventMode = new EventMode(interaction.channel);
+        eventModes.set(channelId, eventMode);
+    }
 
-        const subCommand = interaction.options.getSubcommand();
-        switch (subCommand) {
-            case "start":
-                if (eventMode.isRunning()) {
-                    return `Event mode is already running in this channel.`;
-                } else {
-                    eventMode.startTimer();
-                    return `Event mode started with a ${eventMode.timerInterval / 1000} second interval.`;
-                }
-            case "stop":
-                if (!eventMode.isRunning()) {
-                    return `Event mode is not currently running in this channel.`;
-                } else {
-                    eventMode.stopTimer();
-                    return `Event mode stopped.`;
-                }
-            case "image":
-                const imageUrl = interaction.options.getString(
-                    "image_url",
-                    true,
-                );
-                eventMode.setImage(imageUrl);
-                return `Event mode prompt image set to ${imageUrl}`;
-            case "interval":
-                const interval = interaction.options.getNumber(
-                    "interval",
-                    true,
-                );
-                eventMode.setTimerInterval(interval);
-                return `Event mode prompt interval set to ${inlineCode(
-                    `${interval}s`,
-                )}`;
-            default:
-                return eventMode.getPrompt();
-        }
-    },
-);
+    const subCommand = interaction.options.getSubcommand();
+    switch (subCommand) {
+        case "start":
+            if (eventMode.isRunning()) {
+                return `Event mode is already running in this channel.`;
+            } else {
+                eventMode.startTimer();
+                return `Event mode started with a ${eventMode.timerInterval / 1000} second interval.`;
+            }
+        case "stop":
+            if (!eventMode.isRunning()) {
+                return `Event mode is not currently running in this channel.`;
+            } else {
+                eventMode.stopTimer();
+                return `Event mode stopped.`;
+            }
+        case "image":
+            const imageUrl = interaction.options.getString("image_url", true);
+            eventMode.setImage(imageUrl);
+            return `Event mode prompt image set to ${imageUrl}`;
+        case "interval":
+            const interval = interaction.options.getNumber("interval", true);
+            eventMode.setTimerInterval(interval);
+            return `Event mode prompt interval set to ${inlineCode(
+                `${interval}s`,
+            )}`;
+        default:
+            return eventMode.getPrompt();
+    }
+});
 
 class EventMode {
     image: string;

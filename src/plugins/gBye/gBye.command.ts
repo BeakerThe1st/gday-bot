@@ -39,35 +39,32 @@ const builder = new SlashCommandBuilder()
             ),
     );
 
-useChatCommand(
-    builder as SlashCommandBuilder,
-    async (interaction: ChatInputCommandInteraction) => {
-        const subcommand = interaction.options.getSubcommand();
-        const { guildId } = interaction;
-        let config = await GByeConfig.findOne({ guild: guildId });
-        if (!interaction.guildId || !gByeGuilds.includes(interaction.guildId)) {
-            return "That command can only be run in G'bye guilds";
+useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+    const subcommand = interaction.options.getSubcommand();
+    const { guildId } = interaction;
+    let config = await GByeConfig.findOne({ guild: guildId });
+    if (!interaction.guildId || !gByeGuilds.includes(interaction.guildId)) {
+        return "That command can only be run in G'bye guilds";
+    }
+    if (!config) {
+        config = new GByeConfig({ guild: guildId });
+    }
+    if (subcommand === "set_channel") {
+        const channel = interaction.options.getChannel("channel", true);
+        if ("send" in channel) {
+            config.set("channel", channel.id);
+            await config.save();
+            return `The G'bye output channel has been set to ${channel}`;
+        } else {
+            throw new Error("G'bye output must be in a text channel");
         }
-        if (!config) {
-            config = new GByeConfig({ guild: guildId });
+    } else if (subcommand === "standing") {
+        const user = interaction.options.getUser("user", true);
+        const bans = await fetchGbyeBansString(user);
+        if (!bans) {
+            return `${user} is not banned in any G'bye guilds.`;
         }
-        if (subcommand === "set_channel") {
-            const channel = interaction.options.getChannel("channel", true);
-            if ("send" in channel) {
-                config.set("channel", channel.id);
-                await config.save();
-                return `The G'bye output channel has been set to ${channel}`;
-            } else {
-                throw new Error("G'bye output must be in a text channel");
-            }
-        } else if (subcommand === "standing") {
-            const user = interaction.options.getUser("user", true);
-            const bans = await fetchGbyeBansString(user);
-            if (!bans) {
-                return `${user} is not banned in any G'bye guilds.`;
-            }
-            return `${user} is banned in:\n${bans}`;
-        }
-        throw new Error("Exhausted G'bye command options");
-    },
-);
+        return `${user} is banned in:\n${bans}`;
+    }
+    throw new Error("Exhausted G'bye command options");
+});

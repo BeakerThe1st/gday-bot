@@ -42,50 +42,45 @@ const toTitleCase = (str: string): string => {
     });
 };
 
-useChatCommand(
-    guessBuilder,
-    async (interaction: ChatInputCommandInteraction) => {
-        const userId = interaction.user.id;
-        const userGuess = toTitleCase(
-            interaction.options.getString("name", true),
-        );
+useChatCommand(guessBuilder, async (interaction) => {
+    const userId = interaction.user.id;
+    const userGuess = toTitleCase(interaction.options.getString("name", true));
 
-        if (!guessEnabled) {
-            const embed = new EmbedBuilder()
-                .setTitle("macOS Name Guess is not enabled")
-                .setDescription(
-                    "Sorry, but you're not able to set your guess right now.",
-                )
-                .setColor("Red");
-
-            let guess = await Guess.findOne({ user: userId });
-
-            if (guess) {
-                embed.addFields({
-                    name: "Your current guess",
-                    value: `macOS ${guess.guess}`,
-                    inline: false,
-                });
-            }
-
-            return {
-                embeds: [embed],
-            };
-        }
-
-        let guess = await Guess.findOneAndUpdate(
-            { user: userId },
-            { user: userId, guess: userGuess },
-            { new: true, upsert: true },
-        );
-
+    if (!guessEnabled) {
         const embed = new EmbedBuilder()
-            .setTitle("You've submitted your guess for macOS 14's name.")
-            .setDescription(`You set your guess to 'macOS ${guess.guess}'`)
-            .setColor("Fuchsia");
+            .setTitle("macOS Name Guess is not enabled")
+            .setDescription(
+                "Sorry, but you're not able to set your guess right now.",
+            )
+            .setColor("Red");
+
+        let guess = await Guess.findOne({ user: userId });
+
+        if (guess) {
+            embed.addFields({
+                name: "Your current guess",
+                value: `macOS ${guess.guess}`,
+                inline: false,
+            });
+        }
 
         return {
             embeds: [embed],
         };
-    },
-);
+    }
+
+    let guess = await Guess.findOneAndUpdate(
+        { user: userId },
+        { user: userId, guess: userGuess },
+        { new: true, upsert: true },
+    );
+
+    const embed = new EmbedBuilder()
+        .setTitle("You've submitted your guess for macOS 14's name.")
+        .setDescription(`You set your guess to 'macOS ${guess.guess}'`)
+        .setColor("Fuchsia");
+
+    return {
+        embeds: [embed],
+    };
+});

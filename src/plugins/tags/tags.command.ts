@@ -69,76 +69,73 @@ const builder = new SlashCommandBuilder()
             ),
     );
 
-useChatCommand(
-    builder as SlashCommandBuilder,
-    async (interaction: ChatInputCommandInteraction) => {
-        const subcommand = interaction.options.getSubcommand();
-        //DM permission is false, therefore I think we can assert guild as non-null?
-        const guildId = interaction.guild!.id;
-        const tagName = interaction.options.getString("name", false);
+useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+    const subcommand = interaction.options.getSubcommand();
+    //DM permission is false, therefore I think we can assert guild as non-null?
+    const guildId = interaction.guild!.id;
+    const tagName = interaction.options.getString("name", false);
 
-        const modal = new ModalBuilder();
-        const tagTitleInput = new TextInputBuilder()
-            .setCustomId("tagTitleInput")
-            .setLabel("Tag name")
-            .setStyle(TextInputStyle.Short)
-            .setRequired(true);
-        const tagContentInput = new TextInputBuilder()
-            .setCustomId("tagContentInput")
-            .setLabel("Tag content")
-            .setStyle(TextInputStyle.Paragraph)
-            .setMaxLength(550)
-            .setRequired(true);
+    const modal = new ModalBuilder();
+    const tagTitleInput = new TextInputBuilder()
+        .setCustomId("tagTitleInput")
+        .setLabel("Tag name")
+        .setStyle(TextInputStyle.Short)
+        .setRequired(true);
+    const tagContentInput = new TextInputBuilder()
+        .setCustomId("tagContentInput")
+        .setLabel("Tag content")
+        .setStyle(TextInputStyle.Paragraph)
+        .setMaxLength(550)
+        .setRequired(true);
 
-        const firstActionRow =
-            new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                tagTitleInput,
-            );
-        const secondActionRow =
-            new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                tagContentInput,
-            );
+    const firstActionRow =
+        new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+            tagTitleInput,
+        );
+    const secondActionRow =
+        new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+            tagContentInput,
+        );
 
-        // TODO: Need to figure out why we get [ERROR]: Error with interactionCreate event, Error [InteractionAlreadyReplied]: The reply to this interaction has already been sent or deferred. every time we interact with the modals, even though everything's working fine.
-        switch (subcommand) {
-            case "list":
-                const tags = await fetchTags(guildId);
-                if (!tags) {
-                    return "Crikey, there are no tags in this server mate!";
-                }
-                const tagStrings = tags.map((tag) => {
-                    return `\n- ${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`;
-                });
-                return {
-                    content: `Here are all ya tags cobber:\n ${tagStrings.join("")}`,
-                    allowedMentions: { parse: [] },
-                };
-            case "create":
-                modal
-                    .setCustomId("tagCreate")
-                    .setTitle("Create new tag")
-                    .addComponents(firstActionRow, secondActionRow);
-                return modal;
-            case "delete":
-                await deleteTag(guildId, tagName!);
-                return `${inlineCode(tagName!)} deleted`;
-            case "edit":
-                const tag = await Tag.findOne({
-                    guild: guildId,
-                    name: tagName,
-                });
-                if (!tag) return `${inlineCode(tagName!)} is not a valid tag!`;
-                tagTitleInput.setValue(tag.name);
-                tagContentInput.setValue(tag.content);
-                modal
-                    .setTitle("Edit a tag")
-                    .setCustomId("tagEdit-" + tag.name)
-                    .addComponents(firstActionRow, secondActionRow);
-                return modal;
-        }
-        throw new Error(`Something went wrong with the tags command.`);
-    },
-);
+    // TODO: Need to figure out why we get [ERROR]: Error with interactionCreate event, Error [InteractionAlreadyReplied]: The reply to this interaction has already been sent or deferred. every time we interact with the modals, even though everything's working fine.
+    switch (subcommand) {
+        case "list":
+            const tags = await fetchTags(guildId);
+            if (!tags) {
+                return "Crikey, there are no tags in this server mate!";
+            }
+            const tagStrings = tags.map((tag) => {
+                return `\n- ${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`;
+            });
+            return {
+                content: `Here are all ya tags cobber:\n ${tagStrings.join("")}`,
+                allowedMentions: { parse: [] },
+            };
+        case "create":
+            modal
+                .setCustomId("tagCreate")
+                .setTitle("Create new tag")
+                .addComponents(firstActionRow, secondActionRow);
+            return modal;
+        case "delete":
+            await deleteTag(guildId, tagName!);
+            return `${inlineCode(tagName!)} deleted`;
+        case "edit":
+            const tag = await Tag.findOne({
+                guild: guildId,
+                name: tagName,
+            });
+            if (!tag) return `${inlineCode(tagName!)} is not a valid tag!`;
+            tagTitleInput.setValue(tag.name);
+            tagContentInput.setValue(tag.content);
+            modal
+                .setTitle("Edit a tag")
+                .setCustomId("tagEdit-" + tag.name)
+                .addComponents(firstActionRow, secondActionRow);
+            return modal;
+    }
+    throw new Error(`Something went wrong with the tags command.`);
+});
 
 useEvent(Events.InteractionCreate, async (interaction) => {
     if (

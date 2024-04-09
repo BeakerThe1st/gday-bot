@@ -19,7 +19,7 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.AttachFiles)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const emoji = interaction.options.getString("emoji", true).trim();
 
     const emojis = emoji.split(">");

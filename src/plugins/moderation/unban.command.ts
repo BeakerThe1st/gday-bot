@@ -25,7 +25,7 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .setScope(SlashCommandScope.GLOBAL);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const user = interaction.options.getUser("user", true);
     const reason = interaction.options.getString("reason");
     if (!interaction.guild) {

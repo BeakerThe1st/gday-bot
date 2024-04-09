@@ -82,7 +82,7 @@ useEvent(Events.MessageCreate, async (message: Message) => {
     await forwardModmailMessage(message);
 });
 
-useButton("modmail:create", async (interaction: ButtonInteraction, args) => {
+useButton("modmail:create", async (interaction, args) => {
     const [userId] = args;
     await interaction.deferReply({ ephemeral: true });
     let thread = await MailThread.findOne({ author: userId });

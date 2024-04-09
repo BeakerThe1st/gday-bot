@@ -36,7 +36,7 @@ const builder = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const MAX_MUTE = 2419200000; // 28 days in ms, limit provided by Discord API.
 
     const user = interaction.options.getUser("user", true);

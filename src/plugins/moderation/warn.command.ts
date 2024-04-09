@@ -31,7 +31,7 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
+useChatCommand(builder, async (interaction) => {
     const target = interaction.options.getUser("user", true);
     const reason = interaction.options.getString("reason", true);
     await Case.create({

@@ -3,7 +3,7 @@ import { ButtonInteraction, userMention } from "discord.js";
 import { CHANNELS, GUILDS } from "../../globals";
 import { useButton } from "../../hooks/useButton";
 
-useButton("appeal:unban", async (interaction: ButtonInteraction, [userId]) => {
+useButton("appeal:unban", async (interaction, [userId]) => {
     await interaction.deferReply({ ephemeral: true });
     const { client } = useClient();
     const rApple = await client.guilds.fetch(GUILDS.MAIN);
