@@ -8,9 +8,12 @@ import {
     PermissionFlagsBits,
     TextInputBuilder,
     TextInputStyle,
-    userMention
+    userMention,
 } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { createTag, deleteTag, editTag, fetchTags } from "./tags";
 import { useEvent } from "../../hooks";
@@ -27,41 +30,43 @@ const builder = new SlashCommandBuilder()
         subcommand
             .setName("list")
             .setDescription(
-                "Lays out all the tags for this guild, like a menu at your local pub."
-            )
+                "Lays out all the tags for this guild, like a menu at your local pub.",
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("create")
             .setDescription(
-                "Shows the tag creation modal, where you can whip up a ripper tag."
-            )
+                "Shows the tag creation modal, where you can whip up a ripper tag.",
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("delete")
-            .setDescription("Boots a tag out the door, like tossing out the rubbish.")
+            .setDescription(
+                "Boots a tag out the door, like tossing out the rubbish.",
+            )
             .addStringOption((option) =>
                 option
                     .setName("name")
                     .setDescription("Name for the tag to delete")
                     .setRequired(true)
-                    .setAutocomplete(true)
-            )
+                    .setAutocomplete(true),
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("edit")
             .setDescription(
-                "Brings up the tag editing modal, time to give those tags a bit of a spruce up."
+                "Brings up the tag editing modal, time to give those tags a bit of a spruce up.",
             )
             .addStringOption((option) =>
                 option
                     .setName("name")
                     .setDescription("Name for the tag to edit")
                     .setRequired(true)
-                    .setAutocomplete(true)
-            )
+                    .setAutocomplete(true),
+            ),
     );
 
 useChatCommand(
@@ -87,11 +92,11 @@ useChatCommand(
 
         const firstActionRow =
             new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                tagTitleInput
+                tagTitleInput,
             );
         const secondActionRow =
             new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                tagContentInput
+                tagContentInput,
             );
 
         // TODO: Need to figure out why we get [ERROR]: Error with interactionCreate event, Error [InteractionAlreadyReplied]: The reply to this interaction has already been sent or deferred. every time we interact with the modals, even though everything's working fine.
@@ -106,7 +111,7 @@ useChatCommand(
                 });
                 return {
                     content: `Here are all ya tags cobber:\n ${tagStrings.join("")}`,
-                    allowedMentions: { parse: [] }
+                    allowedMentions: { parse: [] },
                 };
             case "create":
                 modal
@@ -118,7 +123,10 @@ useChatCommand(
                 await deleteTag(guildId, tagName!);
                 return `${inlineCode(tagName!)} deleted`;
             case "edit":
-                const tag = await Tag.findOne({ guild: guildId, name: tagName });
+                const tag = await Tag.findOne({
+                    guild: guildId,
+                    name: tagName,
+                });
                 if (!tag) return `${inlineCode(tagName!)} is not a valid tag!`;
                 tagTitleInput.setValue(tag.name);
                 tagContentInput.setValue(tag.content);
@@ -129,7 +137,7 @@ useChatCommand(
                 return modal;
         }
         throw new Error(`Something went wrong with the tags command.`);
-    }
+    },
 );
 
 useEvent(Events.InteractionCreate, async (interaction) => {
@@ -148,10 +156,10 @@ useEvent(Events.InteractionCreate, async (interaction) => {
             interaction.guild.id,
             interaction.user.id,
             tagName,
-            tagContent
+            tagContent,
         );
         await interaction.reply({
-            content: `Created tag ${inlineCode(createdTag.name)}`
+            content: `Created tag ${inlineCode(createdTag.name)}`,
         });
     } else if (interaction.customId.startsWith("tagEdit")) {
         const oldName = interaction.customId.replace("tagEdit-", "");
@@ -160,11 +168,11 @@ useEvent(Events.InteractionCreate, async (interaction) => {
             interaction.user.id,
             oldName,
             tagName,
-            tagContent
+            tagContent,
         );
         await interaction.reply({ content: `Updated ${inlineCode(oldName)}` });
     }
     await interaction.reply({
-        content: `Something went wrong with the modal submission.`
+        content: `Something went wrong with the modal submission.`,
     });
 });

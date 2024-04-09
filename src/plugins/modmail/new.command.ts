@@ -1,6 +1,15 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { channelMention, ChatInputCommandInteraction, Colors, EmbedBuilder, userMention } from "discord.js";
+import {
+    channelMention,
+    ChatInputCommandInteraction,
+    Colors,
+    EmbedBuilder,
+    userMention,
+} from "discord.js";
 import { MailThread } from "./MailThread";
 
 const builder = new SlashCommandBuilder()
@@ -10,7 +19,7 @@ const builder = new SlashCommandBuilder()
         option
             .setName("user")
             .setDescription("User to create a thread for")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setScope(SlashCommandScope.STAFF_SERVER);
 
@@ -22,12 +31,12 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     }
     const newThread = await MailThread.create({
         author: target.id,
-        initialMessage: ""
+        initialMessage: "",
     });
     const notificationEmbed = new EmbedBuilder()
         .setTitle("Thread Created")
         .setDescription(
-            "The r/Apple mod team have created a modmail thread with you. Any messages sent here will be forwarded to the team."
+            "The r/Apple mod team have created a modmail thread with you. Any messages sent here will be forwarded to the team.",
         )
         .setColor(Colors.Green);
     await target.send({ embeds: [notificationEmbed] });

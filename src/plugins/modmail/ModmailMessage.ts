@@ -10,7 +10,8 @@ interface ModmailMessageOptions {
 
 export class ModmailMessage
     extends EmbedBuilder
-    implements ModmailMessageOptions {
+    implements ModmailMessageOptions
+{
     from: string;
     to: string;
     body: string;
@@ -30,7 +31,7 @@ export class ModmailMessage
 
     public addStaffFields() {
         this.setFooter({
-            text: `${this.from}${this.anon ? " (anon.)" : ""} → ${this.to}`
+            text: `${this.from}${this.anon ? " (anon.)" : ""} → ${this.to}`,
         }).setTimestamp(Date.now());
         if (this.to !== "r/Apple Mod Team") {
             this.setColor(Colors.Red);

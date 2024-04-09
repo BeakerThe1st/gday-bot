@@ -8,8 +8,8 @@ const bingoCheckSchema = new Schema<IBingoCheck>({
     bingoEntries: {
         type: Map,
         of: Boolean,
-        default: {}
-    }
+        default: {},
+    },
 });
 
 export const BingoCheck = model<IBingoCheck>("bingocheck", bingoCheckSchema);

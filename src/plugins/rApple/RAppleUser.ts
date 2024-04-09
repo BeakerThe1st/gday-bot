@@ -10,12 +10,12 @@ const rAppleUserSchema = new Schema<IRAppleUser>({
     userId: String,
     modmailBlocklisted: {
         type: Boolean,
-        default: false
+        default: false,
     },
     scratchpad: {
         type: String,
-        default: ""
-    }
+        default: "",
+    },
 });
 
 export const RAppleUser = model<IRAppleUser>("rAppleUser", rAppleUserSchema);

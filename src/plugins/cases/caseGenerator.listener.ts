@@ -11,7 +11,7 @@ actionsToCaseType.set(AuditLogEvent.MemberBanRemove, CaseType.UNBAN);
 actionsToCaseType.set(AuditLogEvent.MemberUpdate, CaseType.TIMEOUT);
 actionsToCaseType.set(
     AuditLogEvent.AutoModerationUserCommunicationDisabled,
-    CaseType.TIMEOUT
+    CaseType.TIMEOUT,
 );
 
 //This function returns the duration of a timeout, or undefined if there is no timeout
@@ -56,7 +56,8 @@ useEvent(
                   if it's not actually a timeout and will stop execution of this func
                */
             if (
-                entry.action === AuditLogEvent.AutoModerationUserCommunicationDisabled
+                entry.action ===
+                AuditLogEvent.AutoModerationUserCommunicationDisabled
             ) {
                 //Expiry is in 1 hour (default for naughties violation in r/apple)
                 expiry = Date.now() + 1000 * 60 * 60;
@@ -82,7 +83,7 @@ useEvent(
             target: targetId,
             executor: executorId,
             duration: expiry ? expiry - Date.now() : undefined,
-            reason
+            reason,
         });
-    }
+    },
 );

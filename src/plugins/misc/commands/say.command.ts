@@ -1,17 +1,24 @@
-import { ChatInputCommandInteraction, inlineCode, PermissionFlagsBits } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../../builders/SlashCommandBuilder";
+import {
+    ChatInputCommandInteraction,
+    inlineCode,
+    PermissionFlagsBits,
+} from "discord.js";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("say")
     .setDescription(
-        "Makes me, G’day, have a chinwag and say a message, like having a yarn with a mate.\n"
+        "Makes me, G’day, have a chinwag and say a message, like having a yarn with a mate.\n",
     )
     .addStringOption((option) =>
         option
             .setName("message")
             .setDescription("Message to say")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setEphemeral(true)
@@ -25,8 +32,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     await interaction.channel.send({
         content: message,
         allowedMentions: {
-            parse: ["users"]
-        }
+            parse: ["users"],
+        },
     });
     return `Said ${inlineCode(message)} in ${interaction.channel}`;
 });

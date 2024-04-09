@@ -1,12 +1,20 @@
-import { ChatInputCommandInteraction, Interaction, REST, Routes } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    Interaction,
+    REST,
+    Routes,
+} from "discord.js";
 
-import { SlashCommandBuilder, SlashCommandScope } from "../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../builders/SlashCommandBuilder";
 import { useEnv } from "./useEnv";
 import { useError } from "./useError";
 import { InteractionReply, useInteraction } from "./useInteraction";
 
 type CommandHandler = (
-    interaction: ChatInputCommandInteraction
+    interaction: ChatInputCommandInteraction,
 ) => InteractionReply | Promise<InteractionReply>;
 
 const commandHandlers = new Map<string, CommandHandler>();
@@ -16,7 +24,7 @@ const buildersByScope = new Map<SlashCommandScope, SlashCommandBuilder[]>();
 
 export const useChatCommand = (
     builder: SlashCommandBuilder,
-    handler: CommandHandler
+    handler: CommandHandler,
 ) => {
     const { name, scope } = builder;
     const buildersForGuild = buildersByScope.get(builder.scope) ?? [];
@@ -34,7 +42,7 @@ useInteraction(async (interaction: Interaction) => {
     const builder = buildersByName.get(commandName);
     if (!(handler && builder)) {
         throw new Error(
-            `${commandName} does not have a corresponding handler or builder.`
+            `${commandName} does not have a corresponding handler or builder.`,
         );
     }
     if (builder.deferrable) {
@@ -53,7 +61,7 @@ export const updateSlashCommands = async () => {
                 : Routes.applicationGuildCommands(clientId, scope);
         try {
             await rest.put(route, {
-                body: builders.map((builder) => builder.toJSON())
+                body: builders.map((builder) => builder.toJSON()),
             });
         } catch (error) {
             useError(`${error}`);

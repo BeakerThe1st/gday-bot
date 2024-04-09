@@ -1,4 +1,7 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { ChatInputCommandInteraction, inlineCode } from "discord.js";
 import { MailThread } from "./MailThread";
@@ -14,10 +17,12 @@ const builder = new SlashCommandBuilder()
             .setName("tag")
             .setDescription("Tag name.")
             .setRequired(true)
-            .setAutocomplete(true)
+            .setAutocomplete(true),
     )
     .addBooleanOption((option) =>
-        option.setName("anonymous").setDescription("Whether to reply anonymously.")
+        option
+            .setName("anonymous")
+            .setDescription("Whether to reply anonymously."),
     )
     .setScope(SlashCommandScope.STAFF_SERVER);
 
@@ -31,7 +36,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const tag = await Tag.findOneAndUpdate(
         { name: tagName, guild: interaction.guildId },
         { $inc: { usesCount: 1 } },
-        { new: true }
+        { new: true },
     );
     if (!tag) {
         return `${inlineCode(tagName)} is not a valid tag.`;
@@ -42,7 +47,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         from: interaction.user.username,
         to: user.username,
         body: tag.content,
-        anon: anon ?? false
+        anon: anon ?? false,
     });
     await user.send({ embeds: [message] });
     message.addStaffFields();

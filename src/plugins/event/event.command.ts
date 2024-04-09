@@ -1,5 +1,8 @@
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { NEXT_EVENT } from "../../globals";
 import { EmbedBuilder, time, TimestampStyles } from "discord.js";
 
@@ -20,7 +23,7 @@ useChatCommand(builder, () => {
         .setDescription(
             `Apple's ${event.name} event ${
                 afterEvent ? "started" : "starts"
-            } at ${time(eventDate, TimestampStyles.ShortDateTime)}`
+            } at ${time(eventDate, TimestampStyles.ShortDateTime)}`,
         )
         .setColor(NEXT_EVENT?.color ?? "White")
         .setThumbnail(event.image)
@@ -28,8 +31,8 @@ useChatCommand(builder, () => {
             name: "Time to Event",
             value: `Event ${afterEvent ? "began" : "begins"} ${time(
                 eventDate,
-                TimestampStyles.RelativeTime
-            )}`
+                TimestampStyles.RelativeTime,
+            )}`,
         })
         .setFooter({ text: "All times shown in your local time zone." });
     return { embeds: [embed] };

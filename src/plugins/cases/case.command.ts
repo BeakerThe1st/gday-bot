@@ -6,9 +6,12 @@ import {
     PermissionFlagsBits,
     time,
     TimestampStyles,
-    userMention
+    userMention,
 } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { Case } from "./Case.model";
 
 const builder = new SlashCommandBuilder()
@@ -20,35 +23,44 @@ const builder = new SlashCommandBuilder()
         subcommand
             .setName("info")
             .setDescription(
-                "Spills the beans on all the deets for a particular case, aye."
+                "Spills the beans on all the deets for a particular case, aye.",
             )
             .addStringOption((option) =>
-                option.setName("case_id").setDescription("Case ID").setRequired(true)
-            )
+                option
+                    .setName("case_id")
+                    .setDescription("Case ID")
+                    .setRequired(true),
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("reason")
             .setDescription(
-                "Gives ya the chance to change the story on a case, just like a good yarn."
+                "Gives ya the chance to change the story on a case, just like a good yarn.",
             )
             .addStringOption((option) =>
-                option.setName("case_id").setDescription("Case ID").setRequired(true)
+                option
+                    .setName("case_id")
+                    .setDescription("Case ID")
+                    .setRequired(true),
             )
             .addStringOption((option) =>
                 option
                     .setName("new_reason")
                     .setDescription("New reason")
-                    .setRequired(true)
-            )
+                    .setRequired(true),
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("delete")
             .setDescription("Fair dinkum deletes a specific case, no worries.")
             .addStringOption((option) =>
-                option.setName("case_id").setDescription("Case ID").setRequired(true)
-            )
+                option
+                    .setName("case_id")
+                    .setDescription("Case ID")
+                    .setRequired(true),
+            ),
     );
 
 useChatCommand(
@@ -73,10 +85,12 @@ useChatCommand(
             await givenCase.save();
             return `Changed ${inlineCode(caseId)}'s reason to "${newReason}"`;
         } else if (subcommand === "info") {
-            const target = await interaction.client.users.fetch(givenCase.target);
+            const target = await interaction.client.users.fetch(
+                givenCase.target,
+            );
             const embed = new EmbedBuilder()
                 .setTitle(
-                    `${givenCase.type[0]}${givenCase.type.slice(1).toLowerCase()}${givenCase.deleted ? " - DELETED" : ""}`
+                    `${givenCase.type[0]}${givenCase.type.slice(1).toLowerCase()}${givenCase.deleted ? " - DELETED" : ""}`,
                 )
                 .setFooter({ text: givenCase._id })
                 .setThumbnail(target.displayAvatarURL())
@@ -85,39 +99,41 @@ useChatCommand(
                 embed.addFields({
                     name: "Target",
                     value: userMention(givenCase.target),
-                    inline: true
+                    inline: true,
                 });
             }
             if (givenCase.executor) {
                 embed.addFields({
                     name: "Executor",
                     value: userMention(givenCase.executor),
-                    inline: true
+                    inline: true,
                 });
             }
             embed.addFields({
                 name: "Created At",
                 value: time(new Date(+givenCase.createdAtTimestamp)),
-                inline: true
+                inline: true,
             });
             if (givenCase.duration) {
                 embed.addFields({
                     name: "Expiry",
                     value: time(
-                        new Date(+givenCase.createdAtTimestamp + givenCase.duration),
-                        TimestampStyles.RelativeTime
+                        new Date(
+                            +givenCase.createdAtTimestamp + givenCase.duration,
+                        ),
+                        TimestampStyles.RelativeTime,
                     ),
-                    inline: true
+                    inline: true,
                 });
             }
 
             embed.addFields({
                 name: "Reason",
-                value: givenCase.reason ?? "No reason specified."
+                value: givenCase.reason ?? "No reason specified.",
             });
 
             return { content: givenCase._id, embeds: [embed] };
         }
         return null;
-    }
+    },
 );

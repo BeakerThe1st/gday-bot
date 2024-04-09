@@ -1,5 +1,12 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../../builders/SlashCommandBuilder";
-import { ChatInputCommandInteraction, GuildMember, PermissionFlagsBits } from "discord.js";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../../builders/SlashCommandBuilder";
+import {
+    ChatInputCommandInteraction,
+    GuildMember,
+    PermissionFlagsBits,
+} from "discord.js";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 import { ROLES } from "../../../globals";
 
@@ -10,7 +17,7 @@ const builder: SlashCommandBuilder = new SlashCommandBuilder()
         option
             .setName("user")
             .setDescription("User to establish")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
     .setScope(SlashCommandScope.MAIN_GUILD);

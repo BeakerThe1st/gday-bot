@@ -1,14 +1,17 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 import {
-  ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
-  GuildMember,
-  inlineCode,
-  PermissionFlagsBits,
-  time,
-  TimestampStyles
+    ChatInputCommandInteraction,
+    Colors,
+    EmbedBuilder,
+    GuildMember,
+    inlineCode,
+    PermissionFlagsBits,
+    time,
+    TimestampStyles,
 } from "discord.js";
 import { listify } from "../../../utils";
 import { Case } from "../../cases/Case.model";
@@ -16,13 +19,13 @@ import { Case } from "../../cases/Case.model";
 const builder = new SlashCommandBuilder()
     .setName("profile")
     .setDescription(
-        "Takes a squiz at a user's profile, like having a stickybeak."
+        "Takes a squiz at a user's profile, like having a stickybeak.",
     )
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("The user to view the profile for")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setScope(SlashCommandScope.MAIN_GUILD);
 
@@ -32,7 +35,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const embed = new EmbedBuilder()
         .setAuthor({
             name: user.username,
-            iconURL: user.displayAvatarURL()
+            iconURL: user.displayAvatarURL(),
         })
         .setDescription(`${user}`)
         .setThumbnail(user.displayAvatarURL())
@@ -48,8 +51,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                     ?.toArray()
                     .map((name) => inlineCode(name))
                     .join(", ") || "None"
-            }`
-        ])
+            }`,
+        ]),
     });
 
     if (
@@ -68,8 +71,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                         .toArray()
                         .map((name) => inlineCode(name))
                         .join(", ") || "None"
-                }`
-            ])
+                }`,
+            ]),
         });
         if (
             member.id === interaction.user.id ||
@@ -80,10 +83,10 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                 value: listify([
                     `Received: ${await Case.countDocuments({
                         target: user.id,
-                        guild: member.guild.id
+                        guild: member.guild.id,
                     })}`,
-                    `Issued: ${await Case.countDocuments({ executor: user.id, guild: member.guild.id })}`
-                ])
+                    `Issued: ${await Case.countDocuments({ executor: user.id, guild: member.guild.id })}`,
+                ]),
             });
         }
     }

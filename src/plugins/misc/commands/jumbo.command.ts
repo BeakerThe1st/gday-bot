@@ -1,17 +1,20 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("jumbo")
     .setDescription(
-        "Grabs the big version of an emoji, 'cause size matters, mate."
+        "Grabs the big version of an emoji, 'cause size matters, mate.",
     )
     .addStringOption((option) =>
         option
             .setName("emoji")
             .setDescription("Emoji to jumbo size.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.AttachFiles)
     .setScope(SlashCommandScope.MAIN_GUILD);

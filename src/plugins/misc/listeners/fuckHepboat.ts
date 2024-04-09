@@ -8,12 +8,12 @@ useEvent(Events.MessageCreate, (message: Message) => {
     }
     const commands = ["ban", "kick", "mute"];
     const weCare = commands.some((command) =>
-        message.cleanContent.startsWith("!" + command)
+        message.cleanContent.startsWith("!" + command),
     );
     if (!weCare) {
         return;
     }
     message.reply(
-        `This command has been disabled as we transition to G'day for moderation, for more info check out https://discord.com/channels/337792272693461002/733562025321431112/1119619493233184778`
+        `This command has been disabled as we transition to G'day for moderation, for more info check out https://discord.com/channels/337792272693461002/733562025321431112/1119619493233184778`,
     );
 });

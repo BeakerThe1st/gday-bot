@@ -1,16 +1,19 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
 import {
-  ActionRowBuilder,
-  ButtonInteraction,
-  ButtonStyle,
-  ChatInputCommandInteraction,
-  codeBlock,
-  Interaction,
-  ModalBuilder,
-  PermissionFlagsBits,
-  TextInputBuilder,
-  TextInputStyle,
-  userMention
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
+import {
+    ActionRowBuilder,
+    ButtonInteraction,
+    ButtonStyle,
+    ChatInputCommandInteraction,
+    codeBlock,
+    Interaction,
+    ModalBuilder,
+    PermissionFlagsBits,
+    TextInputBuilder,
+    TextInputStyle,
+    userMention,
 } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { RAppleUser } from "../rApple/RAppleUser";
@@ -25,7 +28,7 @@ const builder = new SlashCommandBuilder()
         option
             .setName("user")
             .setDescription("User to view the scratchpad for.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setEphemeral(true)
@@ -51,8 +54,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji("📝")
                 .addArg(targetId)
-                .asActionRow()
-        ]
+                .asActionRow(),
+        ],
     };
 });
 
@@ -70,7 +73,7 @@ useButton("scratchpad:edit", async (interaction: ButtonInteraction, args) => {
         .setCustomId(`${interaction.customId}`)
         .setTitle(`Scratchpad for ${target.username}`)
         .addComponents([
-            new ActionRowBuilder<TextInputBuilder>().addComponents(textField)
+            new ActionRowBuilder<TextInputBuilder>().addComponents(textField),
         ]);
 });
 
@@ -91,6 +94,6 @@ useInteraction(async (interaction: Interaction) => {
     return {
         content: `Edited ${userMention(targetId)}'s scratchpad`,
         ephemeral: true,
-        allowedMentions: { parse: [] }
+        allowedMentions: { parse: [] },
     };
 });

@@ -1,34 +1,37 @@
 import {
-  ChatInputCommandInteraction,
-  inlineCode,
-  PermissionFlagsBits,
-  time,
-  TimestampStyles,
-  userMention
+    ChatInputCommandInteraction,
+    inlineCode,
+    PermissionFlagsBits,
+    time,
+    TimestampStyles,
+    userMention,
 } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import parse from "parse-duration";
 
 const builder = new SlashCommandBuilder()
     .setName("mute")
     .setDescription(
-        "Puts a user on mute for a bit, like when ya mum tells ya to be quiet."
+        "Puts a user on mute for a bit, like when ya mum tells ya to be quiet.",
     )
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to be muted.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .addStringOption((option) =>
         option
             .setName("duration")
             .setDescription("Duration (max 28 days)")
-            .setRequired(true)
+            .setRequired(true),
     )
     .addStringOption((option) =>
-        option.setName("reason").setDescription("Reason for the mute.")
+        option.setName("reason").setDescription("Reason for the mute."),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setScope(SlashCommandScope.MAIN_GUILD);
@@ -49,7 +52,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
 
     await member.timeout(
         parsedDuration,
-        `${interaction.user.id}${reason ? ` ${reason}` : ""}`
+        `${interaction.user.id}${reason ? ` ${reason}` : ""}`,
     );
     const timestamp = Math.floor(Date.now() / 1000 + parsedDuration / 1000);
     return `${userMention(member.id)} has been muted${reason ? ` for ${inlineCode(reason)}` : ""}. Expiry: ${time(timestamp, TimestampStyles.RelativeTime)}`;

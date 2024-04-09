@@ -1,6 +1,15 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { ChatInputCommandInteraction, Colors, EmbedBuilder, Message, userMention } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    Colors,
+    EmbedBuilder,
+    Message,
+    userMention,
+} from "discord.js";
 import { IMailThread, MailThread } from "./MailThread";
 import { useClient } from "../../hooks";
 import { CHANNELS } from "../../globals";
@@ -12,7 +21,7 @@ const builder = new SlashCommandBuilder()
 
 useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const thread: unknown = (await MailThread.findOneAndDelete({
-        channel: interaction.channelId
+        channel: interaction.channelId,
     })) as unknown;
     if (!thread) {
         return "You can only close modmail threads.";
@@ -26,7 +35,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const author = await useClient().client.users.fetch(castThread.author);
     const { username: authorUsername } = author;
     const logChannel = await useClient().client.channels.fetch(
-        CHANNELS.STAFF.modmail_logs
+        CHANNELS.STAFF.modmail_logs,
     );
     if (!logChannel?.isTextBased()) {
         throw new Error("Modmail log channel is not text based");
@@ -37,16 +46,16 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                 .setTitle("Thread Closed")
                 .setColor(Colors.DarkRed)
                 .setDescription(
-                    `Modmail thread for ${userMention(castThread.author)} (${authorUsername}) closed by ${interaction.user.username}`
+                    `Modmail thread for ${userMention(castThread.author)} (${authorUsername}) closed by ${interaction.user.username}`,
                 )
-                .setTimestamp(Date.now())
+                .setTimestamp(Date.now()),
         ],
         files: [
             {
                 attachment: createLogFile([...messages.values()]),
-                name: `${authorUsername}-${Date.now()}-modmail-thread.txt`
-            }
-        ]
+                name: `${authorUsername}-${Date.now()}-modmail-thread.txt`,
+            },
+        ],
     });
     author.send({
         embeds: [
@@ -54,9 +63,9 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
                 .setTitle("Thread Closed")
                 .setColor(Colors.DarkRed)
                 .setDescription(
-                    `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`
-                )
-        ]
+                    `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`,
+                ),
+        ],
     });
     await interaction.channel.delete();
     return null;

@@ -1,4 +1,7 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { GByeConfig } from "./GByeConfig.model";
@@ -13,27 +16,27 @@ const builder = new SlashCommandBuilder()
         command
             .setName("set_channel")
             .setDescription(
-                "Locks in the channel where all the G’bye action goes down, mate."
+                "Locks in the channel where all the G’bye action goes down, mate.",
             )
             .addChannelOption((option) =>
                 option
                     .setName("channel")
                     .setDescription("G'bye output channel.")
-                    .setRequired(true)
-            )
+                    .setRequired(true),
+            ),
     )
     .addSubcommand((command) =>
         command
             .setName("standing")
             .setDescription(
-                "Spills the beans on a user’s G’bye status, like knowing if they're a legend or not."
+                "Spills the beans on a user’s G’bye status, like knowing if they're a legend or not.",
             )
             .addUserOption((option) =>
                 option
                     .setName("user")
                     .setDescription("User to show G'bye standing for.")
-                    .setRequired(true)
-            )
+                    .setRequired(true),
+            ),
     );
 
 useChatCommand(
@@ -66,5 +69,5 @@ useChatCommand(
             return `${user} is banned in:\n${bans}`;
         }
         throw new Error("Exhausted G'bye command options");
-    }
+    },
 );

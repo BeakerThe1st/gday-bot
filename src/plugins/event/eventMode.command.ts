@@ -1,18 +1,21 @@
 import { useChatCommand } from "../../hooks/useChatCommand";
 import {
-  ActionRowBuilder,
-  BaseMessageOptions,
-  ButtonBuilder,
-  ButtonStyle,
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  inlineCode,
-  PermissionFlagsBits,
-  TextBasedChannel,
-  time,
-  TimestampStyles
+    ActionRowBuilder,
+    BaseMessageOptions,
+    ButtonBuilder,
+    ButtonStyle,
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    inlineCode,
+    PermissionFlagsBits,
+    TextBasedChannel,
+    time,
+    TimestampStyles,
 } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { NEXT_EVENT } from "../../globals";
 
 const builder = new SlashCommandBuilder()
@@ -24,22 +27,22 @@ const builder = new SlashCommandBuilder()
         subcommand
             .setName("start")
             .setDescription(
-                "Kicks off event mode, time to throw another shrimp on the barbie!"
-            )
+                "Kicks off event mode, time to throw another shrimp on the barbie!",
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("stop")
             .setDescription(
-                "Puts a stop to event mode, like closing up shop after a ripper day."
-            )
+                "Puts a stop to event mode, like closing up shop after a ripper day.",
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
             .setName("prompt")
             .setDescription(
-                "Pops up the prompt for event mode, time to crack open a cold one."
-            )
+                "Pops up the prompt for event mode, time to crack open a cold one.",
+            ),
     )
     .addSubcommandGroup((group) =>
         group
@@ -49,30 +52,32 @@ const builder = new SlashCommandBuilder()
                 subcommand
                     .setName("image")
                     .setDescription(
-                        "Sets the image for the event mode prompt, fair dinkum."
+                        "Sets the image for the event mode prompt, fair dinkum.",
                     )
                     .addStringOption((option) =>
                         option
                             .setName("image_url")
                             .setDescription("Image URL for event mode prompt")
-                            .setRequired(true)
-                    )
+                            .setRequired(true),
+                    ),
             )
             .addSubcommand((subcommand) =>
                 subcommand
                     .setName("interval")
                     .setDescription(
-                        "Sets how long between event mode prompts, like timing your snag on the barbie just right."
+                        "Sets how long between event mode prompts, like timing your snag on the barbie just right.",
                     )
                     .addNumberOption((option) =>
                         option
                             .setName("interval")
-                            .setDescription("Interval between event mode prompts in seconds.")
+                            .setDescription(
+                                "Interval between event mode prompts in seconds.",
+                            )
                             .setRequired(true)
                             .setMinValue(1)
-                            .setMaxValue(1440)
-                    )
-            )
+                            .setMaxValue(1440),
+                    ),
+            ),
     );
 
 const eventModes: Map<string, EventMode> = new Map();
@@ -107,19 +112,25 @@ useChatCommand(
                     return `Event mode stopped.`;
                 }
             case "image":
-                const imageUrl = interaction.options.getString("image_url", true);
+                const imageUrl = interaction.options.getString(
+                    "image_url",
+                    true,
+                );
                 eventMode.setImage(imageUrl);
                 return `Event mode prompt image set to ${imageUrl}`;
             case "interval":
-                const interval = interaction.options.getNumber("interval", true);
+                const interval = interaction.options.getNumber(
+                    "interval",
+                    true,
+                );
                 eventMode.setTimerInterval(interval);
                 return `Event mode prompt interval set to ${inlineCode(
-                    `${interval}s`
+                    `${interval}s`,
                 )}`;
             default:
                 return eventMode.getPrompt();
         }
-    }
+    },
 );
 
 class EventMode {
@@ -146,8 +157,8 @@ class EventMode {
                     Date.now() > eventDate.getTime() ? "began" : "begins"
                 } ${time(
                     eventDate,
-                    TimestampStyles.RelativeTime
-                )}. Watch at the links below.`
+                    TimestampStyles.RelativeTime,
+                )}. Watch at the links below.`,
             )
             .setImage(this.image)
             .setColor(NEXT_EVENT?.color ?? "White");
@@ -163,7 +174,7 @@ class EventMode {
             new ButtonBuilder()
                 .setLabel("Leaked Event Footage")
                 .setStyle(ButtonStyle.Link)
-                .setURL("https://youtu.be/ZoG5jJ3E8rg")
+                .setURL("https://youtu.be/ZoG5jJ3E8rg"),
         );
         return { embeds: [embed], components: [actionRow] };
     }

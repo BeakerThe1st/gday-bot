@@ -1,24 +1,31 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
-import { ChatInputCommandInteraction, inlineCode, PermissionFlagsBits } from "discord.js";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
+import {
+    ChatInputCommandInteraction,
+    inlineCode,
+    PermissionFlagsBits,
+} from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { Case, CaseType } from "../cases/Case.model";
 
 const builder = new SlashCommandBuilder()
     .setName("warn")
     .setDescription(
-        "Gives a bloke a warning, letting 'em know to pull their head in."
+        "Gives a bloke a warning, letting 'em know to pull their head in.",
     )
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to be warned.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .addStringOption((option) =>
         option
             .setName("reason")
             .setDescription("Reason for the warning.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setEphemeral(true)
@@ -33,7 +40,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         deleted: false,
         target: target.id,
         executor: interaction.user.id,
-        reason
+        reason,
     });
     return `Warned ${target} for ${inlineCode(reason)}`;
 });

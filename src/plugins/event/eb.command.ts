@@ -1,17 +1,24 @@
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { ChatInputCommandInteraction, GuildMember, PermissionFlagsBits } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    ChatInputCommandInteraction,
+    GuildMember,
+    PermissionFlagsBits,
+} from "discord.js";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 
 const builder = new SlashCommandBuilder()
     .setName("eb")
     .setDescription(
-        "Keep someone buttoned up tighter than a kangaroo's pouch during the event."
+        "Keep someone buttoned up tighter than a kangaroo's pouch during the event.",
     )
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to event blocklist.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
     .setScope(SlashCommandScope.MAIN_GUILD)
@@ -23,11 +30,13 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         throw new Error("Member is not a GuildMember");
     }
     await member.roles.add("1166975967433080894");
-    const logChannel = await member.client.channels.fetch("1168668680075366420");
+    const logChannel = await member.client.channels.fetch(
+        "1168668680075366420",
+    );
     if (logChannel?.isTextBased()) {
         await logChannel.send({
             content: `${interaction.user} event blocklisted ${member}`,
-            allowedMentions: { parse: [] }
+            allowedMentions: { parse: [] },
         });
     }
     return `Event blocklisted ${member}`;

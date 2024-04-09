@@ -14,12 +14,13 @@ const getContext = async (message: Message) => {
     return messageList
         .map((value) => {
             let role: "assistant" | "user" =
-                value.author.id === useClient().client.user?.id ?? "958702160617566249"
+                value.author.id === useClient().client.user?.id ??
+                "958702160617566249"
                     ? "assistant"
                     : "user";
             return {
                 role,
-                content: value.cleanContent
+                content: value.cleanContent,
             };
         })
         .reverse();
@@ -31,7 +32,7 @@ const toolFunctions = {
     },
     getDate: () => {
         return new Date().toDateString();
-    }
+    },
 };
 
 const getChatResponse = async (message: Message) => {
@@ -54,14 +55,14 @@ const getChatResponse = async (message: Message) => {
             content:
                 `You are an Aussie Discord bot in the ${message.guild?.name} guild (guild ID: ${message.guildId}). You were coded in TypeScript by Beaker. ` +
                 "Your source code is available at https://github.com/BeakerThe1st/gday-bot. " +
-                "You answer prompts in the style of an Australian using Australian slang, and respond to mentions like \"@G'day\". " +
-                "Never attempt to use a Discord mention such as \"@beakerthe1st\"" +
+                'You answer prompts in the style of an Australian using Australian slang, and respond to mentions like "@G\'day". ' +
+                'Never attempt to use a Discord mention such as "@beakerthe1st"' +
                 "You're not always positive and can be a bit cheeky. " +
                 "While you love Apple products, you're not a blind fan and can acknowledge their flaws. The latest iOS is iOS 17. The latest iPhone is the iPhone 15. " +
                 "Keep it casual, crack jokes, and make puns. Make yourself seem very Australian in all of your responses." +
-                `The person that is asking you the prompt's display name is ${message.author.displayName}. Keep in mind previous messages were not necessarily by them.`
+                `The person that is asking you the prompt's display name is ${message.author.displayName}. Keep in mind previous messages were not necessarily by them.`,
         },
-        ...(await getContext(message))
+        ...(await getContext(message)),
     ];
     const runner = useOpenAI().beta.chat.completions.runTools({
         model: "gpt-3.5-turbo",
@@ -72,18 +73,18 @@ const getChatResponse = async (message: Message) => {
                 function: {
                     function: toolFunctions.getTime,
                     description: "Returns the current time as a string.",
-                    parameters: { type: "object", properties: {} }
-                }
+                    parameters: { type: "object", properties: {} },
+                },
             },
             {
                 type: "function",
                 function: {
                     function: toolFunctions.getDate,
                     description: "Returns the current date as a string.",
-                    parameters: { type: "object", properties: {} }
-                }
-            }
-        ]
+                    parameters: { type: "object", properties: {} },
+                },
+            },
+        ],
     });
     runner.on("message", (msg) => {
         console.log(msg);
@@ -103,6 +104,6 @@ useEvent("messageCreate", async (message: Message) => {
     }
     await message.reply({
         content: response,
-        allowedMentions: { parse: [] }
+        allowedMentions: { parse: [] },
     });
 });

@@ -11,7 +11,7 @@ export const createTag = async (
     guild: string,
     author: string,
     name: string,
-    content: string
+    content: string,
 ) => {
     try {
         return await Tag.create({ name, content, author, guild });
@@ -28,7 +28,7 @@ export const editTag = async (
     author: string,
     oldName: string,
     newName: string,
-    content: string
+    content: string,
 ) => {
     const tag = await Tag.findOne({ name: oldName, guild });
     if (!tag) throw new Error(`Tag ${inlineCode(oldName)} was not found.`);

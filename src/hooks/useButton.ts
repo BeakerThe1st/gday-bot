@@ -3,7 +3,7 @@ import { InteractionReply, useInteraction } from "./useInteraction";
 
 type ButtonHandler = (
     interaction: ButtonInteraction,
-    data: string[]
+    data: string[],
 ) => InteractionReply | Promise<InteractionReply>;
 
 export const useButton = (ref: string, handler: ButtonHandler) => {

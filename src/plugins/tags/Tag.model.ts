@@ -13,7 +13,7 @@ const tagSchema = new Schema<ITag>({
     content: String,
     author: String,
     guild: String,
-    usesCount: { type: Number, default: 0 }
+    usesCount: { type: Number, default: 0 },
 });
 
 // Guild + Tag Name combinations should be unique

@@ -1,11 +1,14 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("slowmode")
     .setDescription(
-        "Slows things down in the current channel, like taking it easy on a hot arvo."
+        "Slows things down in the current channel, like taking it easy on a hot arvo.",
     )
     .addIntegerOption((option) =>
         option
@@ -13,7 +16,7 @@ const builder = new SlashCommandBuilder()
             .setDescription("Slowmode interval in seconds.")
             .setMinValue(0)
             .setMaxValue(21600)
-            .setRequired(true)
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .setScope(SlashCommandScope.MAIN_GUILD)

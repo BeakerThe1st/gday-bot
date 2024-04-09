@@ -8,7 +8,7 @@ type EventHandler<K extends keyof ClientEvents> = (
 
 export const useEvent = <K extends keyof ClientEvents>(
     eventName: K,
-    executor: EventHandler<K>
+    executor: EventHandler<K>,
 ) => {
     const { client } = useClient();
     client.on(eventName, async (...args: ClientEvents[K]) => {

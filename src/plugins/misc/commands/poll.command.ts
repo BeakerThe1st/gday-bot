@@ -1,15 +1,18 @@
 import { useChatCommand } from "../../../hooks/useChatCommand";
-import { SlashCommandBuilder, SlashCommandScope } from "../../../builders/SlashCommandBuilder";
 import {
-  ActionRowBuilder,
-  BaseMessageOptions,
-  ButtonBuilder,
-  ButtonInteraction,
-  ButtonStyle,
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  Message,
-  User
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../../builders/SlashCommandBuilder";
+import {
+    ActionRowBuilder,
+    BaseMessageOptions,
+    ButtonBuilder,
+    ButtonInteraction,
+    ButtonStyle,
+    ChatInputCommandInteraction,
+    EmbedBuilder,
+    Message,
+    User,
 } from "discord.js";
 import { GdayButtonBuilder } from "../../../builders/GdayButtonBuilder";
 import { useButton } from "../../../hooks/useButton";
@@ -17,13 +20,13 @@ import { useButton } from "../../../hooks/useButton";
 const builder = new SlashCommandBuilder()
     .setName("poll")
     .setDescription(
-        "Gets the convo going with a poll, find out what the mob reckons."
+        "Gets the convo going with a poll, find out what the mob reckons.",
     )
     .addStringOption((option) =>
         option
             .setName("question")
             .setDescription("The question you want to poll.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .setScope(SlashCommandScope.GLOBAL);
 
@@ -33,7 +36,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const message = await interaction.fetchReply();
     const poll = new PollCommand(
         interaction.options.getString("question", true),
-        message
+        message,
     );
     polls.set(message.id, poll);
     return poll.getMessage();
@@ -64,7 +67,7 @@ class PollCommand {
             (acc, vote) => {
                 return Object.assign(acc, { [vote]: acc[vote] + 1 });
             },
-            { yes: 0, no: 0 }
+            { yes: 0, no: 0 },
         );
     };
 
@@ -76,13 +79,13 @@ class PollCommand {
                 {
                     name: "Yes",
                     value: count.yes.toLocaleString(),
-                    inline: true
+                    inline: true,
                 },
                 {
                     name: "No",
                     value: count.no.toLocaleString(),
-                    inline: true
-                }
+                    inline: true,
+                },
             )
             .setColor("Blurple");
         const actionRow = new ActionRowBuilder<ButtonBuilder>()
@@ -94,12 +97,12 @@ class PollCommand {
                 new GdayButtonBuilder("poll:vote")
                     .setStyle(ButtonStyle.Danger)
                     .setLabel("No")
-                    .addArg("no")
+                    .addArg("no"),
             )
             .toJSON();
         return {
             embeds: [embed],
-            components: [actionRow]
+            components: [actionRow],
         };
     };
 

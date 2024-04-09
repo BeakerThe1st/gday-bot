@@ -1,4 +1,10 @@
-import { Guild, GuildBan, inlineCode, RESTJSONErrorCodes, User } from "discord.js";
+import {
+    Guild,
+    GuildBan,
+    inlineCode,
+    RESTJSONErrorCodes,
+    User,
+} from "discord.js";
 import { useClient } from "../../hooks";
 import { GByeConfig } from "./GByeConfig.model";
 
@@ -9,7 +15,7 @@ export const gByeGuilds = [
     "549448381613998103", // Samsung
     "871642313561096194", // Nashy cab
     "1041118987787972678", // G'day server
-    "150662382874525696" // Microsoft Community
+    "150662382874525696", // Microsoft Community
 ];
 
 export const fetchGbyeBans = async (user: User) => {
@@ -20,10 +26,15 @@ export const fetchGbyeBans = async (user: User) => {
             const ban = await guild.bans.fetch(user);
             bans.push(ban);
         } catch (error: any) {
-            if ("code" in error && error.code === RESTJSONErrorCodes.UnknownBan) {
+            if (
+                "code" in error &&
+                error.code === RESTJSONErrorCodes.UnknownBan
+            ) {
                 //ignored - they just aren't banned
             } else {
-                console.error(`Error fetching G'bye bans in ${gByeGuildId}: ${error}`);
+                console.error(
+                    `Error fetching G'bye bans in ${gByeGuildId}: ${error}`,
+                );
             }
         }
     }

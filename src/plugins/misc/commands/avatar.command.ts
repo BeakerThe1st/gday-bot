@@ -1,17 +1,22 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 
 const builder = new SlashCommandBuilder()
     .setName("avatar")
     .setDescription(
-        "Chuck in a username and get back a snap of their profile pic."
+        "Chuck in a username and get back a snap of their profile pic.",
     )
     .addUserOption((option) =>
         option
             .setName("user")
-            .setDescription("Bloke or sheila whose mug you wanna snag a squiz at.")
-            .setRequired(false)
+            .setDescription(
+                "Bloke or sheila whose mug you wanna snag a squiz at.",
+            )
+            .setRequired(false),
     )
     .setScope(SlashCommandScope.MAIN_GUILD);
 
@@ -24,8 +29,8 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
             user.displayAvatarURL({
                 extension: "png",
                 size: 2048,
-                forceStatic: false
-            })
+                forceStatic: false,
+            }),
         );
     return { embeds: [embed] };
 });

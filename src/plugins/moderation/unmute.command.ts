@@ -1,12 +1,23 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { ChatInputCommandInteraction, GuildMember, PermissionFlagsBits, userMention } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    GuildMember,
+    PermissionFlagsBits,
+    userMention,
+} from "discord.js";
 
 const builder = new SlashCommandBuilder()
     .setName("unmute")
     .setDescription("Unmutes a user")
     .addUserOption((option) =>
-        option.setName("user").setDescription("User to unmute.").setRequired(true)
+        option
+            .setName("user")
+            .setDescription("User to unmute.")
+            .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
     .setScope(SlashCommandScope.MAIN_GUILD);
@@ -21,7 +32,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     }
     await member.disableCommunicationUntil(
         null,
-        `Unmute command by ${interaction.user.username}`
+        `Unmute command by ${interaction.user.username}`,
     );
     return `${userMention(member.id)} has been unmuted.`;
 });

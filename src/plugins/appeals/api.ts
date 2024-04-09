@@ -22,7 +22,7 @@ app.get("/guild-info", async (req, res) => {
     res.status(200).json({
         iconURL: guild.iconURL({ size: 128 }),
         members: guild.memberCount,
-        bannerURL: guild.bannerURL({ size: 2048 })
+        bannerURL: guild.bannerURL({ size: 2048 }),
     });
 });
 
@@ -30,7 +30,7 @@ app.post("/ban-appeal", async (req, res) => {
     const { tag, id, reason } = req.body;
     if (!tag || !id || !reason) {
         return res.status(400).json({
-            error: "Missing required parameters"
+            error: "Missing required parameters",
         });
     }
     try {
@@ -50,12 +50,12 @@ app.post("/ban-appeal", async (req, res) => {
                 {
                     name: "Ban Reason",
                     value: ban.reason ?? "No reason found",
-                    inline: true
+                    inline: true,
                 },
                 {
                     name: "Argument",
-                    value: reason
-                }
+                    value: reason,
+                },
             );
         await appealChannel.send({
             content: `${id}`,
@@ -65,29 +65,28 @@ app.post("/ban-appeal", async (req, res) => {
                     .setLabel("Unban")
                     .setStyle(ButtonStyle.Success)
                     .addArg(id)
-                    .asActionRow()
+                    .asActionRow(),
             ],
             allowedMentions: {
-                users: []
-            }
+                users: [],
+            },
         });
         return res.status(200).json("Submitted appeal");
     } catch (error: any) {
         if (error.code === 50035) {
             return res.status(400).json({
-                error: `${id} is not a valid user ID. Read the instructions to learn where to find your user ID.`
+                error: `${id} is not a valid user ID. Read the instructions to learn where to find your user ID.`,
             });
         } else if (error.code === 10026) {
             return res.status(400).json({
-                error:
-                    "You are not banned from r/Apple. Ensure your user ID is correct."
+                error: "You are not banned from r/Apple. Ensure your user ID is correct.",
             });
         } else {
             console.error(error);
             return res.status(500).json({
                 error: `An unexpected error occurred while submitting the ban appeal. (${
                     error.code ?? error.message ?? error
-                })`
+                })`,
             });
         }
     }

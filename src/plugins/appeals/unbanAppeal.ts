@@ -10,18 +10,18 @@ useButton("appeal:unban", async (interaction: ButtonInteraction, [userId]) => {
     await rApple.bans.remove(userId, `${interaction.user.id} appealed`);
     await interaction.message.edit({
         content: `${userMention(userId)} unbanned by ${interaction.user}`,
-        components: []
+        components: [],
     });
 
     const unbanChannel = await client.channels.fetch(
-        CHANNELS.APPEALS.unban_announcements
+        CHANNELS.APPEALS.unban_announcements,
     );
     if (unbanChannel?.isTextBased()) {
         await unbanChannel.send({
             content: `${userMention(userId)}, your appeal was successful and you have been unbanned. You may rejoin the server at https://discord.gg/apple`,
             allowedMentions: {
-                users: [userId]
-            }
+                users: [userId],
+            },
         });
     }
 

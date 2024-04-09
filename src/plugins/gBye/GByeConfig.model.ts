@@ -7,7 +7,7 @@ export interface IGByeConfig {
 
 const gByeConfigSchema = new Schema<IGByeConfig>({
     guild: String,
-    channel: String
+    channel: String,
 });
 
 export const GByeConfig = model<IGByeConfig>("gByeConfig", gByeConfigSchema);

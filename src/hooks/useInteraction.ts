@@ -1,10 +1,10 @@
 import {
-  codeBlock,
-  Interaction,
-  InteractionReplyOptions,
-  MessagePayload,
-  ModalBuilder,
-  RepliableInteraction
+    codeBlock,
+    Interaction,
+    InteractionReplyOptions,
+    MessagePayload,
+    ModalBuilder,
+    RepliableInteraction,
 } from "discord.js";
 import { useEvent } from "./useEvent";
 import { useError } from "./useError";
@@ -17,7 +17,7 @@ export type InteractionReply =
     | null;
 
 type InteractionHandler = (
-    interaction: RepliableInteraction
+    interaction: RepliableInteraction,
 ) => InteractionReply | Promise<InteractionReply>;
 
 export const useInteraction = (handler: InteractionHandler) => {
@@ -43,12 +43,12 @@ export const useInteraction = (handler: InteractionHandler) => {
             if (response instanceof ModalBuilder) {
                 if (alreadyReplied) {
                     throw new Error(
-                        `Cannot show a modal to an already replied or deferred interaction`
+                        `Cannot show a modal to an already replied or deferred interaction`,
                     );
                 }
                 if (!("showModal" in interaction)) {
                     throw new Error(
-                        `Cannot show a modal to interaction of type ${interaction.type}`
+                        `Cannot show a modal to interaction of type ${interaction.type}`,
                     );
                 }
                 await interaction.showModal(response);

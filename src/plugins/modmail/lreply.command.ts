@@ -1,15 +1,18 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import {
-  ActionRowBuilder,
-  ChatInputCommandInteraction,
-  Events,
-  Interaction,
-  ModalBuilder,
-  SelectMenuBuilder,
-  SelectMenuOptionBuilder,
-  TextInputBuilder,
-  TextInputStyle
+    ActionRowBuilder,
+    ChatInputCommandInteraction,
+    Events,
+    Interaction,
+    ModalBuilder,
+    SelectMenuBuilder,
+    SelectMenuOptionBuilder,
+    TextInputBuilder,
+    TextInputStyle,
 } from "discord.js";
 import { MailThread } from "./MailThread";
 import { useClient, useEvent } from "../../hooks";
@@ -36,7 +39,9 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     const anonInput = new SelectMenuBuilder()
         .setCustomId("anon")
         .setOptions([
-            new SelectMenuOptionBuilder().setLabel("yes").setDescription("hello")
+            new SelectMenuOptionBuilder()
+                .setLabel("yes")
+                .setDescription("hello"),
         ])
         .setMinValues(1)
         .setMaxValues(1);
@@ -45,7 +50,9 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         .setCustomId(`lreply-${thread._id}-anon`)
         .setTitle(`Long reply to ${recipient.username}`)
         .addComponents([
-            new ActionRowBuilder<TextInputBuilder>().addComponents(messageInput)
+            new ActionRowBuilder<TextInputBuilder>().addComponents(
+                messageInput,
+            ),
         ]);
     return modal;
     /*const input = interaction.options.getString("message", true);
