@@ -3,7 +3,7 @@ import {
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { RAppleUser } from "../rApple/RAppleUser";
+import { RAppleUser } from "../rApple/RAppleUser.model";
 
 const builder = new SlashCommandBuilder()
     .setName("blocklist")

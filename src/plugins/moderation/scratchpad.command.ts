@@ -16,7 +16,7 @@ import {
     userMention,
 } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { RAppleUser } from "../rApple/RAppleUser";
+import { RAppleUser } from "../rApple/RAppleUser.model";
 import { GdayButtonBuilder } from "../../builders/GdayButtonBuilder";
 import { useButton } from "../../hooks/useButton";
 import { useInteraction } from "../../hooks/useInteraction";

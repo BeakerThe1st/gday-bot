@@ -1,6 +1,5 @@
 import { useClient, useEvent } from "../../hooks";
 import {
-    ButtonInteraction,
     ButtonStyle,
     ChannelType,
     Colors,
@@ -14,7 +13,7 @@ import {
 import { MailThread } from "./MailThread";
 import { CHANNELS, GUILDS } from "../../globals";
 import { ModmailMessage } from "./ModmailMessage";
-import { RAppleUser } from "../rApple/RAppleUser";
+import { RAppleUser } from "../rApple/RAppleUser.model";
 import { GdayButtonBuilder } from "../../builders/GdayButtonBuilder";
 import { useButton } from "../../hooks/useButton";
 
