@@ -3,13 +3,7 @@ import {
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import {
-    ChatInputCommandInteraction,
-    Colors,
-    EmbedBuilder,
-    Message,
-    userMention,
-} from "discord.js";
+import { Colors, EmbedBuilder, Message, userMention } from "discord.js";
 import { IMailThread, MailThread } from "./MailThread";
 import { useClient } from "../../hooks";
 import { CHANNELS } from "../../globals";

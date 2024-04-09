@@ -1,6 +1,5 @@
 import { useChatCommand } from "../../hooks/useChatCommand";
 import {
-    ChatInputCommandInteraction,
     EmbedBuilder,
     inlineCode,
     PermissionFlagsBits,

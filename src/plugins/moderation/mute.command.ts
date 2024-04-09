@@ -1,5 +1,4 @@
 import {
-    ChatInputCommandInteraction,
     inlineCode,
     PermissionFlagsBits,
     time,

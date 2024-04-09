@@ -3,12 +3,7 @@ import {
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import {
-    ChatInputCommandInteraction,
-    GuildMember,
-    PermissionFlagsBits,
-    userMention,
-} from "discord.js";
+import { GuildMember, PermissionFlagsBits, userMention } from "discord.js";
 
 const builder = new SlashCommandBuilder()
     .setName("unmute")

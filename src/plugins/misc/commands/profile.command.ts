@@ -4,7 +4,6 @@ import {
 } from "../../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 import {
-    ChatInputCommandInteraction,
     Colors,
     EmbedBuilder,
     GuildMember,

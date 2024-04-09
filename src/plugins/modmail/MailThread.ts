@@ -38,7 +38,7 @@ mailThreadSchema.pre("save", async function () {
             `${userMention(resolvedAuthor.id)} (${resolvedAuthor.username})\nAccount Created: ${time(resolvedAuthor.createdAt)}`,
         )
         .setColor(Colors.Aqua);
-    channel.send({
+    await channel.send({
         embeds: [embed],
         content: process.env.NODE_ENV === "development" ? "" : "@here",
         allowedMentions: { parse: ["everyone"] },

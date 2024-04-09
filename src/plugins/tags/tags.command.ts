@@ -1,6 +1,5 @@
 import {
     ActionRowBuilder,
-    ChatInputCommandInteraction,
     Events,
     inlineCode,
     ModalActionRowComponentBuilder,

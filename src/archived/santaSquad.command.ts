@@ -2,9 +2,7 @@ import { useClient } from "../hooks";
 import {
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonInteraction,
     ButtonStyle,
-    ChatInputCommandInteraction,
     EmbedBuilder,
     GuildMember,
     PermissionFlagsBits,

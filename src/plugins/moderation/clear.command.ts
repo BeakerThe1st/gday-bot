@@ -1,9 +1,4 @@
-import {
-    ChannelType,
-    ChatInputCommandInteraction,
-    Collection,
-    PermissionFlagsBits,
-} from "discord.js";
+import { ChannelType, Collection, PermissionFlagsBits } from "discord.js";
 import {
     SlashCommandBuilder,
     SlashCommandScope,

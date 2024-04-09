@@ -3,7 +3,7 @@ import {
     SlashCommandScope,
 } from "../../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
-import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 
 const builder = new SlashCommandBuilder()
     .setName("avatar")

@@ -4,11 +4,7 @@ import {
     SlashCommandScope,
 } from "../builders/SlashCommandBuilder";
 import { Guess } from "./Guess.model";
-import {
-    ChatInputCommandInteraction,
-    EmbedBuilder,
-    PermissionFlagsBits,
-} from "discord.js";
+import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
 
 let guessEnabled = true;
 

@@ -4,7 +4,6 @@ import {
     BaseMessageOptions,
     ButtonBuilder,
     ButtonStyle,
-    ChatInputCommandInteraction,
     EmbedBuilder,
     inlineCode,
     PermissionFlagsBits,

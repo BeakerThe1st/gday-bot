@@ -3,7 +3,7 @@ import {
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { ChatInputCommandInteraction, inlineCode } from "discord.js";
+import { inlineCode } from "discord.js";
 import { MailThread } from "./MailThread";
 import { useClient } from "../../hooks";
 import { ModmailMessage } from "./ModmailMessage";

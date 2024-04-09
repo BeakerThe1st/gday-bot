@@ -1,8 +1,4 @@
-import {
-    ChatInputCommandInteraction,
-    inlineCode,
-    PermissionFlagsBits,
-} from "discord.js";
+import { inlineCode, PermissionFlagsBits } from "discord.js";
 import {
     SlashCommandBuilder,
     SlashCommandScope,

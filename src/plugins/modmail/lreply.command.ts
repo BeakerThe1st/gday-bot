@@ -5,7 +5,6 @@ import {
 import { useChatCommand } from "../../hooks/useChatCommand";
 import {
     ActionRowBuilder,
-    ChatInputCommandInteraction,
     Events,
     Interaction,
     ModalBuilder,

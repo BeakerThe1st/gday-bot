@@ -2,11 +2,7 @@ import {
     SlashCommandBuilder,
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
-import {
-    ChatInputCommandInteraction,
-    inlineCode,
-    PermissionFlagsBits,
-} from "discord.js";
+import { inlineCode, PermissionFlagsBits } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { Case, CaseType } from "../cases/Case.model";
 

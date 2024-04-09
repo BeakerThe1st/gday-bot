@@ -1,9 +1,5 @@
 import { useChatCommand } from "../../hooks/useChatCommand";
-import {
-    ChatInputCommandInteraction,
-    GuildMember,
-    PermissionFlagsBits,
-} from "discord.js";
+import { GuildMember, PermissionFlagsBits } from "discord.js";
 import {
     SlashCommandBuilder,
     SlashCommandScope,

@@ -1,5 +1,5 @@
 import { useClient } from "../../hooks";
-import { ButtonInteraction, userMention } from "discord.js";
+import { userMention } from "discord.js";
 import { CHANNELS, GUILDS } from "../../globals";
 import { useButton } from "../../hooks/useButton";
 

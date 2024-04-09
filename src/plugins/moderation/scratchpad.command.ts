@@ -4,9 +4,7 @@ import {
 } from "../../builders/SlashCommandBuilder";
 import {
     ActionRowBuilder,
-    ButtonInteraction,
     ButtonStyle,
-    ChatInputCommandInteraction,
     codeBlock,
     Interaction,
     ModalBuilder,

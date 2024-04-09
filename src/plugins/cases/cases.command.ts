@@ -1,9 +1,4 @@
-import {
-    bold,
-    ChatInputCommandInteraction,
-    PermissionFlagsBits,
-    userMention,
-} from "discord.js";
+import { bold, PermissionFlagsBits, userMention } from "discord.js";
 import {
     SlashCommandBuilder,
     SlashCommandScope,

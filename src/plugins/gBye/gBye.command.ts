@@ -2,7 +2,7 @@ import {
     SlashCommandBuilder,
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
-import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
+import { PermissionFlagsBits } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { GByeConfig } from "./GByeConfig.model";
 import { fetchGbyeBansString, gByeGuilds } from "./gBye";
