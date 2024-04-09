@@ -11,8 +11,12 @@ import { CHANNELS } from "../../globals";
 const builder = new SlashCommandBuilder()
     .setName("close")
     .setDescription("Closes a modmail thread.")
+    .addBooleanOption((option) =>
+        option
+            .setName("silent")
+            .setDescription("Whether to close the thread silently"),
+    )
     .setScope(SlashCommandScope.STAFF_SERVER);
-
 useChatCommand(builder, async (interaction) => {
     const thread: unknown = (await MailThread.findOneAndDelete({
         channel: interaction.channelId,
@@ -51,16 +55,19 @@ useChatCommand(builder, async (interaction) => {
             },
         ],
     });
-    author.send({
-        embeds: [
-            new EmbedBuilder()
-                .setTitle("Thread Closed")
-                .setColor(Colors.DarkRed)
-                .setDescription(
-                    `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`,
-                ),
-        ],
-    });
+    const silent = interaction.options.getBoolean("silent");
+    if (!silent) {
+        author.send({
+            embeds: [
+                new EmbedBuilder()
+                    .setTitle("Thread Closed")
+                    .setColor(Colors.DarkRed)
+                    .setDescription(
+                        `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`,
+                    ),
+            ],
+        });
+    }
     await interaction.channel.delete();
     return null;
 });
