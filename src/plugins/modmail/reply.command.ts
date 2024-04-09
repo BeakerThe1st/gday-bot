@@ -1,4 +1,7 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { ChatInputCommandInteraction } from "discord.js";
 import { MailThread } from "./MailThread";
@@ -12,10 +15,10 @@ const builder = new SlashCommandBuilder()
         option
             .setName("message")
             .setDescription("Message to send.")
-            .setRequired(true)
+            .setRequired(true),
     )
     .addAttachmentOption((option) =>
-        option.setName("attachment").setDescription("Attachment to attach.")
+        option.setName("attachment").setDescription("Attachment to attach."),
     )
     .setScope(SlashCommandScope.STAFF_SERVER);
 
@@ -31,7 +34,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
         from: interaction.user.username,
         to: user.username,
         body,
-        attachments: attachment ? [attachment.url] : undefined
+        attachments: attachment ? [attachment.url] : undefined,
     });
     await user.send({ embeds: [message] });
     message.addStaffFields();

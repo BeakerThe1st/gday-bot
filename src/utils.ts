@@ -5,7 +5,7 @@ export const listify = (items: string[]) => {
 };
 
 export const createBulkMessageLogFile = (
-    messages: Collection<string, Message | PartialMessage>
+    messages: Collection<string, Message | PartialMessage>,
 ) => {
     let fileContent = "";
     messages = messages.reverse();

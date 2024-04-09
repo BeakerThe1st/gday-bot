@@ -16,7 +16,7 @@ import {
     roleMention,
     time,
     TimestampStyles,
-    User
+    User,
 } from "discord.js";
 import { log, LOG_THREADS } from "./logs";
 import { GUILDS } from "../../globals";
@@ -28,7 +28,7 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
     if (message.channelId === LOG_THREADS.DELETION) return;
     const embed = new EmbedBuilder()
         .setDescription(
-            `:wastebasket: Message by ${message.author} deleted in ${message.channel}`
+            `:wastebasket: Message by ${message.author} deleted in ${message.channel}`,
         )
         .setColor(Colors.DarkRed)
         .setFooter({ text: `Message ID: ${message.id}` })
@@ -40,13 +40,13 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
     if (attachments && attachments.size > 0) {
         embed.addFields({
             name: "Attachments",
-            value: `- ${attachments.map((attachment) => attachment.url).join("\n- ")}`
+            value: `- ${attachments.map((attachment) => attachment.url).join("\n- ")}`,
         });
     }
     if (embeds && embeds.length > 0) {
         embed.addFields({
             name: "Embeds",
-            value: `${embeds.map((embed) => `- ${embed.title ?? "No Title"}: ${embed.description ?? "No Description"}`).join("\n- ")}`
+            value: `${embeds.map((embed) => `- ${embed.title ?? "No Title"}: ${embed.description ?? "No Description"}`).join("\n- ")}`,
         });
     }
     log(LOG_THREADS.DELETION, embed);
@@ -57,7 +57,7 @@ useEvent(
     Events.MessageBulkDelete,
     (
         messages: Collection<string, Message | PartialMessage>,
-        channel: GuildTextBasedChannel
+        channel: GuildTextBasedChannel,
     ) => {
         if (channel.guildId !== GUILDS.MAIN) return;
         messages = messages.reverse();
@@ -68,10 +68,10 @@ useEvent(
         const embed = new EmbedBuilder()
             .setDescription(
                 `:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(
-                    authors
+                    authors,
                 )
                     .map((id) => inlineCode(id))
-                    .join(", ")}]`
+                    .join(", ")}]`,
             )
             .setColor(Colors.DarkRed)
             .setTimestamp(Date.now());
@@ -80,11 +80,11 @@ useEvent(
             files: [
                 {
                     attachment: createBulkMessageLogFile(messages),
-                    name: `${channel.guild.name.replace(/[\\W_]+/g, "")}-bulk-delete-${Date.now()}.txt`
-                }
-            ]
+                    name: `${channel.guild.name.replace(/[\\W_]+/g, "")}-bulk-delete-${Date.now()}.txt`,
+                },
+            ],
         });
-    }
+    },
 );
 
 //Role Logs
@@ -100,7 +100,7 @@ useEvent(
             .setDescription(description)
             .setColor(change.key === "$add" ? Colors.Green : Colors.Red);
         log(LOG_THREADS.ROLE, embed);
-    }
+    },
 );
 
 //Nickname Logs
@@ -125,7 +125,7 @@ useEvent(
             .setDescription(description)
             .setColor(Colors.Orange);
         log(LOG_THREADS.NICKNAME, embed);
-    }
+    },
 );
 
 //Join Logs
@@ -134,7 +134,7 @@ useEvent(Events.GuildMemberAdd, (member: GuildMember) => {
     const { user } = member;
     const embed = new EmbedBuilder()
         .setDescription(
-            `:inbox_tray: ${member} joined the server\nAccount created: ${time(user.createdAt, TimestampStyles.RelativeTime)}`
+            `:inbox_tray: ${member} joined the server\nAccount created: ${time(user.createdAt, TimestampStyles.RelativeTime)}`,
         )
         .setThumbnail(user.displayAvatarURL())
         .setTimestamp(Date.now())
@@ -154,7 +154,7 @@ useEvent(
             .setTimestamp(Date.now())
             .setColor(Colors.DarkRed);
         log(LOG_THREADS.JOIN_LEAVE, embed);
-    }
+    },
 );
 
 //Message Edit Logs
@@ -162,27 +162,27 @@ useEvent(
     Events.MessageUpdate,
     (
         oldMessage: Message | PartialMessage,
-        newMessage: Message | PartialMessage
+        newMessage: Message | PartialMessage,
     ) => {
         if (oldMessage.guildId !== GUILDS.MAIN) return;
         const { author } = newMessage;
         if (!author || author.bot) return;
         const embed = new EmbedBuilder()
             .setDescription(
-                `:pencil: ${author} updated their message in ${newMessage.channel}`
+                `:pencil: ${author} updated their message in ${newMessage.channel}`,
             )
             .addFields([
                 {
                     name: "Old Content",
-                    value: `${oldMessage.cleanContent}`
+                    value: `${oldMessage.cleanContent}`,
                 },
                 {
                     name: "New Content",
-                    value: `${newMessage.cleanContent}`
-                }
+                    value: `${newMessage.cleanContent}`,
+                },
             ])
             .setTimestamp(Date.now())
             .setColor(Colors.Orange);
         log(LOG_THREADS.EDIT, embed);
-    }
+    },
 );

@@ -1,11 +1,19 @@
-import { ChannelType, ChatInputCommandInteraction, Collection, PermissionFlagsBits } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    ChannelType,
+    ChatInputCommandInteraction,
+    Collection,
+    PermissionFlagsBits,
+} from "discord.js";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()
     .setName("clear")
     .setDescription(
-        "Clears out messages in a channel, clean up like a true blue Aussie."
+        "Clears out messages in a channel, clean up like a true blue Aussie.",
     )
     .addIntegerOption((option) =>
         option
@@ -13,20 +21,20 @@ const builder = new SlashCommandBuilder()
             .setDescription("Amount of messages to fetch")
             .setRequired(true)
             .setMinValue(1)
-            .setMaxValue(99)
+            .setMaxValue(99),
     )
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User whose messages you want to clear")
-            .setRequired(false)
+            .setRequired(false),
     )
     .addChannelOption((option) =>
         option
             .setName("channel")
             .setDescription("Channel to clear messages from")
             .setRequired(false)
-            .addChannelTypes(ChannelType.GuildText)
+            .addChannelTypes(ChannelType.GuildText),
     )
     .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
@@ -42,7 +50,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
 
     const user = interaction.options.getUser("user");
     const specifiedChannel = interaction.options.getChannel("channel", false, [
-        ChannelType.GuildText
+        ChannelType.GuildText,
     ]);
     const channel = specifiedChannel ?? interaction.channel;
     const amount = interaction.options.getInteger("amount", true);
@@ -58,7 +66,7 @@ useChatCommand(builder, async (interaction: ChatInputCommandInteraction) => {
     );
 
     messages = new Collection([
-        ...Array.from(messages.entries()).splice(~~ignoreFirst, amount)
+        ...Array.from(messages.entries()).splice(~~ignoreFirst, amount),
     ]);
 
     await channel.bulkDelete(messages, true);

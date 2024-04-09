@@ -1,4 +1,7 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { AttachmentBuilder, ChatInputCommandInteraction } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { bingoItems } from "./bingoItems";
@@ -24,7 +27,7 @@ const generateBoard = () => {
                 row[colIndex] = "free_space";
             } else {
                 let chosenOptionIndex = Math.floor(
-                    Math.random() * availableOptions.length
+                    Math.random() * availableOptions.length,
                 );
                 row[colIndex] = availableOptions[chosenOptionIndex];
                 availableOptions.splice(chosenOptionIndex, 1);
@@ -39,7 +42,10 @@ const prettyBoard = async (board: string[][]) => {
     const canvas = createCanvas(600, 655);
     const ctx = canvas.getContext("2d");
 
-    const imageDir = path.join(process.cwd(), "/src/plugins/bingo/bingo_images/");
+    const imageDir = path.join(
+        process.cwd(),
+        "/src/plugins/bingo/bingo_images/",
+    );
 
     const bg = await loadImage(`${imageDir}bg.png`);
     ctx.drawImage(bg, 0, 0, 600, 655);
@@ -59,13 +65,15 @@ const prettyBoard = async (board: string[][]) => {
                 const isChecked = check?.bingoEntries.get(col) ?? false;
                 const image = await loadImage(`${imageDir}${col}.png`);
                 if (isChecked === true) {
-                    const checkedImage = await loadImage(`${imageDir}checked.png`);
+                    const checkedImage = await loadImage(
+                        `${imageDir}checked.png`,
+                    );
                     ctx.drawImage(
                         checkedImage,
                         x - 1,
                         y - 1,
                         SQUARE_WIDTH + 2,
-                        SQUARE_WIDTH + 2
+                        SQUARE_WIDTH + 2,
                     );
                 }
                 ctx.drawImage(image, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
@@ -77,7 +85,7 @@ const prettyBoard = async (board: string[][]) => {
     });
 
     return new AttachmentBuilder(await canvas.createPNGStream(), {
-        name: "bingo.png"
+        name: "bingo.png",
     });
 };
 
@@ -91,7 +99,10 @@ useChatCommand(
             board = await Bingo.findOne({ user: userId });
             if (!board) {
                 return "You missed out on bingo this time, sorry!";
-                board = await Bingo.create({ user: userId, board: generateBoard() });
+                board = await Bingo.create({
+                    user: userId,
+                    board: generateBoard(),
+                });
             }
         } else {
             board = { board: generateBoard() };
@@ -99,7 +110,7 @@ useChatCommand(
 
         return {
             content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board!${PERSIST ? "" : " **PERSISTENCE IS DISABLED**"}`,
-            files: [await prettyBoard(board.board)]
+            files: [await prettyBoard(board.board)],
         };
-    }
+    },
 );

@@ -16,7 +16,9 @@ useEvent("messageCreate", async (message: Message) => {
         if (!contentType) {
             return false;
         }
-        return contentType.startsWith("image") || contentType.startsWith("video");
+        return (
+            contentType.startsWith("image") || contentType.startsWith("video")
+        );
     });
 
     if (
@@ -25,11 +27,10 @@ useEvent("messageCreate", async (message: Message) => {
     ) {
         await message.delete();
         const reply = await message.channel.send(
-            `${message.author}, please only post images and videos in this channel.`
+            `${message.author}, please only post images and videos in this channel.`,
         );
         setTimeout(() => {
-            reply.delete().catch(() => {
-            });
+            reply.delete().catch(() => {});
         }, 5000);
     }
 

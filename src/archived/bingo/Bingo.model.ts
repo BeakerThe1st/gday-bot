@@ -7,7 +7,7 @@ export interface IBingo {
 
 const bingoSchema = new Schema<IBingo>({
     user: String,
-    board: [[String]]
+    board: [[String]],
 });
 
 export const Bingo = model<IBingo>("bingo", bingoSchema);

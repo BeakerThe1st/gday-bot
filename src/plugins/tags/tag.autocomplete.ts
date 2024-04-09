@@ -9,12 +9,12 @@ useEvent(Events.InteractionCreate, async (interaction) => {
 
     //Weakened tags array with just name and content
     const tags = (await Tag.find({ guild: interaction.guildId })).map(
-        (document) => ({ name: document.name, content: document.content })
+        (document) => ({ name: document.name, content: document.content }),
     );
     //fuuuuuseeeeeee
     const fuse = new Fuse(tags, {
         includeScore: true,
-        keys: ["name", "content"]
+        keys: ["name", "content"],
     });
 
     const result = fuse.search(interaction.options.getFocused());
@@ -22,7 +22,7 @@ useEvent(Events.InteractionCreate, async (interaction) => {
     //Turn it into discord friendly options
     const options = result.map(({ item }) => ({
         name: item.name,
-        value: item.name
+        value: item.name,
     }));
     await interaction.respond(options);
 });
