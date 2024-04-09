@@ -1,5 +1,13 @@
-import { bold, ChatInputCommandInteraction, PermissionFlagsBits, userMention } from "discord.js";
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    bold,
+    ChatInputCommandInteraction,
+    PermissionFlagsBits,
+    userMention,
+} from "discord.js";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { Case } from "./Case.model";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { RAppleUser } from "../rApple/RAppleUser";
@@ -7,15 +15,15 @@ import { RAppleUser } from "../rApple/RAppleUser";
 const builder = new SlashCommandBuilder()
     .setName("cases")
     .setDescription(
-        "Has a squiz at all the cases in the guild, filtered by your specs."
+        "Has a squiz at all the cases in the guild, filtered by your specs.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
     .setScope(SlashCommandScope.GLOBAL)
     .addUserOption((option) =>
-        option.setName("executor").setDescription("Case executor.")
+        option.setName("executor").setDescription("Case executor."),
     )
     .addUserOption((option) =>
-        option.setName("target").setDescription("Case target.")
+        option.setName("target").setDescription("Case target."),
     )
     .addStringOption((option) =>
         option
@@ -26,8 +34,8 @@ const builder = new SlashCommandBuilder()
                 { name: "Ban", value: "BAN" },
                 { name: "Unban", value: "UNBAN" },
                 { name: "Kick", value: "KICK" },
-                { name: "Timeout", value: "TIMEOUT" }
-            )
+                { name: "Timeout", value: "TIMEOUT" },
+            ),
     );
 
 useChatCommand(
@@ -37,7 +45,7 @@ useChatCommand(
         const target = interaction.options.getUser("target");
         const type = interaction.options.getString("type");
         let filter: any = {
-            deleted: false
+            deleted: false,
         };
         if (executor) {
             filter.executor = executor.id;
@@ -67,7 +75,7 @@ useChatCommand(
 
         let resultsList = results.reduce((acc, result) => {
             let currentStr = `${bold(result._id)} - ${result.type} on ${userMention(
-                result.target
+                result.target,
             )}`;
             if (result.executor) {
                 currentStr += ` by ${userMention(result.executor)}`;
@@ -87,5 +95,5 @@ useChatCommand(
         } else {
             return `Found ${count.toLocaleString()} cases that fit the bill. Here ya go cobber!\n${resultsList}`;
         }
-    }
+    },
 );

@@ -1,4 +1,7 @@
-import { SlashCommandBuilder, SlashCommandScope } from "../../builders/SlashCommandBuilder";
+import {
+    SlashCommandBuilder,
+    SlashCommandScope,
+} from "../../builders/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { RAppleUser } from "../rApple/RAppleUser";
 
@@ -14,8 +17,8 @@ const builder = new SlashCommandBuilder()
                 option
                     .setName("user")
                     .setDescription("User to add to the blocklist")
-                    .setRequired(true)
-            )
+                    .setRequired(true),
+            ),
     )
     .addSubcommand((subcommand) =>
         subcommand
@@ -25,8 +28,8 @@ const builder = new SlashCommandBuilder()
                 option
                     .setName("user")
                     .setDescription("User to remove from the blocklist")
-                    .setRequired(true)
-            )
+                    .setRequired(true),
+            ),
     );
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
@@ -35,7 +38,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
     let rAppleUser = await RAppleUser.findOne({ userId: target.id });
     if (!rAppleUser) {
         rAppleUser = new RAppleUser({
-            userId: target.id
+            userId: target.id,
         });
     }
     let message;

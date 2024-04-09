@@ -1,15 +1,15 @@
 import { useClient, useEvent } from "../../hooks";
 import {
-  ButtonInteraction,
-  ButtonStyle,
-  ChannelType,
-  Colors,
-  DMChannel,
-  EmbedBuilder,
-  Events,
-  GuildChannel,
-  Message,
-  userMention
+    ButtonInteraction,
+    ButtonStyle,
+    ChannelType,
+    Colors,
+    DMChannel,
+    EmbedBuilder,
+    Events,
+    GuildChannel,
+    Message,
+    userMention,
 } from "discord.js";
 import { MailThread } from "./MailThread";
 import { CHANNELS, GUILDS } from "../../globals";
@@ -21,10 +21,12 @@ import { useButton } from "../../hooks/useButton";
 export const forwardModmailMessage = async (message: Message) => {
     const thread = await MailThread.findOne({ author: message.author.id });
     if (!thread) {
-        const rAppleUser = await RAppleUser.findOne({ userId: message.author.id });
+        const rAppleUser = await RAppleUser.findOne({
+            userId: message.author.id,
+        });
         if (rAppleUser?.modmailBlocklisted) {
             await message.reply(
-                "You have been blocked from creating new modmail threads."
+                "You have been blocked from creating new modmail threads.",
             );
             return;
         }
@@ -32,7 +34,7 @@ export const forwardModmailMessage = async (message: Message) => {
             .setTitle("G'day from the r/Apple mod team!")
             .setColor(Colors.Aqua)
             .setDescription(
-                "Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply. If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!"
+                "Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply. If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!",
             );
         await message.reply({
             embeds: [embed],
@@ -42,19 +44,21 @@ export const forwardModmailMessage = async (message: Message) => {
                     .setEmoji("✅")
                     .setStyle(ButtonStyle.Success)
                     .addArg(message.author.id)
-                    .asActionRow()
-            ]
+                    .asActionRow(),
+            ],
         });
         return;
     }
     try {
-        const mailChannel = await useClient().client.channels.fetch(thread.channel);
+        const mailChannel = await useClient().client.channels.fetch(
+            thread.channel,
+        );
         if (!mailChannel?.isTextBased()) throw new Error("Channel not found");
         const modmailMessage = new ModmailMessage({
             from: message.author.username,
             to: "r/Apple Mod Team",
             body: message.cleanContent,
-            attachments: message.attachments.map((value) => value.url)
+            attachments: message.attachments.map((value) => value.url),
         }).addStaffFields();
         await mailChannel.send({ embeds: [modmailMessage] });
         await message.react("✅");
@@ -64,7 +68,7 @@ export const forwardModmailMessage = async (message: Message) => {
         }
         await message.react("⛔");
         await message.reply(
-            `There was an error sending this message. Please try again!`
+            `There was an error sending this message. Please try again!`,
         );
     }
 };
@@ -88,7 +92,7 @@ useButton("modmail:create", async (interaction: ButtonInteraction, args) => {
     const initialMessage = await interaction.message.fetchReference();
     await MailThread.create({
         author: userId,
-        initialMessage: initialMessage.id
+        initialMessage: initialMessage.id,
     });
     return `Thread created!`;
 });
@@ -102,20 +106,22 @@ useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
         return;
     }
     const modmailLog = await useClient().client.channels.fetch(
-        CHANNELS.STAFF.modmail_logs
+        CHANNELS.STAFF.modmail_logs,
     );
     if (modmailLog && "send" in modmailLog) {
-        const author = await useClient().client.users.fetch(thread.value.author);
+        const author = await useClient().client.users.fetch(
+            thread.value.author,
+        );
         await modmailLog.send({
             embeds: [
                 new EmbedBuilder()
                     .setTitle("Thread Superclosed")
                     .setColor(Colors.DarkRed)
                     .setDescription(
-                        `Modmail thread for ${userMention(thread.value.author)} (${author.username}) superclosed, no log generated.`
+                        `Modmail thread for ${userMention(thread.value.author)} (${author.username}) superclosed, no log generated.`,
                     )
-                    .setTimestamp(Date.now())
-            ]
+                    .setTimestamp(Date.now()),
+            ],
         });
         await author.send({
             embeds: [
@@ -123,9 +129,9 @@ useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
                     .setTitle("Thread Closed")
                     .setColor(Colors.DarkRed)
                     .setDescription(
-                        `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`
-                    )
-            ]
+                        `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`,
+                    ),
+            ],
         });
     }
 });
