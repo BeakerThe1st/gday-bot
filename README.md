@@ -7,7 +7,7 @@ be adapted and used successfully in any server.
 ## Key Features
 - Permanent records of warns/kicks/timeouts/bans/unbans through the case record system
 - A communal "scratchpad" attached to each user for moderators to keep notes about particular users
-- Additional supplement moderation commands such as `/clear` and `/warn`
+- Additional supplemental moderation commands such as `/clear` and `/warn`
 - A modmail system
 - A ban appeal system from a corresponding web frontend
 - "Event mode" for big server events with high traffic to answer FAQ throughout
