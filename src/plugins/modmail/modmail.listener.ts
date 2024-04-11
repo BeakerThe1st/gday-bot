@@ -84,6 +84,10 @@ useEvent(Events.MessageCreate, async (message: Message) => {
 useButton("modmail:create", async (interaction, args) => {
     const [userId] = args;
     await interaction.deferReply({ ephemeral: true });
+    const rAppleUser = await RAppleUser.findOne({ userId });
+    if (rAppleUser?.modmailBlocklisted) {
+        return "You have been blocked from creating new modmail threads.";
+    }
     let thread = await MailThread.findOne({ author: userId });
     if (thread) {
         return `You already have an open thread, simply send your message in this channel and it'll go straight to the mod team!`;
