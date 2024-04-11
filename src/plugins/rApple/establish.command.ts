@@ -1,10 +1,10 @@
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../../builders/SlashCommandBuilder";
+} from "../../builders/SlashCommandBuilder";
 import { GuildMember, PermissionFlagsBits } from "discord.js";
-import { useChatCommand } from "../../../hooks/useChatCommand";
-import { ROLES } from "../../../globals";
+import { useChatCommand } from "../../hooks/useChatCommand";
+import { ROLES } from "../../globals";
 
 const builder: SlashCommandBuilder = new SlashCommandBuilder()
     .setName("establish")

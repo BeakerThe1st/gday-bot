@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { useEvent } from "../../../hooks";
+import { useEvent } from "../../hooks";
 
 useEvent("messageCreate", async (message: Message) => {
     const shotOnIphoneChannelId = "780706842383745034";

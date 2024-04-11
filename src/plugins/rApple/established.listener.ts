@@ -1,6 +1,6 @@
-import { GUILDS, ROLES } from "../../../globals";
+import { GUILDS, ROLES } from "../../globals";
 import { Typing } from "discord.js";
-import { useEvent } from "../../../hooks";
+import { useEvent } from "../../hooks";
 
 useEvent("typingStart", async (typing: Typing) => {
     if (typing.guild?.id !== GUILDS.MAIN) {
