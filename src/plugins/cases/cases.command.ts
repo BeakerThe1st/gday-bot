@@ -13,7 +13,7 @@ const builder = new SlashCommandBuilder()
         "Has a squiz at all the cases in the guild, filtered by your specs.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setScope(SlashCommandScope.GLOBAL)
+    .setScope(SlashCommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option.setName("executor").setDescription("Case executor."),
     )

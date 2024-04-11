@@ -17,7 +17,7 @@ const builder = new SlashCommandBuilder()
     .setName("case")
     .setDescription("Manages a given case.")
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setScope(SlashCommandScope.GLOBAL)
+    .setScope(SlashCommandScope.MAIN_GUILD)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("info")

@@ -23,7 +23,7 @@ const builder = new SlashCommandBuilder()
             .setRequired(false),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-    .setScope(SlashCommandScope.GLOBAL);
+    .setScope(SlashCommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const user = interaction.options.getUser("user", true);

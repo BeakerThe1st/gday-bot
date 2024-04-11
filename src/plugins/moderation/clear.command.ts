@@ -33,7 +33,7 @@ const builder = new SlashCommandBuilder()
     )
     .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-    .setScope(SlashCommandScope.GLOBAL);
+    .setScope(SlashCommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     if (
