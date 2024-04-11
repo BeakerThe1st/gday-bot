@@ -21,6 +21,7 @@ be adapted and used successfully in any server.
 2. Clone this repo
 3. Run `npm install` in the root directory
 4. Run `npm build && npm run start` in the root directory 
+
 Please note that you will most likely want to adapt parts of the bot before using it in your own community, in particular, 
 you will need to change values in globals.ts, as well as removing the gBye & rApple plugins which will likely provide
 very little utility outside of their designated purpose.
