@@ -1,3 +1,4 @@
-export const useError = (message: string) => {
-    console.log(`[ERROR]: ${message}`);
+export const useError = (error: any) => {
+    console.error(`[ERROR]: ${error}`);
+    console.dir(error);
 };
