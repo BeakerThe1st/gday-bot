@@ -45,10 +45,7 @@ const getChatResponse = async (message: Message) => {
         return null;
     }
     //BEAKER ONLY
-    if (
-        message.channel.id !== "1228203485648916500" &&
-        message.author.id !== "537861332532461579"
-    ) {
+    if (message.author.id !== "537861332532461579") {
         return null;
     }
     message.channel.sendTyping();
