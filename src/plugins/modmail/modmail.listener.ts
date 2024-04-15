@@ -1,12 +1,11 @@
 import { useClient, useEvent } from "../../hooks";
 import {
     ButtonStyle,
+    Channel,
     ChannelType,
     Colors,
-    DMChannel,
     EmbedBuilder,
     Events,
-    GuildChannel,
     Message,
     userMention,
 } from "discord.js";
@@ -49,9 +48,7 @@ export const forwardModmailMessage = async (message: Message) => {
         return;
     }
     try {
-        const mailChannel = await useClient().client.channels.fetch(
-            thread.channel,
-        );
+        const mailChannel = await useClient().channels.fetch(thread.channel);
         if (!mailChannel?.isTextBased()) throw new Error("Channel not found");
         const modmailMessage = new ModmailMessage({
             from: message.author.username,
@@ -100,7 +97,7 @@ useButton("modmail:create", async (interaction, args) => {
     return `Thread created!`;
 });
 
-useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
+useEvent(Events.ChannelDelete, async (channel: Channel) => {
     if (!("guildId" in channel && channel.guildId === GUILDS.STAFF)) {
         return;
     }
@@ -108,13 +105,11 @@ useEvent(Events.ChannelDelete, async (channel: GuildChannel | DMChannel) => {
     if (!thread?.value) {
         return;
     }
-    const modmailLog = await useClient().client.channels.fetch(
+    const modmailLog = await useClient().channels.fetch(
         CHANNELS.STAFF.modmail_logs,
     );
     if (modmailLog && "send" in modmailLog) {
-        const author = await useClient().client.users.fetch(
-            thread.value.author,
-        );
+        const author = await useClient().users.fetch(thread.value.author);
         await modmailLog.send({
             embeds: [
                 new EmbedBuilder()

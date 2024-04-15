@@ -14,8 +14,7 @@ const getContext = async (message: Message) => {
     return messageList
         .map((value) => {
             let role: "assistant" | "user" =
-                value.author.id === useClient().client.user?.id ??
-                "958702160617566249"
+                value.author.id === useClient().user?.id ?? "958702160617566249"
                     ? "assistant"
                     : "user";
             return {
@@ -36,7 +35,7 @@ const toolFunctions = {
 };
 
 const getChatResponse = async (message: Message) => {
-    const clientId = useClient().client.user?.id ?? "958702160617566249";
+    const clientId = useClient().user?.id ?? "958702160617566249";
     if (
         !message.mentions.has(clientId) ||
         message.mentions.everyone ||

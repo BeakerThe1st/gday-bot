@@ -25,7 +25,6 @@ const getTimeoutExpiry = (entry: GuildAuditLogsEntry) => {
 useEvent(
     Events.GuildAuditLogEntryCreate,
     async (entry: GuildAuditLogsEntry, guild: Guild) => {
-        const { client } = useClient();
         let { executorId, reason } = entry;
         const { targetId } = entry;
 
@@ -38,7 +37,7 @@ useEvent(
             return;
         }
 
-        const gDayId = client.user?.id;
+        const gDayId = useClient().user?.id;
 
         if (entry.executorId === gDayId) {
             //If the case was by g'day it should have the user's id in the first word of the reason, otherwise we will keep it at g'day.

@@ -30,8 +30,7 @@ useEvent(
                     //Continue to not broadcast in originating guild.
                     continue;
                 }
-                const rxGuild =
-                    await useClient().client.guilds.fetch(gByeGuildId);
+                const rxGuild = await useClient().guilds.fetch(gByeGuildId);
                 //This line verifies they are in fact in the guild
                 await rxGuild.members.fetch(user);
                 const channel = await getGbyeChannel(rxGuild);

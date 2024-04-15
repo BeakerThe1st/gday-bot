@@ -26,9 +26,8 @@ const mailThreadSchema = new Schema<IMailThread>({
 
 mailThreadSchema.pre("save", async function () {
     if (!this.isNew) return;
-    const { client } = useClient();
-    const staffServer = await client.guilds.fetch(GUILDS.STAFF);
-    const resolvedAuthor = await client.users.fetch(this.author);
+    const staffServer = await useClient().guilds.fetch(GUILDS.STAFF);
+    const resolvedAuthor = await useClient().users.fetch(this.author);
 
     let rAppleUser = await RAppleUser.findOne({ userId: this.author });
     if (!rAppleUser) {
@@ -60,9 +59,7 @@ mailThreadSchema.pre("save", async function () {
 
 mailThreadSchema.post("save", async function () {
     try {
-        const resolvedAuthor = await useClient().client.users.fetch(
-            this.author,
-        );
+        const resolvedAuthor = await useClient().users.fetch(this.author);
         const initialMessage = await resolvedAuthor.dmChannel?.messages.fetch(
             this.initialMessage as Snowflake,
         );

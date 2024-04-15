@@ -30,9 +30,9 @@ useChatCommand(builder, async (interaction) => {
         return "That command can only be run in a channel!";
     }
     const messages = await interaction.channel.messages.fetch();
-    const author = await useClient().client.users.fetch(castThread.author);
+    const author = await useClient().users.fetch(castThread.author);
     const { username: authorUsername } = author;
-    const logChannel = await useClient().client.channels.fetch(
+    const logChannel = await useClient().channels.fetch(
         CHANNELS.STAFF.modmail_logs,
     );
     if (!logChannel?.isTextBased()) {

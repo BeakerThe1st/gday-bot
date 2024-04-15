@@ -28,7 +28,7 @@ useChatCommand(builder, async (interaction) => {
     }
     const body = interaction.options.getString("message", true);
     const attachment = interaction.options.getAttachment("attachment");
-    const user = await useClient().client.users.fetch(thread.author);
+    const user = await useClient().users.fetch(thread.author);
     const message = new ModmailMessage({
         from: interaction.user.username,
         to: user.username,

@@ -22,7 +22,7 @@ export const fetchGbyeBans = async (user: User) => {
     const bans: GuildBan[] = [];
     for (const gByeGuildId of gByeGuilds) {
         try {
-            const guild = await useClient().client.guilds.fetch(gByeGuildId);
+            const guild = await useClient().guilds.fetch(gByeGuildId);
             const ban = await guild.bans.fetch(user);
             bans.push(ban);
         } catch (error: any) {
@@ -65,7 +65,7 @@ export const getGbyeChannel = async (guild: Guild) => {
     if (!config?.channel) {
         return null;
     }
-    const channel = await useClient().client.channels.fetch(config.channel);
+    const channel = await useClient().channels.fetch(config.channel);
     if (!channel || !("send" in channel)) {
         return null;
     }

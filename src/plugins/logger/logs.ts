@@ -12,7 +12,7 @@ export enum LOG_THREADS {
 type LogItem = EmbedBuilder | MessageCreateOptions;
 
 export const log = async (thread: LOG_THREADS, item: LogItem) => {
-    const channel = await useClient().client.channels.fetch(thread);
+    const channel = await useClient().channels.fetch(thread);
     if (item instanceof EmbedBuilder) {
         item = { embeds: [item] };
     }

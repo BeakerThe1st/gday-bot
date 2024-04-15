@@ -47,7 +47,7 @@ useChatCommand(builder, async (interaction) => {
 });
 
 useButton("santa:apply", async (interaction) => {
-    const apps = await useClient().client.channels.fetch(
+    const apps = await useClient().channels.fetch(
         CHANNELS.MAIN.santa_applications,
     );
     if (!apps?.isTextBased()) {

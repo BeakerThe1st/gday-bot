@@ -16,8 +16,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/guild-info", async (req, res) => {
-    const { client } = useClient();
-    const guild = await client.guilds.fetch("332309672486895637");
+    const guild = await useClient().guilds.fetch("332309672486895637");
 
     res.status(200).json({
         iconURL: guild.iconURL({ size: 128 }),
@@ -34,9 +33,9 @@ app.post("/ban-appeal", async (req, res) => {
         });
     }
     try {
-        const { client } = useClient();
-        const appealChannel = await client.channels.fetch("700365232542973979");
-        const rApple = await client.guilds.fetch("332309672486895637");
+        const appealChannel =
+            await useClient().channels.fetch("700365232542973979");
+        const rApple = await useClient().guilds.fetch("332309672486895637");
         const ban = await rApple.bans.fetch(id);
         if (!appealChannel || !appealChannel.isTextBased()) {
             throw new Error("Could not find appeal channel");

@@ -27,7 +27,7 @@ useChatCommand(builder, async (interaction) => {
     if (!thread) {
         return "You can only reply within modmail threads.";
     }
-    const recipient = await useClient().client.users.fetch(thread.author);
+    const recipient = await useClient().users.fetch(thread.author);
     const messageInput = new TextInputBuilder()
         .setCustomId("message")
         .setLabel("Message")
@@ -55,7 +55,7 @@ useChatCommand(builder, async (interaction) => {
         ]);
     return modal;
     /*const input = interaction.options.getString("message", true);
-      const user = await useClient().client.users.fetch(thread.author);
+      const user = await useClient().users.fetch(thread.author);
       const message = new ModmailMessage({
           from: interaction.user.username,
           to: user.username,

@@ -29,7 +29,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
         let current = check.bingoEntries.get(id) ?? false;
         check.bingoEntries.set(id, !current);
         await check.save();
-        const logChannel = await useClient().client.channels.fetch("1168318621349597214")
+        const logChannel = await useClient().channels.fetch("1168318621349597214")
         if (logChannel?.isTextBased() && !current) {
             logChannel.send({
                 embeds: [new EmbedBuilder()
@@ -70,7 +70,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
         if (topRightDiag.every((card) => check.bingoEntries.get(card)))
             return true;
     });
-    const rApple = await useClient().client.guilds.fetch("332309672486895637");
+    const rApple = await useClient().guilds.fetch("332309672486895637");
     for (const bingo of filteredBingos) {
         try {
             const member = await rApple.members.fetch(bingo.user);

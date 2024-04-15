@@ -1,10 +1,25 @@
-import { Client } from "discord.js";
+import { Client, GatewayIntentBits, Partials } from "discord.js";
 
 let client: Client;
 
 export const useClient = () => {
-    const setClient = (newClient: Client) => {
-        client = newClient;
-    };
-    return { client, setClient };
+    if (!client) {
+        client = new Client({
+            intents: [
+                GatewayIntentBits.DirectMessages,
+                GatewayIntentBits.DirectMessageTyping,
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.GuildMessages,
+                GatewayIntentBits.GuildMembers,
+                GatewayIntentBits.GuildMessageTyping,
+                GatewayIntentBits.MessageContent,
+                GatewayIntentBits.GuildModeration,
+            ],
+            allowedMentions: {
+                parse: ["users"],
+            },
+            partials: [Partials.GuildMember, Partials.Channel],
+        });
+    }
+    return client;
 };

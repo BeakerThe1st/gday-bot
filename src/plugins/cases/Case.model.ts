@@ -82,8 +82,8 @@ caseSchema.pre("save", async function () {
         return;
     }
     try {
-        const user = await useClient().client.users.fetch(this.target);
-        const guild = await useClient().client.guilds.fetch(this.guild);
+        const user = await useClient().users.fetch(this.target);
+        const guild = await useClient().guilds.fetch(this.guild);
         await user.send(
             `You have been ${friendlyNames.get(this.type)} ${guild.name}${this.reason ? ` for ${inlineCode(this.reason)}` : ""}.${this.duration ? ` Expiry: ${time(new Date(parseInt(this.createdAtTimestamp) + this.duration), TimestampStyles.RelativeTime)}` : ""}${this.type === CaseType.BAN ? "\nAppeal at https://rapple.xyz/appeals" : ""}`,
         );
@@ -95,7 +95,7 @@ caseSchema.pre("save", async function () {
 
 const getUsernameFromId = async (id: string) => {
     try {
-        const user = await useClient().client.users.fetch(id);
+        const user = await useClient().users.fetch(id);
         return user.username;
     } catch {
         return null;
@@ -106,9 +106,7 @@ const getUsernameFromId = async (id: string) => {
 caseSchema.pre("save", async function () {
     if (!this.isNew) return;
     if (this.guild !== GUILDS.MAIN) return;
-    const channel = await useClient().client.channels.fetch(
-        CHANNELS.MAIN.case_log,
-    );
+    const channel = await useClient().channels.fetch(CHANNELS.MAIN.case_log);
     if (channel?.isTextBased()) {
         const embed = new EmbedBuilder()
             .setTitle(`✅ New Case ${this.imported ? "Imported" : "Generated"}`)

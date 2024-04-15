@@ -81,6 +81,7 @@ if (process.env.NODE_ENV === "development") {
             buildersByScope.set(scope, []);
         }
         await updateSlashCommands();
+        console.log("Slash commands cleaned up, exiting.");
         process.exit(0);
     };
     process.on("SIGTERM", commandCleanup);

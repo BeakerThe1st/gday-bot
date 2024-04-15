@@ -1,62 +1,22 @@
-import { useClient, useEnv, useEvent } from "./hooks";
 import "./env";
-import fs from "fs";
-import path from "path";
-import {
-    ActivityType,
-    Client,
-    GatewayIntentBits,
-    Partials,
-    User,
-} from "discord.js";
+import { useClient, useEnv, useEvent } from "./hooks";
+import { ActivityType, Client, User } from "discord.js";
 import mongoose from "mongoose";
+import { loadFilesFromFolder } from "./loader";
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.DirectMessageTyping,
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessageTyping,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildBans,
-    ],
-    allowedMentions: {
-        parse: ["users"],
-    },
-    partials: [Partials.GuildMember, Partials.Channel],
-});
-
-useClient().setClient(client);
-const loadFilesFromFolder = (folder: string) => {
-    const folderUrl = new URL(folder, import.meta.url);
-    const files = fs.readdirSync(folderUrl);
-    for (const file of files) {
-        const filePath = path.join(folderUrl.href, file);
-        if (!filePath.includes(".")) {
-            loadFilesFromFolder(filePath);
-        } else if (file.endsWith(".ts") || file.endsWith(".js")) {
-            if (file.includes(".model.")) {
-                continue;
-            }
-            import(filePath)
-                .then(() => console.log(`Loaded ${file}`))
-                .catch(() => console.error(`Error loading ${file}`));
-        } else {
-            console.warn(`${file} was present in /plugins but ignored.`);
-        }
-    }
+// @ts-ignore
+User.prototype.toString = function (): string {
+    return `<@${this.id}> (${this.username})`;
 };
 
-loadFilesFromFolder("./plugins");
-
 try {
-    await client.login(useEnv("DISCORD_TOKEN"));
-} catch {
-    console.log("UNABLE TO LOGIN");
+    await useClient().login(useEnv("DISCORD_TOKEN"));
+} catch (error) {
+    console.error(`Unable to login: ${error}`);
     process.exit(1);
 }
+
+loadFilesFromFolder("./plugins");
 
 let statuses: [ActivityType, string][];
 if (process.env.NODE_ENV === "development") {
@@ -76,16 +36,12 @@ if (process.env.NODE_ENV === "development") {
     statuses = [[ActivityType.Playing, "DM to contact staff."]];
 }
 
-// @ts-ignore
-User.prototype.toString = function (): string {
-    return `<@${this.id}> (${this.username})`;
-};
-
 useEvent("ready", async (client: Client) => {
     try {
         await mongoose.connect(useEnv("MONGO_URI"));
     } catch (error) {
-        console.warn(`Error connecting to database: ${error}`);
+        console.error(`Error connecting to database: ${error}`);
+        process.exit(1);
     }
 
     const chosenStatus = statuses[Math.floor(Math.random() * statuses.length)];

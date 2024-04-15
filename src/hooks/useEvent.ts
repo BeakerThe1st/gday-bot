@@ -10,8 +10,7 @@ export const useEvent = <K extends keyof ClientEvents>(
     eventName: K,
     executor: EventHandler<K>,
 ) => {
-    const { client } = useClient();
-    client.on(eventName, async (...args: ClientEvents[K]) => {
+    useClient().on(eventName, async (...args: ClientEvents[K]) => {
         try {
             await executor(...args);
         } catch (error) {

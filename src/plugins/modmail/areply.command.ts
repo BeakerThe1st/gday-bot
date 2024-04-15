@@ -27,7 +27,7 @@ useChatCommand(builder, async (interaction) => {
         return "You can only reply within modmail threads.";
     }
     const input = interaction.options.getString("message", true);
-    const user = await useClient().client.users.fetch(thread.author);
+    const user = await useClient().users.fetch(thread.author);
     const attachment = interaction.options.getAttachment("attachment");
     const message = new ModmailMessage({
         from: interaction.user.username,

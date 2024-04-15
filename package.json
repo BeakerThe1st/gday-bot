@@ -1,7 +1,7 @@
 {
-  "name": "bonjour-v2",
+  "name": "gday-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord bot intended to supplement, rather than replace, native moderation",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "build": "tsc",
     "start": "node --import=extensionless/register ./dist/index.js"
   },
-  "author": "",
+  "author": "BeakerThe1st",
   "license": "ISC",
   "dependencies": {
     "canvas": "^2.11.2",

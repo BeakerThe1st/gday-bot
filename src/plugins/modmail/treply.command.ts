@@ -42,7 +42,7 @@ useChatCommand(builder, async (interaction) => {
         return `${inlineCode(tagName)} is not a valid tag.`;
     }
     const anon = interaction.options.getBoolean("anonymous");
-    const user = await useClient().client.users.fetch(thread.author);
+    const user = await useClient().users.fetch(thread.author);
     const message = new ModmailMessage({
         from: interaction.user.username,
         to: user.username,
