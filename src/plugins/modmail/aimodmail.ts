@@ -4,7 +4,7 @@ import {
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
 import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
-useChatCommand(
+/*useChatCommand(
     new SlashCommandBuilder()
         .setName("simulate_modmail")
         .setDescription("AI modmail simulation")
@@ -36,4 +36,4 @@ useChatCommand(
         });
         return chat.choices[0].message.content ?? "not sure sorry";
     },
-);
+);*/
