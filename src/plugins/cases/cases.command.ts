@@ -1,11 +1,19 @@
-import { bold, PermissionFlagsBits, userMention } from "discord.js";
+import {
+    ActionRowBuilder,
+    bold,
+    ButtonBuilder,
+    ButtonStyle,
+    Message,
+    PermissionFlagsBits,
+    userMention,
+} from "discord.js";
 import {
     SlashCommandBuilder,
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
 import { Case } from "./Case.model";
-import { useChatCommand } from "../../hooks/useChatCommand";
-import { RAppleUser } from "../rApple/RAppleUser.model";
+import { useChatCommand, useButton } from "../../hooks";
+import { GdayButtonBuilder } from "../../builders/GdayButtonBuilder";
 
 const builder = new SlashCommandBuilder()
     .setName("cases")
@@ -31,13 +39,15 @@ const builder = new SlashCommandBuilder()
                 { name: "Kick", value: "KICK" },
                 { name: "Timeout", value: "TIMEOUT" },
             ),
-    );
-
+    )
+    .setDeferrable(false);
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+    await interaction.reply("Fetching cases for ya cobber...");
+    //Create a filter and push it to messagesToFilters
     const executor = interaction.options.getUser("executor");
     const target = interaction.options.getUser("target");
     const type = interaction.options.getString("type");
-    let filter: any = {
+    let filter: CaseMessageFilter = {
         deleted: false,
     };
     if (executor) {
@@ -49,43 +59,130 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
     if (type) {
         filter.type = type;
     }
-    const count = await Case.count(filter);
-    let hasScratchpad = false;
 
-    if (target) {
-        const user = await RAppleUser.findOne({ userId: target.id });
-        if (user?.scratchpad) {
-            hasScratchpad = true;
-        }
-    }
-
-    if (count < 1) {
-        return `Sorry mate, couldn't find any cases that match your search${hasScratchpad ? ` but they've got a scratchpad entry` : ""}! 🤠`;
-    }
-    const results = await Case.find(filter)
-        .sort({ createdAtTimestamp: "desc" })
-        .limit(6);
-
-    let resultsList = results.reduce((acc, result) => {
-        let currentStr = `${bold(result._id)} - ${result.type} on ${userMention(
-            result.target,
-        )}`;
-        if (result.executor) {
-            currentStr += ` by ${userMention(result.executor)}`;
-        }
-        if (result.reason) {
-            currentStr += ` for ${result.reason}`;
-        }
-        return acc + `\n- ${currentStr.replaceAll("\n", " ")}`;
-    }, "");
-
-    if (hasScratchpad) {
-        resultsList += `\n\n📝 User has scratchpad entry`;
-    }
-
-    if (count > 6) {
-        return `Strewth! Found ${count.toLocaleString()} cases that match what you're after. Check out the latest 6!\n${resultsList}`;
-    } else {
-        return `Found ${count.toLocaleString()} cases that fit the bill. Here ya go cobber!\n${resultsList}`;
-    }
+    const paginatedCases = new PaginatedCasesMessage(
+        await interaction.fetchReply(),
+        filter,
+    );
+    await paginatedCases.update();
+    return null;
 });
+
+const messageIdsToPagination = new Map<string, PaginatedCasesMessage>();
+
+useButton("cases:pagination", async (interaction, args) => {
+    const pagination = messageIdsToPagination.get(interaction.message.id);
+    if (!pagination) {
+        return {
+            content: `Sorry cobber! Page navigation only works for 10 minutes, you might have to search again!!`,
+            ephemeral: true,
+        };
+    }
+    const content = await (args[0] === "next"
+        ? pagination.showNext()
+        : pagination.showPrev());
+    return {
+        content,
+        ephemeral: true,
+    };
+});
+
+interface CaseMessageFilter {
+    deleted?: boolean;
+    executor?: string;
+    target?: string;
+    type?: string;
+}
+
+class PaginatedCasesMessage {
+    message: Message;
+    filter: CaseMessageFilter;
+    page: number;
+    maxPages?: number;
+    constructor(message: Message, filter: CaseMessageFilter) {
+        this.message = message;
+        this.filter = filter;
+        this.page = 1;
+        messageIdsToPagination.set(message.id, this);
+        setTimeout(this.destroy, 10 * 60 * 1000);
+    }
+
+    private async generateMessage() {
+        const count = await Case.count(this.filter);
+        this.maxPages = Math.ceil(count / 6);
+        if (count < 1) {
+            return `Sorry mate, couldn't find any cases that match your search! 🤠`;
+        }
+
+        const results = await Case.find(this.filter)
+            .sort({ createdAtTimestamp: "desc" })
+            .skip((this.page - 1) * 6)
+            .limit(6);
+        const resultsString = results.reduce((acc, result) => {
+            let currentStr = `${bold(result._id)} - ${result.type} on ${userMention(
+                result.target,
+            )}`;
+            if (result.executor) {
+                currentStr += ` by ${userMention(result.executor)}`;
+            }
+            if (result.reason) {
+                currentStr += ` for ${result.reason}`;
+            }
+            return acc + `\n- ${currentStr.replaceAll("\n", " ")}`;
+        }, "");
+
+        if (count <= 6) {
+            //No pagination required, we can display them all
+            await this.destroy();
+            return `Found ${count.toLocaleString()} cases that fit the bill. Here ya go cobber!\n${resultsString}`;
+        }
+
+        //Otherwise return w/ pagination
+        const actionRow = new ActionRowBuilder<
+            GdayButtonBuilder | ButtonBuilder
+        >().addComponents(
+            new GdayButtonBuilder("cases:pagination")
+                .setStyle(ButtonStyle.Secondary)
+                .setEmoji("⬅️")
+                .addArg("prev"),
+            new ButtonBuilder()
+                .setCustomId("dummy")
+                .setLabel(`Page ${this.page}/${this.maxPages}`)
+                .setStyle(ButtonStyle.Secondary)
+                .setDisabled(true),
+            new GdayButtonBuilder("cases:pagination")
+                .setStyle(ButtonStyle.Secondary)
+                .setEmoji("➡️")
+                .addArg("next"),
+        );
+        return {
+            content: `Strewth! Found ${count.toLocaleString()} cases that match what you're after:\n${resultsString}`,
+            components: [actionRow],
+        };
+    }
+    async update() {
+        await this.message.edit(await this.generateMessage());
+    }
+
+    async showNext() {
+        if (this.page === this.maxPages) {
+            return `I'm already showing you the last page!`;
+        }
+        this.page += 1;
+        await this.update();
+        return `Showing next page`;
+    }
+
+    async showPrev() {
+        if (this.page === 1) {
+            return `I'm already showing you the first page!`;
+        }
+        this.page -= 1;
+        await this.update();
+        return `Showing previous page`;
+    }
+
+    private async destroy() {
+        messageIdsToPagination.delete(this.message.id);
+    }
+}
