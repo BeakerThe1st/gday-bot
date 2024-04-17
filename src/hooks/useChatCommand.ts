@@ -52,6 +52,7 @@ useInteraction(async (interaction: Interaction) => {
 });
 
 export const updateSlashCommands = async () => {
+    console.log(`Pushing slash commands`);
     const rest = new REST({ version: "10" }).setToken(useEnv("DISCORD_TOKEN"));
     const clientId = useEnv("DISCORD_CLIENT_ID");
     for (const [scope, builders] of buildersByScope) {
@@ -69,7 +70,7 @@ export const updateSlashCommands = async () => {
     }
 };
 
-setTimeout(updateSlashCommands, 5000);
+setTimeout(updateSlashCommands, 7500);
 
 if (process.env.NODE_ENV === "development") {
     const commandCleanup = async () => {
