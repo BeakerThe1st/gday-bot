@@ -2,6 +2,7 @@ import {
     ActionRowBuilder,
     bold,
     ButtonBuilder,
+    ButtonInteraction,
     ButtonStyle,
     Message,
     PermissionFlagsBits,
@@ -42,7 +43,7 @@ const builder = new SlashCommandBuilder()
     )
     .setDeferrable(false);
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
-    await interaction.reply("Fetching cases for ya cobber...");
+    await interaction.deferReply();
     //Create a filter and push it to messagesToFilters
     const executor = interaction.options.getUser("executor");
     const target = interaction.options.getUser("target");
@@ -63,8 +64,9 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
     const paginatedCases = new PaginatedCasesMessage(
         await interaction.fetchReply(),
         filter,
+        interaction.user.id,
     );
-    await paginatedCases.update();
+    await interaction.editReply(await paginatedCases.generateMessage());
     return null;
 });
 
@@ -79,12 +81,15 @@ useButton("cases:pagination", async (interaction, args) => {
         };
     }
     const content = await (args[0] === "next"
-        ? pagination.showNext()
-        : pagination.showPrev());
-    return {
-        content,
-        ephemeral: true,
-    };
+        ? pagination.showNext(interaction)
+        : pagination.showPrev(interaction));
+    if (content) {
+        return {
+            content,
+            ephemeral: true,
+        };
+    }
+    return null;
 });
 
 interface CaseMessageFilter {
@@ -98,16 +103,18 @@ class PaginatedCasesMessage {
     message: Message;
     filter: CaseMessageFilter;
     page: number;
+    owner: string;
     maxPages?: number;
-    constructor(message: Message, filter: CaseMessageFilter) {
+    constructor(message: Message, filter: CaseMessageFilter, owner: string) {
         this.message = message;
         this.filter = filter;
         this.page = 1;
+        this.owner = owner;
         messageIdsToPagination.set(message.id, this);
         setTimeout(this.destroy, 10 * 60 * 1000);
     }
 
-    private async generateMessage() {
+    async generateMessage() {
         const count = await Case.count(this.filter);
         this.maxPages = Math.ceil(count / 6);
         if (count < 1) {
@@ -164,22 +171,28 @@ class PaginatedCasesMessage {
         await this.message.edit(await this.generateMessage());
     }
 
-    async showNext() {
+    async showNext(interaction: ButtonInteraction) {
+        if (interaction.user.id !== this.owner) {
+            return `You'll need to make your own search mate!`;
+        }
         if (this.page === this.maxPages) {
             return `I'm already showing you the last page!`;
         }
         this.page += 1;
-        await this.update();
-        return `Showing next page`;
+        await interaction.update(await this.generateMessage());
+        return null;
     }
 
-    async showPrev() {
+    async showPrev(interaction: ButtonInteraction) {
+        if (interaction.user.id !== this.owner) {
+            return `You'll need to make your own search mate!`;
+        }
         if (this.page === 1) {
             return `I'm already showing you the first page!`;
         }
         this.page -= 1;
-        await this.update();
-        return `Showing previous page`;
+        await interaction.update(await this.generateMessage());
+        return null;
     }
 
     private async destroy() {
