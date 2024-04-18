@@ -35,7 +35,7 @@ useEvent(
                 await rxGuild.members.fetch(user);
                 const channel = await getGbyeChannel(rxGuild);
                 await channel?.send({
-                    content: `# G'bye \n${user} (${user.username}) was banned from ${txGuild.name}${reason ? ` for ${inlineCode(reason)}` : `. No reason specified`}.`,
+                    content: `# G'bye \n${user} was banned from ${txGuild.name}${reason ? ` for ${inlineCode(reason)}` : `. No reason specified`}.`,
                     allowedMentions: { parse: [] },
                 });
             } catch {
