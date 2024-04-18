@@ -8,6 +8,7 @@ import {
     BaseMessageOptions,
     ButtonBuilder,
     ButtonStyle,
+    cleanContent,
     EmbedBuilder,
     Message,
     User,
@@ -32,8 +33,14 @@ const polls = new Map<string, PollCommand>();
 
 useChatCommand(builder, async (interaction) => {
     const message = await interaction.fetchReply();
+    if (!interaction.channel) {
+        throw new Error("Poll can only be used in channels.");
+    }
     const poll = new PollCommand(
-        interaction.options.getString("question", true),
+        cleanContent(
+            interaction.options.getString("question", true),
+            interaction.channel,
+        ),
         message,
     );
     polls.set(message.id, poll);
