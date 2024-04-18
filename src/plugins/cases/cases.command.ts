@@ -40,10 +40,8 @@ const builder = new SlashCommandBuilder()
                 { name: "Kick", value: "KICK" },
                 { name: "Timeout", value: "TIMEOUT" },
             ),
-    )
-    .setDeferrable(false);
+    );
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
-    await interaction.deferReply();
     //Create a filter and push it to messagesToFilters
     const executor = interaction.options.getUser("executor");
     const target = interaction.options.getUser("target");
