@@ -70,8 +70,6 @@ export const updateSlashCommands = async () => {
     }
 };
 
-setTimeout(updateSlashCommands, 7500);
-
 if (process.env.NODE_ENV === "development") {
     const commandCleanup = async () => {
         setTimeout(() => {
