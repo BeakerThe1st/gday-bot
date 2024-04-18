@@ -1,9 +1,3 @@
-import { useChatCommand, useOpenAI } from "../../hooks";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
-import { ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
 /*useChatCommand(
     new SlashCommandBuilder()
         .setName("simulate_modmail")

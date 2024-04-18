@@ -13,7 +13,7 @@ import {
     SlashCommandScope,
 } from "../../builders/SlashCommandBuilder";
 import { Case } from "./Case.model";
-import { useChatCommand, useButton } from "../../hooks";
+import { useButton, useChatCommand } from "../../hooks";
 import { GdayButtonBuilder } from "../../builders/GdayButtonBuilder";
 
 const builder = new SlashCommandBuilder()
@@ -103,6 +103,7 @@ class PaginatedCasesMessage {
     page: number;
     owner: string;
     maxPages?: number;
+
     constructor(message: Message, filter: CaseMessageFilter, owner: string) {
         this.message = message;
         this.filter = filter;
@@ -165,6 +166,7 @@ class PaginatedCasesMessage {
             components: [actionRow],
         };
     }
+
     async update() {
         await this.message.edit(await this.generateMessage());
     }
