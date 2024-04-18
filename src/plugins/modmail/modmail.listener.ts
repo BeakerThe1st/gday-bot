@@ -32,7 +32,7 @@ export const forwardModmailMessage = async (message: Message) => {
             .setTitle("G'day from the r/Apple mod team!")
             .setColor(Colors.Aqua)
             .setDescription(
-                "Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/332310122904944652 and wait patiently for a reply. If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!",
+                "Thanks for getting in touch!\n\n **Just a quick heads up, this is not for tech support.** If you are after help with a tech issue, pop a message in https://discord.com/channels/332309672486895637/1230544750701187194 and wait patiently for a reply. If your message is about a server-related issue, click the create thread button below and we'll be in touch shortly!",
             );
         await message.reply({
             embeds: [embed],
