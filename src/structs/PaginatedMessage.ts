@@ -60,7 +60,10 @@ export class PaginatedMessage<T> {
         }, "");
 
         if (count <= this.options.perPage) {
-            return `${this.options.preamble}\n${resultsString}`;
+            return {
+                content: `${this.options.preamble}\n${resultsString}`,
+                allowedMentions: { parse: [] },
+            };
         }
 
         const actionRow = new ActionRowBuilder<
@@ -92,9 +95,10 @@ export class PaginatedMessage<T> {
             return `You'll need to make your own search mate!`;
         }
         if (this.page === this.maxPages) {
-            return `I'm already showing you the last page!`;
+            this.page = 1;
+        } else {
+            this.page += 1;
         }
-        this.page += 1;
         await interaction.update(await this.generateMessage());
         return null;
     }
@@ -104,9 +108,13 @@ export class PaginatedMessage<T> {
             return `You'll need to make your own search mate!`;
         }
         if (this.page === 1) {
-            return `I'm already showing you the first page!`;
+            if (!this.maxPages) {
+                return `Doesn't work like that mate!`;
+            }
+            this.page = this.maxPages;
+        } else {
+            this.page -= 1;
         }
-        this.page -= 1;
         await interaction.update(await this.generateMessage());
         return null;
     }
