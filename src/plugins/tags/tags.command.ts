@@ -105,7 +105,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
                 query: Tag.find({ guild: guildId }).sort({ name: 1 }),
                 stringify: (tag) =>
                     `${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`,
-                perPage: 6,
+                perPage: 10,
                 owner: interaction.user.id,
             });
         /*const tags = await fetchTags(guildId);
