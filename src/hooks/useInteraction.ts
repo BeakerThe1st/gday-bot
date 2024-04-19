@@ -8,12 +8,14 @@ import {
 } from "discord.js";
 import { useEvent } from "./useEvent";
 import { useError } from "./useError";
+import { PaginatedMessage } from "../structs/PaginatedMessage";
 
 export type InteractionReply =
     | string
     | MessagePayload
     | InteractionReplyOptions
     | ModalBuilder
+    | PaginatedMessage<any>
     | null;
 
 type InteractionHandler = (
@@ -52,11 +54,23 @@ export const useInteraction = (handler: InteractionHandler) => {
                     );
                 }
                 await interaction.showModal(response);
-            } else {
-                await (alreadyReplied
-                    ? interaction.editReply(response)
-                    : interaction.reply(response));
+                return;
             }
+            const reply = (
+                r: string | MessagePayload | InteractionReplyOptions,
+            ) => {
+                return alreadyReplied
+                    ? interaction.editReply(r)
+                    : interaction.reply(r);
+            };
+
+            if (response instanceof PaginatedMessage) {
+                await reply(await response.generateMessage());
+                response.setMessageId((await interaction.fetchReply()).id);
+                return;
+            }
+
+            await reply(response);
         } catch (error) {
             useError(`Error attempting to respond to interaction: ${error}`);
         }
