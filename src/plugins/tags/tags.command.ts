@@ -12,11 +12,11 @@ import {
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+} from "../../structs/SlashCommandBuilder";
+import { useChatCommand } from "../../hooks";
 import { createTag, deleteTag, editTag, fetchTags } from "./tags";
-import { useEvent } from "../../hooks";
-import { Tag } from "./Tag.model";
+import { useEvent, usePagination } from "../../hooks";
+import { ITag, Tag } from "./Tag.model";
 
 const builder = new SlashCommandBuilder()
     .setName("tags")
@@ -99,7 +99,16 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
     // TODO: Need to figure out why we get [ERROR]: Error with interactionCreate event, Error [InteractionAlreadyReplied]: The reply to this interaction has already been sent or deferred. every time we interact with the modals, even though everything's working fine.
     switch (subcommand) {
         case "list":
-            const tags = await fetchTags(guildId);
+            return usePagination<ITag>({
+                preamble: `Here are all ya tags cobber:`,
+                emptyMsg: `Crikey, there are no tags in this server mate!`,
+                query: Tag.find({ guild: guildId }).sort({ name: 1 }),
+                stringify: (tag) =>
+                    `${inlineCode(tag.name)} by ${userMention(tag.author)} (${tag.usesCount} uses)`,
+                perPage: 6,
+                owner: interaction.user.id,
+            });
+        /*const tags = await fetchTags(guildId);
             if (!tags) {
                 return "Crikey, there are no tags in this server mate!";
             }
@@ -109,7 +118,7 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
             return {
                 content: `Here are all ya tags cobber:\n ${tagStrings.join("")}`,
                 allowedMentions: { parse: [] },
-            };
+            };*/
         case "create":
             modal
                 .setCustomId("tagCreate")

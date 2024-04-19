@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { useClient } from "../../hooks";
-import { GdayButtonBuilder } from "../../builders/GdayButtonBuilder";
+import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
 
 const app = express();
 

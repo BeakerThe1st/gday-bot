@@ -3,7 +3,7 @@ import { GuildMember, PermissionFlagsBits } from "discord.js";
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 
 const builder = new SlashCommandBuilder()
     .setName("eb")

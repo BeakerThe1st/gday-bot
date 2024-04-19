@@ -2,7 +2,7 @@ import { useChatCommand } from "../../../hooks/useChatCommand";
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../../builders/SlashCommandBuilder";
+} from "../../../structs/SlashCommandBuilder";
 import {
     ActionRowBuilder,
     BaseMessageOptions,
@@ -13,7 +13,7 @@ import {
     Message,
     User,
 } from "discord.js";
-import { GdayButtonBuilder } from "../../../builders/GdayButtonBuilder";
+import { GdayButtonBuilder } from "../../../structs/GdayButtonBuilder";
 import { useButton } from "../../../hooks/useButton";
 
 const builder = new SlashCommandBuilder()

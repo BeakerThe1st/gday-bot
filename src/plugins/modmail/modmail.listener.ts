@@ -13,7 +13,7 @@ import { MailThread } from "./MailThread";
 import { CHANNELS, GUILDS } from "../../globals";
 import { ModmailMessage } from "./ModmailMessage";
 import { RAppleUser } from "../rApple/RAppleUser.model";
-import { GdayButtonBuilder } from "../../builders/GdayButtonBuilder";
+import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
 import { useButton } from "../../hooks/useButton";
 
 export const forwardModmailMessage = async (message: Message) => {

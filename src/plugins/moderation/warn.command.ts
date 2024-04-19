@@ -1,7 +1,7 @@
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 import { inlineCode, PermissionFlagsBits } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { Case, CaseType } from "../cases/Case.model";

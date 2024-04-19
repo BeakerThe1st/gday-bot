@@ -1,7 +1,7 @@
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { MailThread } from "./MailThread";
 import { useClient } from "../../hooks";

@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "../../../builders/SlashCommandBuilder";
+import { SlashCommandBuilder } from "../../../structs/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()

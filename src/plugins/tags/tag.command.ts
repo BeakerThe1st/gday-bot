@@ -1,7 +1,7 @@
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { Colors, EmbedBuilder, inlineCode, userMention } from "discord.js";
 import { Tag } from "./Tag.model";

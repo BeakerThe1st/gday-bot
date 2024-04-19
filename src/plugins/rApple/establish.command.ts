@@ -1,7 +1,7 @@
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 import { GuildMember, PermissionFlagsBits } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { ROLES } from "../../globals";

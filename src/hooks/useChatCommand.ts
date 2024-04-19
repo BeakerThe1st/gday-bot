@@ -4,11 +4,10 @@ import {
     REST,
     Routes,
 } from "discord.js";
-
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../builders/SlashCommandBuilder";
+} from "../structs/SlashCommandBuilder";
 import { useEnv } from "./useEnv";
 import { useError } from "./useError";
 import { InteractionReply, useInteraction } from "./useInteraction";

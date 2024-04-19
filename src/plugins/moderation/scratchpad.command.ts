@@ -1,7 +1,7 @@
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 import {
     ActionRowBuilder,
     ButtonStyle,
@@ -15,7 +15,7 @@ import {
 } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { RAppleUser } from "../rApple/RAppleUser.model";
-import { GdayButtonBuilder } from "../../builders/GdayButtonBuilder";
+import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
 import { useButton } from "../../hooks/useButton";
 import { useInteraction } from "../../hooks/useInteraction";
 

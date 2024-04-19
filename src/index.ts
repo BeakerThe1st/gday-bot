@@ -1,4 +1,5 @@
 import "./env";
+import "./hooks/useButton";
 import { useClient, useEnv, useEvent } from "./hooks";
 import { ActivityType, Client, User } from "discord.js";
 import mongoose from "mongoose";
@@ -8,6 +9,8 @@ import { loadFilesFromFolder } from "./loader";
 User.prototype.toString = function (): string {
     return `<@${this.id}> (${this.username})`;
 };
+
+useClient().setMaxListeners(20);
 
 try {
     await useClient().login(useEnv("DISCORD_TOKEN"));

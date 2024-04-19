@@ -11,11 +11,11 @@ import {
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../builders/SlashCommandBuilder";
+} from "../structs/SlashCommandBuilder";
 import { useChatCommand } from "../hooks/useChatCommand";
 import { useButton } from "../hooks/useButton";
 import { CHANNELS, ROLES } from "../globals";
-import { GdayButtonBuilder } from "../builders/GdayButtonBuilder";
+import { GdayButtonBuilder } from "../structs/GdayButtonBuilder";
 
 const builder = new SlashCommandBuilder()
     .setName("sendsanta")

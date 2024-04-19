@@ -6,3 +6,4 @@ export * from "./useError";
 export * from "./useEvent";
 export * from "./useInteraction";
 export * from "./useOpenAI";
+export * from "./usePagination";

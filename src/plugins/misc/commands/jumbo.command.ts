@@ -2,7 +2,7 @@ import { PermissionFlagsBits } from "discord.js";
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../../builders/SlashCommandBuilder";
+} from "../../../structs/SlashCommandBuilder";
 import { useChatCommand } from "../../../hooks/useChatCommand";
 
 const builder = new SlashCommandBuilder()

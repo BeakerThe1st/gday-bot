@@ -14,7 +14,7 @@ import {
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 import { NEXT_EVENT } from "../../globals";
 
 const builder = new SlashCommandBuilder()

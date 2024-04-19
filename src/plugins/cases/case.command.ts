@@ -10,7 +10,7 @@ import {
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../../builders/SlashCommandBuilder";
+} from "../../structs/SlashCommandBuilder";
 import { Case } from "./Case.model";
 
 const builder = new SlashCommandBuilder()

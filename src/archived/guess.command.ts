@@ -2,7 +2,7 @@ import { useChatCommand } from "../hooks/useChatCommand";
 import {
     SlashCommandBuilder,
     SlashCommandScope,
-} from "../builders/SlashCommandBuilder";
+} from "../structs/SlashCommandBuilder";
 import { Guess } from "./Guess.model";
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
 
