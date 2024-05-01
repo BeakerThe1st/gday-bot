@@ -1,9 +1,19 @@
-import { ButtonStyle, EmbedBuilder, userMention } from "discord.js";
+import {
+    bold,
+    ButtonStyle,
+    codeBlock,
+    EmbedBuilder,
+    inlineCode,
+    time,
+    userMention,
+} from "discord.js";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { useClient } from "../../hooks";
 import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
+import { Case } from "../cases/Case.model";
+import { GUILDS } from "../../globals";
 
 const app = express();
 
@@ -35,8 +45,14 @@ app.post("/ban-appeal", async (req, res) => {
     try {
         const appealChannel =
             await useClient().channels.fetch("700365232542973979");
-        const rApple = await useClient().guilds.fetch("332309672486895637");
+        const rApple = await useClient().guilds.fetch(GUILDS.MAIN);
         const ban = await rApple.bans.fetch(id);
+        const banCase = await Case.findOne({
+            target: id,
+            guild: GUILDS.MAIN,
+            type: "BAN",
+            deleted: false,
+        });
         if (!appealChannel || !appealChannel.isTextBased()) {
             throw new Error("Could not find appeal channel");
         }
@@ -44,18 +60,23 @@ app.post("/ban-appeal", async (req, res) => {
             .setTitle("Ban Appeal")
             .setDescription(`${userMention(id)}`)
             .setColor("Blue")
-            .addFields(
-                { name: "User", value: `${tag} (${id})`, inline: true },
-                {
-                    name: "Ban Reason",
-                    value: ban.reason ?? "No reason found",
-                    inline: true,
-                },
-                {
-                    name: "Argument",
-                    value: reason,
-                },
-            );
+            .addFields({ name: "User", value: `${tag} (${id})`, inline: true });
+        if (banCase) {
+            embed.addFields({
+                name: "Fetched Ban Case",
+                value: `${inlineCode(banCase._id)} by ${banCase.executor ? userMention(banCase.executor) : "Unknown"} for ${banCase.reason ?? "No reason specified"} at ${time(Math.round(+banCase.createdAtTimestamp / 1000))}`,
+            });
+        } else {
+            embed.addFields({
+                name: "Fetched Reason",
+                value: ban.reason ?? "None",
+                inline: true,
+            });
+        }
+        embed.addFields({ name: "Argument", value: reason });
+        embed.setFooter({
+            text: `User has ${await Case.count({ target: id, guild: GUILDS.MAIN, deleted: false })} total case(s)`,
+        });
         await appealChannel.send({
             content: `${id}`,
             embeds: [embed],
