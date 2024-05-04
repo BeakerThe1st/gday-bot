@@ -77,7 +77,7 @@ friendlyNames.set(CaseType.WARN, "warned in");
 friendlyNames.set(CaseType.UNBAN, "unbanned from");
 caseSchema.pre("save", async function () {
     if (!this.isNew) return;
-    if (this.imported) {
+    if (this.imported || process.env.NODE_ENV === "development") {
         this.userNotified = false;
         return;
     }
@@ -106,6 +106,7 @@ const getUsernameFromId = async (id: string) => {
 caseSchema.pre("save", async function () {
     if (!this.isNew) return;
     if (this.guild !== GUILDS.MAIN) return;
+    if (process.env.NODE_ENV === "development") return;
     const channel = await useClient().channels.fetch(CHANNELS.MAIN.case_log);
     if (channel?.isTextBased()) {
         const embed = new EmbedBuilder()
