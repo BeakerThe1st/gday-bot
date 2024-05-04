@@ -4,7 +4,7 @@ import {
 } from "../../structs/SlashCommandBuilder";
 import { AttachmentBuilder } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
-import { bingoItems } from "./bingoItems";
+import { bingoTiles } from "./bingoTiles";
 import { Bingo } from "./Bingo.model";
 import { createCanvas, loadImage } from "canvas";
 import path from "path";
@@ -18,7 +18,7 @@ const builder = new SlashCommandBuilder()
 
 const generateBoard = () => {
     const board: string[][] = [];
-    let availableOptions = Array.from(bingoItems.keys());
+    let availableOptions = Array.from(bingoTiles.keys());
     availableOptions.splice(availableOptions.indexOf("free_space"), 1);
     for (let rowIndex = 0; rowIndex < 5; rowIndex++) {
         let row: string[] = [];
@@ -42,10 +42,7 @@ const prettyBoard = async (board: string[][]) => {
     const canvas = createCanvas(600, 655);
     const ctx = canvas.getContext("2d");
 
-    const imageDir = path.join(
-        process.cwd(),
-        "/src/plugins/bingo/bingo_images/",
-    );
+    const imageDir = path.join(process.cwd(), "/src/plugins/bingo/assets/");
 
     const bg = await loadImage(`${imageDir}bg.png`);
     ctx.drawImage(bg, 0, 0, 600, 655);
@@ -60,10 +57,9 @@ const prettyBoard = async (board: string[][]) => {
         row.forEach(async (col, colIndex) => {
             const x = SQUARE_WIDTH * rowIndex + X_OFFSET;
             const y = SQUARE_WIDTH * colIndex + Y_OFFSET;
-
             try {
                 const isChecked = check?.bingoEntries.get(col) ?? false;
-                const image = await loadImage(`${imageDir}${col}.png`);
+                const image = await loadImage(`${imageDir}/tiles/${col}.png`);
                 if (isChecked === true) {
                     const checkedImage = await loadImage(
                         `${imageDir}checked.png`,
@@ -78,25 +74,51 @@ const prettyBoard = async (board: string[][]) => {
                 }
                 ctx.drawImage(image, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
             } catch {
+                ctx.font = "semibold 14px SF Pro Display";
                 ctx.fillStyle = "white";
-                ctx.fillText(col, x + 5, y + 20);
+                ctx.textAlign = "center";
+                const lines: string[] = [""];
+                for (const word of (bingoTiles.get(col) ?? "empty").split(
+                    " ",
+                )) {
+                    let added = false;
+                    for (let i = 0; i < lines.length; i++) {
+                        if (
+                            ctx.measureText(`${lines[i]} ${word}`).width <
+                            SQUARE_WIDTH * 0.9
+                        ) {
+                            lines[i] = `${lines[i]} ${word}`;
+                            added = true;
+                            break;
+                        }
+                    }
+                    if (!added) {
+                        lines.push(`${word}`);
+                    }
+                }
+                for (let i = 0; i < lines.length; i++) {
+                    ctx.fillText(
+                        lines[i],
+                        x + SQUARE_WIDTH / 2,
+                        y + SQUARE_WIDTH / 2 + 7 + 14 * i,
+                    );
+                }
             }
         });
     });
 
-    return new AttachmentBuilder(await canvas.createPNGStream(), {
+    return new AttachmentBuilder(canvas.createPNGStream(), {
         name: "bingo.png",
     });
 };
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
-    const PERSIST = true;
+    const PERSIST = false;
     const userId = interaction.user.id;
     let board;
     if (PERSIST) {
         board = await Bingo.findOne({ user: userId });
         if (!board) {
-            return "You missed out on bingo this time, sorry!";
             board = await Bingo.create({
                 user: userId,
                 board: generateBoard(),

@@ -9,10 +9,10 @@ interface NextEvent {
 
 //Timestamp is in ms
 export const NEXT_EVENT: null | NextEvent = {
-    name: "WWDC 2024",
-    timestamp: 1718038800000,
-    image: "https://www.apple.com/newsroom/images/2024/03/apples-worldwide-developers-conference-returns-june-10-2024/article/Apple-WWDC24-event-announcement-hero_big.jpg.large_2x.jpg",
-    color: "#93f7f9",
+    name: "Let Loose",
+    timestamp: 1715090400000,
+    image: "https://cdn.discordapp.com/attachments/332310178277883916/1232926541399199754/Let-Loose.png",
+    color: "#E9703D",
 };
 
 //THESE GUILD IDS ARE MIRRORED SlashCommandBuilder, CHANGE THEM THERE TOO

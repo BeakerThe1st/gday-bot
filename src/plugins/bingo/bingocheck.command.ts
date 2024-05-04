@@ -2,11 +2,12 @@ import {
     SlashCommandBuilder,
     SlashCommandScope,
 } from "../../structs/SlashCommandBuilder";
-import { PermissionFlagsBits } from "discord.js";
+import { bold, Colors, EmbedBuilder, PermissionFlagsBits } from "discord.js";
 import { useChatCommand } from "../../hooks/useChatCommand";
 import { BingoCheck } from "./BingoCheck.model";
 import { useClient } from "../../hooks";
 import { Bingo } from "./Bingo.model";
+import { bingoTiles } from "./bingoTiles";
 
 const builder = new SlashCommandBuilder()
     .setName("bingocheck")
@@ -21,26 +22,29 @@ const builder = new SlashCommandBuilder()
     .setEphemeral(true)
     .setScope(SlashCommandScope.MAIN_GUILD);
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
-    /*const id = interaction.options.getString("bingo_id", true);
-        if (!Array.from(bingoItems.keys()).includes(id)) {
-            return "Not a bingo key!"
-        }
-        const check = await BingoCheck.findOne() ?? await BingoCheck.create({});
-        let current = check.bingoEntries.get(id) ?? false;
-        check.bingoEntries.set(id, !current);
-        await check.save();
-        const logChannel = await useClient().channels.fetch("1168318621349597214")
-        if (logChannel?.isTextBased() && !current) {
-            logChannel.send({
-                embeds: [new EmbedBuilder()
-                    .setDescription(`${bold(bingoItems.get(id) ?? "A tile")} has been checked!\n\nView your personalised bingo board with </bingo:1146636308765212746>`)
+    const id = interaction.options.getString("bingo_id", true);
+    if (!Array.from(bingoTiles.keys()).includes(id)) {
+        return "Not a bingo key!";
+    }
+    const check = (await BingoCheck.findOne()) ?? (await BingoCheck.create({}));
+    let current = check.bingoEntries.get(id) ?? false;
+    check.bingoEntries.set(id, !current);
+    await check.save();
+    const logChannel = await useClient().channels.fetch("1168318621349597214");
+    if (logChannel?.isTextBased() && !current) {
+        logChannel.send({
+            embeds: [
+                new EmbedBuilder()
+                    .setDescription(
+                        `${bold(bingoTiles.get(id) ?? "A tile")} has been checked!\n\nView your personalised bingo board with </bingo:1146636308765212746>`,
+                    )
                     .setColor(Colors.Green)
-                    .setThumbnail(`https://rapple.xyz/bingo_images/${id}.png`)
-                ]
-            })
-        }
-        return `${current ? "Unchecked" : "Checked"} \`${id}\``;*/
-    const bingos = await Bingo.find();
+                    .setThumbnail(`https://rapple.xyz/bingo_images/${id}.png`),
+            ],
+        });
+    }
+    return `${current ? "Unchecked" : "Checked"} \`${id}\``;
+    /*const bingos = await Bingo.find();
     const check = (await BingoCheck.findOne()) ?? (await BingoCheck.create({}));
     const filteredBingos = bingos.filter((bingo) => {
         const { board } = bingo;
@@ -79,5 +83,5 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
             //ignored
         }
     }
-    return `Applied role to ${filteredBingos.length} entries`;
+    return `Applied role to ${filteredBingos.length} entries`;*/
 });
