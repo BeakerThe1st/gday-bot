@@ -113,6 +113,9 @@ const prettyBoard = async (board: string[][]) => {
 };
 
 useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+    if (process.env.NODE_ENV !== "development") {
+        return `Bingo is not quite ready yet. Stay tuned!`;
+    }
     const PERSIST = false;
     const userId = interaction.user.id;
     let board;
