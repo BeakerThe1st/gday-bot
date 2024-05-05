@@ -30,13 +30,13 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
     let current = check.bingoEntries.get(id) ?? false;
     check.bingoEntries.set(id, !current);
     await check.save();
-    const logChannel = await useClient().channels.fetch("1168318621349597214");
+    const logChannel = await useClient().channels.fetch("1236508820201541713");
     if (logChannel?.isTextBased() && !current) {
         logChannel.send({
             embeds: [
                 new EmbedBuilder()
                     .setDescription(
-                        `${bold(bingoTiles.get(id) ?? "A tile")} has been checked!\n\nView your personalised bingo board with </bingo:1146636308765212746>`,
+                        `${bold(bingoTiles.get(id) ?? "A tile")} has been checked!\n\nView your personalised bingo board with </bingo:1236301356315181077>`,
                     )
                     .setColor(Colors.Green)
                     .setThumbnail(`https://rapple.xyz/bingo_images/${id}.png`),
