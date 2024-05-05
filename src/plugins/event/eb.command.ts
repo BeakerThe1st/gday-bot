@@ -4,6 +4,8 @@ import {
     SlashCommandBuilder,
     SlashCommandScope,
 } from "../../structs/SlashCommandBuilder";
+import { GUILDS, ROLES } from "../../globals";
+import { useClient } from "../../hooks";
 
 const builder = new SlashCommandBuilder()
     .setName("eb")
@@ -25,10 +27,8 @@ useChatCommand(builder, async (interaction) => {
     if (!(member instanceof GuildMember)) {
         throw new Error("Member is not a GuildMember");
     }
-    await member.roles.add("1166975967433080894");
-    const logChannel = await member.client.channels.fetch(
-        "1168668680075366420",
-    );
+    await member.roles.add(ROLES.MAIN.event_blocklisted);
+    const logChannel = await useClient().channels.fetch("1126077157895053312");
     if (logChannel?.isTextBased()) {
         await logChannel.send({
             content: `${interaction.user} event blocklisted ${member}`,
