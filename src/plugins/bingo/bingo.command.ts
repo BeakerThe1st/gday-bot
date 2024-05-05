@@ -44,8 +44,13 @@ const prettyBoard = async (board: string[][]) => {
 
     const imageDir = path.join(process.cwd(), "/src/plugins/bingo/assets/");
 
-    const bg = await loadImage(`${imageDir}bg.png`);
-    ctx.drawImage(bg, 0, 0, 600, 655);
+    try {
+        const bg = await loadImage(`${imageDir}bg.png`);
+        ctx.drawImage(bg, 0, 0, 600, 655);
+    } catch {
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, 600, 655);
+    }
 
     const X_OFFSET = 25;
     const Y_OFFSET = 80;
@@ -57,26 +62,24 @@ const prettyBoard = async (board: string[][]) => {
         row.forEach(async (col, colIndex) => {
             const x = SQUARE_WIDTH * rowIndex + X_OFFSET;
             const y = SQUARE_WIDTH * colIndex + Y_OFFSET;
+            if (check?.bingoEntries.get(col)) {
+                const checkedImage = await loadImage(`${imageDir}checked.png`);
+                ctx.drawImage(
+                    checkedImage,
+                    x - 1,
+                    y - 1,
+                    SQUARE_WIDTH + 2,
+                    SQUARE_WIDTH + 2,
+                );
+            }
             try {
-                const isChecked = check?.bingoEntries.get(col) ?? false;
                 const image = await loadImage(`${imageDir}/tiles/${col}.png`);
-                if (isChecked === true) {
-                    const checkedImage = await loadImage(
-                        `${imageDir}checked.png`,
-                    );
-                    ctx.drawImage(
-                        checkedImage,
-                        x - 1,
-                        y - 1,
-                        SQUARE_WIDTH + 2,
-                        SQUARE_WIDTH + 2,
-                    );
-                }
                 ctx.drawImage(image, x, y, SQUARE_WIDTH, SQUARE_WIDTH);
             } catch {
                 ctx.font = "semibold 14px SF Pro Display";
-                ctx.fillStyle = "white";
+                ctx.fillStyle = "black";
                 ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
                 const lines: string[] = [""];
                 for (const word of (bingoTiles.get(col) ?? "empty").split(
                     " ",
@@ -97,11 +100,13 @@ const prettyBoard = async (board: string[][]) => {
                     }
                 }
                 for (let i = 0; i < lines.length; i++) {
-                    ctx.fillText(
-                        lines[i],
-                        x + SQUARE_WIDTH / 2,
-                        y + SQUARE_WIDTH / 2 + 7 + 14 * i,
-                    );
+                    let yOffset = y + SQUARE_WIDTH / 2 + 7;
+                    if (i < lines.length / 2) {
+                        yOffset -= 14 * (lines.length / 2 - i) - 1;
+                    } else {
+                        yOffset += 14 * (lines.length / 2 - i) + 1;
+                    }
+                    ctx.fillText(lines[i], x + SQUARE_WIDTH / 2, yOffset);
                 }
             }
         });
