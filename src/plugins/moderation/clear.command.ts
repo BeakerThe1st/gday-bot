@@ -8,6 +8,9 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Clears out messages in a channel, clean up like a true blue Aussie.",
     )
+    .setDMPermission(false)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setScope(CommandScope.MAIN_GUILD)
     .addIntegerOption((option) =>
         option
             .setName("amount")
@@ -28,12 +31,8 @@ const builder = new GdayChatCommandBuilder()
             .setDescription("Channel to clear messages from")
             .setRequired(false)
             .addChannelTypes(ChannelType.GuildText),
-    )
-    .setDMPermission(false)
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-    .setScope(CommandScope.MAIN_GUILD);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     if (
         !interaction.guild ||
         !interaction.channel ||

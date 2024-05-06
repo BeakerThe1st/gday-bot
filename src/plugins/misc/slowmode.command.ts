@@ -8,6 +8,9 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Slows things down in the current channel, like taking it easy on a hot arvo.",
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+    .setScope(CommandScope.MAIN_GUILD)
+    .setEphemeral(true)
     .addIntegerOption((option) =>
         option
             .setName("interval")
@@ -15,12 +18,8 @@ const builder = new GdayChatCommandBuilder()
             .setMinValue(0)
             .setMaxValue(21600)
             .setRequired(true),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
-    .setScope(CommandScope.MAIN_GUILD)
-    .setEphemeral(true);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const interval = interaction.options.getInteger("interval", true);
     const { channel } = interaction;
     if (!(channel && "setRateLimitPerUser" in channel)) {

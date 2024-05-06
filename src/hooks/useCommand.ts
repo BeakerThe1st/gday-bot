@@ -83,27 +83,6 @@ useInteraction(async (interaction) => {
     // @ts-ignore
     return command.handler(interaction);
 });
-
-/*
-useInteraction(async (interaction: Interaction) => {
-    if (!interaction.isChatInputCommand()) {
-        return null;
-    }
-    const { commandName } = interaction;
-    const handler = commandHandlers.get(commandName);
-    const builder = buildersByName.get(commandName);
-    if (!(handler && builder)) {
-        throw new Error(
-            `${commandName} does not have a corresponding handler or builder.`,
-        );
-    }
-    if (builder.deferrable) {
-        await interaction.deferReply({ ephemeral: builder.ephemeral });
-    }
-    return handler(interaction);
-});
- */
-
 export const registerCommands = async () => {
     console.log(`Registering commands`);
     const rest = new REST({ version: "10" }).setToken(useEnv("DISCORD_TOKEN"));
@@ -131,22 +110,36 @@ export const registerCommands = async () => {
             useError(`${error}`);
         }
     }
+    console.log(`Command registration complete`);
 };
 
-/*if (process.env.NODE_ENV === "development") {
-    const commandCleanup = async () => {
-        setTimeout(() => {
-            console.error("Slash command cleanup incomplete, exiting anyway.");
-            process.exit(1);
-        }, 5000);
-        for (const scope of buildersByScope.keys()) {
-            buildersByScope.set(scope, []);
+export const deregisterCommands = async () => {
+    console.log(`Deregistering commands`);
+    const rest = new REST({ version: "10" }).setToken(useEnv("DISCORD_TOKEN"));
+    const clientId = useEnv("DISCORD_CLIENT_ID");
+    const usedScopes = new Set<CommandScope>();
+    const collectScopes = (command: ChatCommand | ContextMenuCommand) =>
+        usedScopes.add(command.builder.scope);
+    chatCommands.forEach(collectScopes);
+    contextMenuCommands.forEach(collectScopes);
+    for (const scope of usedScopes) {
+        const route =
+            scope === CommandScope.GLOBAL
+                ? Routes.applicationCommands(clientId)
+                : Routes.applicationGuildCommands(clientId, scope);
+        try {
+            await rest.put(route, {
+                body: [],
+            });
+        } catch (error) {
+            useError(`${error}`);
         }
-        await updateSlashCommands();
-        console.log("Slash commands cleaned up, exiting.");
-        process.exit(0);
-    };
-    process.on("SIGTERM", commandCleanup);
-    process.on("SIGINT", commandCleanup);
-    process.on("exit", commandCleanup);
-}*/
+    }
+    console.log(`Command deregistration complete`);
+};
+
+if (process.env.NODE_ENV === "development") {
+    process.on("SIGTERM", deregisterCommands);
+    process.on("SIGINT", deregisterCommands);
+    process.on("exit", deregisterCommands);
+}

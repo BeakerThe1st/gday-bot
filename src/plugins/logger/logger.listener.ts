@@ -1,14 +1,12 @@
 import { useEvent } from "../../hooks";
 import {
     AuditLogEvent,
-    Collection,
     Colors,
     EmbedBuilder,
     Events,
     Guild,
     GuildAuditLogsEntry,
     GuildMember,
-    GuildTextBasedChannel,
     inlineCode,
     Message,
     PartialGuildMember,
@@ -53,39 +51,32 @@ useEvent(Events.MessageDelete, (message: Message | PartialMessage) => {
 });
 
 //Bulk delete Logs
-useEvent(
-    Events.MessageBulkDelete,
-    (
-        messages: Collection<string, Message | PartialMessage>,
-        channel: GuildTextBasedChannel,
-    ) => {
-        if (channel.guildId !== GUILDS.MAIN) return;
-        messages = messages.reverse();
-        const authors = new Set<string>();
-        for (const [, message] of messages) {
-            if (message.author?.id) authors.add(message.author.id);
-        }
-        const embed = new EmbedBuilder()
-            .setDescription(
-                `:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(
-                    authors,
-                )
-                    .map((id) => inlineCode(id))
-                    .join(", ")}]`,
+useEvent(Events.MessageBulkDelete, (messages, channel) => {
+    if (channel.guildId !== GUILDS.MAIN) return;
+    const authors = new Set<string>();
+    for (const [, message] of messages) {
+        if (message.author?.id) authors.add(message.author.id);
+    }
+    const embed = new EmbedBuilder()
+        .setDescription(
+            `:wastebasket: ${messages.size} messages deleted in ${channel}\n\nAuthors: [${Array.from(
+                authors,
             )
-            .setColor(Colors.DarkRed)
-            .setTimestamp(Date.now());
-        log(LOG_THREADS.DELETION, {
-            embeds: [embed],
-            files: [
-                {
-                    attachment: createBulkMessageLogFile(messages),
-                    name: `${channel.guild.name.replace(/[\\W_]+/g, "")}-bulk-delete-${Date.now()}.txt`,
-                },
-            ],
-        });
-    },
-);
+                .map((id) => inlineCode(id))
+                .join(", ")}]`,
+        )
+        .setColor(Colors.DarkRed)
+        .setTimestamp(Date.now());
+    log(LOG_THREADS.DELETION, {
+        embeds: [embed],
+        files: [
+            {
+                attachment: createBulkMessageLogFile(messages),
+                name: `${channel.guild.name.replace(/[\\W_]+/g, "")}-bulk-delete-${Date.now()}.txt`,
+            },
+        ],
+    });
+});
 
 //Role Logs
 useEvent(

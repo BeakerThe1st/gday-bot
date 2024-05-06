@@ -8,17 +8,16 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Makes me, G’day, have a chinwag and say a message, like having a yarn with a mate.\n",
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setEphemeral(true)
+    .setScope(CommandScope.GLOBAL)
     .addStringOption((option) =>
         option
             .setName("message")
             .setDescription("Message to say")
             .setRequired(true),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-    .setEphemeral(true)
-    .setScope(CommandScope.GLOBAL);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const message = interaction.options.getString("message", true);
     if (!interaction.channel) {
         throw new Error("Channel undefined.");

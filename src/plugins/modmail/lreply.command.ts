@@ -20,7 +20,7 @@ const builder = new GdayChatCommandBuilder()
     .setDeferrable(false)
     .setScope(CommandScope.STAFF_SERVER);
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const thread = await MailThread.findOne({ channel: interaction.channelId });
     if (!thread) {
         return "You can only reply within modmail threads.";

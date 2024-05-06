@@ -30,15 +30,15 @@ const userCommandBuilder = new GdayUserCommandBuilder()
 const chatCommandBuilder = new GdayChatCommandBuilder()
     .setName("scratchpad")
     .setDescription("Shows a user's scratchpad")
+    .setEphemeral(true)
+    .setScope(CommandScope.MAIN_GUILD)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to view the scratchpad for.")
             .setRequired(true),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .setEphemeral(true)
-    .setScope(CommandScope.MAIN_GUILD);
+    );
 
 const fetchResponse = async (targetId: string) => {
     let rAppleUser = await RAppleUser.findOne({ userId: targetId });
@@ -63,9 +63,12 @@ const fetchResponse = async (targetId: string) => {
         ],
     };
 };
-useChatCommand(chatCommandBuilder, async (interaction) => {
-    return fetchResponse(interaction.options.getUser("user", true).id);
-});
+useChatCommand(
+    chatCommandBuilder as GdayChatCommandBuilder,
+    async (interaction) => {
+        return fetchResponse(interaction.options.getUser("user", true).id);
+    },
+);
 
 useUserCommand(userCommandBuilder, async (interaction) => {
     return fetchResponse(interaction.targetId);

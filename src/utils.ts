@@ -1,15 +1,16 @@
-import { Collection, Message, PartialMessage } from "discord.js";
+import { Message, PartialMessage, ReadonlyCollection } from "discord.js";
 
 export const listify = (items: string[]) => {
     return `- ${items.join(`\n- `)}`;
 };
 
 export const createBulkMessageLogFile = (
-    messages: Collection<string, Message | PartialMessage>,
+    messageCollection: ReadonlyCollection<string, Message | PartialMessage>,
 ) => {
     let fileContent = "";
+    let messages = messageCollection.map((value) => value);
     messages = messages.reverse();
-    for (const [, message] of messages) {
+    for (const message of messages) {
         const { author } = message;
         if (fileContent !== "") {
             fileContent += "\n";

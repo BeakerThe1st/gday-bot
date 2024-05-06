@@ -15,6 +15,8 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Puts a user on mute for a bit, like when ya mum tells ya to be quiet.",
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option
             .setName("user")
@@ -29,11 +31,8 @@ const builder = new GdayChatCommandBuilder()
     )
     .addStringOption((option) =>
         option.setName("reason").setDescription("Reason for the mute."),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .setScope(CommandScope.MAIN_GUILD);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const MAX_MUTE = 2419200000; // 28 days in ms, limit provided by Discord API.
 
     const user = interaction.options.getUser("user", true);

@@ -10,17 +10,17 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Keep someone buttoned up tighter than a kangaroo's pouch during the event.",
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
+    .setScope(CommandScope.MAIN_GUILD)
+    .setEphemeral(true)
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to event blocklist.")
             .setRequired(true),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
-    .setScope(CommandScope.MAIN_GUILD)
-    .setEphemeral(true);
+    );
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const member = interaction.options.getMember("user");
     if (!(member instanceof GuildMember)) {
         throw new Error("Member is not a GuildMember");

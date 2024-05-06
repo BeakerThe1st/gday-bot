@@ -8,6 +8,7 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Chuck in a username and get back a snap of their profile pic.",
     )
+    .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option
             .setName("user")
@@ -15,10 +16,8 @@ const builder = new GdayChatCommandBuilder()
                 "Bloke or sheila whose mug you wanna snag a squiz at.",
             )
             .setRequired(false),
-    )
-    .setScope(CommandScope.MAIN_GUILD);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const user = interaction.options.getUser("user", false) ?? interaction.user;
     const embed = new EmbedBuilder()
         .setColor(0x333333)

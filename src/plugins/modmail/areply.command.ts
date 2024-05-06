@@ -8,6 +8,7 @@ import { CommandScope } from "../../structs/GdayCommandBuilder";
 const builder = new GdayChatCommandBuilder()
     .setName("areply")
     .setDescription("Anonymously reply within a modmail thread.")
+    .setScope(CommandScope.STAFF_SERVER)
     .addStringOption((option) =>
         option
             .setName("message")
@@ -16,10 +17,8 @@ const builder = new GdayChatCommandBuilder()
     )
     .addAttachmentOption((option) =>
         option.setName("attachment").setDescription("Attachment to attach."),
-    )
-    .setScope(CommandScope.STAFF_SERVER);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const thread = await MailThread.findOne({ channel: interaction.channelId });
     if (!thread) {
         return "You can only reply within modmail threads.";

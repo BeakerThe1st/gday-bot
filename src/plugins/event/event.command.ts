@@ -9,7 +9,7 @@ const builder = new GdayChatCommandBuilder()
     .setDescription("Throws up info on the next Apple event!")
     .setScope(CommandScope.MAIN_GUILD);
 
-useChatCommand(builder, () => {
+useChatCommand(builder as GdayChatCommandBuilder, () => {
     const event = NEXT_EVENT;
     if (!event) {
         return "no event soz";

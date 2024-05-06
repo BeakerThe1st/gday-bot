@@ -9,7 +9,7 @@ import {
     userMention,
 } from "discord.js";
 import { GdayChatCommandBuilder } from "../structs/GdayChatCommandBuilder";
-import { useChatCommand, useButton } from "../hooks/";
+import { useButton, useChatCommand } from "../hooks/";
 import { CHANNELS, ROLES } from "../globals";
 import { GdayButtonBuilder } from "../structs/GdayButtonBuilder";
 import { CommandScope } from "../structs/GdayCommandBuilder";
@@ -22,7 +22,7 @@ const builder = new GdayChatCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setScope(CommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const { channel } = interaction;
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()

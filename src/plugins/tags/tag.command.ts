@@ -10,6 +10,8 @@ const builder = new GdayChatCommandBuilder()
         "Digs out a tag for a bit of a chat, like calling out a mate.",
     )
     .setDeferrable(false)
+    .setDMPermission(false)
+    .setScope(CommandScope.GLOBAL)
     .addStringOption((option) =>
         option
             .setName("name")
@@ -19,10 +21,9 @@ const builder = new GdayChatCommandBuilder()
     )
     .addUserOption((option) =>
         option.setName("user").setDescription("User to ping with the tag."),
-    )
-    .setScope(CommandScope.GLOBAL);
+    );
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const tagName = interaction.options.getString("name", true);
     const target = interaction.options.getUser("user");
     if (!interaction.guild)

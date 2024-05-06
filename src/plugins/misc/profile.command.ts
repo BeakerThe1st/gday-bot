@@ -18,15 +18,15 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Takes a squiz at a user's profile, like having a stickybeak.",
     )
+    .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("The user to view the profile for")
             .setRequired(true),
-    )
-    .setScope(CommandScope.MAIN_GUILD);
+    );
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const member = interaction.options.getMember("user");
     const user = interaction.options.getUser("user", true);
     const embed = new EmbedBuilder()

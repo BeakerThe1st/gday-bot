@@ -4,19 +4,19 @@ import { useChatCommand } from "../../hooks/";
 import { ROLES } from "../../globals";
 import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder: GdayChatCommandBuilder = new GdayChatCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("establish")
     .setDescription("Hooks a user up with the image role, good on ya mate!")
+    .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to establish")
             .setRequired(true),
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
-    .setScope(CommandScope.MAIN_GUILD);
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles);
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const member = interaction.options.getMember("user");
     if (!(member instanceof GuildMember)) {
         throw new Error("User is not a member of the guild");

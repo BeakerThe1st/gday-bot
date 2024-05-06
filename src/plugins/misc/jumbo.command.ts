@@ -8,16 +8,15 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Grabs the big version of an emoji, 'cause size matters, mate.",
     )
+    .setScope(CommandScope.MAIN_GUILD)
+    .setDefaultMemberPermissions(PermissionFlagsBits.AttachFiles)
     .addStringOption((option) =>
         option
             .setName("emoji")
             .setDescription("Emoji to jumbo size.")
             .setRequired(true),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.AttachFiles)
-    .setScope(CommandScope.MAIN_GUILD);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const emoji = interaction.options.getString("emoji", true).trim();
 
     const emojis = emoji.split(">");

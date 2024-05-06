@@ -6,16 +6,15 @@ import { CommandScope } from "../../structs/GdayCommandBuilder";
 const builder = new GdayChatCommandBuilder()
     .setName("unmute")
     .setDescription("Unmutes a user")
+    .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
+    .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to unmute.")
             .setRequired(true),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
-    .setScope(CommandScope.MAIN_GUILD);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const member = interaction.options.getMember("user");
     if (!(member instanceof GuildMember)) {
         return `${member} is not a GuildMember.`;

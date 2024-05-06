@@ -1,4 +1,4 @@
-import { useChatCommand } from "../../hooks";
+import { useButton, useChatCommand } from "../../hooks";
 import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import {
     ActionRowBuilder,
@@ -11,8 +11,6 @@ import {
     User,
 } from "discord.js";
 import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
-import { useButton } from "../../hooks";
-import { CommandScope } from "../../structs/GdayCommandBuilder";
 
 const builder = new GdayChatCommandBuilder()
     .setName("poll")
@@ -24,12 +22,11 @@ const builder = new GdayChatCommandBuilder()
             .setName("question")
             .setDescription("The question you want to poll.")
             .setRequired(true),
-    )
-    .setScope(CommandScope.GLOBAL);
+    );
 
 const polls = new Map<string, PollCommand>();
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const message = await interaction.fetchReply();
     if (!interaction.channel) {
         throw new Error("Poll can only be used in channels.");

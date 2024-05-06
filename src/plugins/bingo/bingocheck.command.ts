@@ -10,14 +10,14 @@ const builder = new GdayChatCommandBuilder()
     .setName("bingocheck")
     .setDescription("Checks/unchecks a bingo item")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+    .setEphemeral(true)
+    .setScope(CommandScope.MAIN_GUILD)
     .addStringOption((option) =>
         option
             .setName("bingo_id")
             .setDescription("Bingo item ID")
             .setRequired(true),
-    )
-    .setEphemeral(true)
-    .setScope(CommandScope.MAIN_GUILD);
+    );
 useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoTiles.keys()).includes(id)) {

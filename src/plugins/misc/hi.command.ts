@@ -5,4 +5,4 @@ const builder = new GdayChatCommandBuilder()
     .setName("hi")
     .setDescription("Quick way to say g'day, keep it simple.");
 
-useChatCommand(builder, (interaction) => "hi!");
+useChatCommand(builder as GdayChatCommandBuilder, (interaction) => "hi!");

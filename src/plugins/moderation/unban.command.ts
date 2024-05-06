@@ -8,6 +8,8 @@ const builder = new GdayChatCommandBuilder()
     .setDescription(
         "Gives a user a fair go by unbanning them with the given ID, everyone deserves a second chance.",
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+    .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option
             .setName("user")
@@ -19,11 +21,8 @@ const builder = new GdayChatCommandBuilder()
             .setName("reason")
             .setDescription("Reason for the unban")
             .setRequired(false),
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-    .setScope(CommandScope.MAIN_GUILD);
-
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const user = interaction.options.getUser("user", true);
     const reason = interaction.options.getString("reason");
     if (!interaction.guild) {

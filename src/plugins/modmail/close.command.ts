@@ -9,13 +9,13 @@ import { CommandScope } from "../../structs/GdayCommandBuilder";
 const builder = new GdayChatCommandBuilder()
     .setName("close")
     .setDescription("Closes a modmail thread.")
+    .setScope(CommandScope.STAFF_SERVER)
     .addBooleanOption((option) =>
         option
             .setName("silent")
             .setDescription("Whether to close the thread silently"),
-    )
-    .setScope(CommandScope.STAFF_SERVER);
-useChatCommand(builder, async (interaction) => {
+    );
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const thread: unknown = (await MailThread.findOneAndDelete({
         channel: interaction.channelId,
     })) as unknown;
@@ -55,7 +55,7 @@ useChatCommand(builder, async (interaction) => {
     });
     const silent = interaction.options.getBoolean("silent");
     if (!silent) {
-        author.send({
+        await author.send({
             embeds: [
                 new EmbedBuilder()
                     .setTitle("Thread Closed")

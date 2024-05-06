@@ -21,14 +21,14 @@ useChatCommand(enableGuessBuilder, () => {
 const guessBuilder = new GdayChatCommandBuilder()
     .setName("guess")
     .setDescription("Guess the name of macOS 14.")
+    .setScope(CommandScope.MAIN_GUILD)
+    .setEphemeral(true)
     .addStringOption((option) =>
         option
             .setName("name")
             .setDescription("Your guess for the name of macOS.")
             .setRequired(true),
-    )
-    .setScope(CommandScope.MAIN_GUILD)
-    .setEphemeral(true);
+    );
 
 const toTitleCase = (str: string): string => {
     return str.replace(/\w\S*/g, (txt: string): string => {
@@ -36,7 +36,7 @@ const toTitleCase = (str: string): string => {
     });
 };
 
-useChatCommand(guessBuilder, async (interaction) => {
+useChatCommand(guessBuilder as GdayChatCommandBuilder, async (interaction) => {
     const userId = interaction.user.id;
     const userGuess = toTitleCase(interaction.options.getString("name", true));
 

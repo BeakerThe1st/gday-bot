@@ -7,15 +7,15 @@ import { CommandScope } from "../../structs/GdayCommandBuilder";
 const builder = new GdayChatCommandBuilder()
     .setName("new")
     .setDescription("Creates a new modmail thread.")
+    .setScope(CommandScope.STAFF_SERVER)
     .addUserOption((option) =>
         option
             .setName("user")
             .setDescription("User to create a thread for")
             .setRequired(true),
-    )
-    .setScope(CommandScope.STAFF_SERVER);
+    );
 
-useChatCommand(builder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const target = interaction.options.getUser("user", true);
     const thread = await MailThread.findOne({ author: target.id });
     if (thread) {
