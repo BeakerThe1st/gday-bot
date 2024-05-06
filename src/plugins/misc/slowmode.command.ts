@@ -1,11 +1,9 @@
 import { PermissionFlagsBits } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("slowmode")
     .setDescription(
         "Slows things down in the current channel, like taking it easy on a hot arvo.",
@@ -19,7 +17,7 @@ const builder = new SlashCommandBuilder()
             .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(CommandScope.MAIN_GUILD)
     .setEphemeral(true);
 
 useChatCommand(builder, async (interaction) => {

@@ -1,8 +1,5 @@
-import { useChatCommand } from "../../../hooks/useChatCommand";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../../structs/SlashCommandBuilder";
+import { useChatCommand } from "../../hooks";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import {
     ActionRowBuilder,
     BaseMessageOptions,
@@ -13,10 +10,11 @@ import {
     Message,
     User,
 } from "discord.js";
-import { GdayButtonBuilder } from "../../../structs/GdayButtonBuilder";
-import { useButton } from "../../../hooks/useButton";
+import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
+import { useButton } from "../../hooks";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("poll")
     .setDescription(
         "Gets the convo going with a poll, find out what the mob reckons.",
@@ -27,7 +25,7 @@ const builder = new SlashCommandBuilder()
             .setDescription("The question you want to poll.")
             .setRequired(true),
     )
-    .setScope(SlashCommandScope.GLOBAL);
+    .setScope(CommandScope.GLOBAL);
 
 const polls = new Map<string, PollCommand>();
 

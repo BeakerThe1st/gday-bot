@@ -1,4 +1,4 @@
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks/";
 import {
     EmbedBuilder,
     inlineCode,
@@ -7,17 +7,15 @@ import {
     TimestampStyles,
     userMention,
 } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { Case } from "./Case.model";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("case")
     .setDescription("Manages a given case.")
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(CommandScope.MAIN_GUILD)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("info")
@@ -62,7 +60,7 @@ const builder = new SlashCommandBuilder()
             ),
     );
 
-useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const caseId = interaction.options.getString("case_id", true);
     const givenCase = await Case.findById(caseId);
     if (!givenCase) {

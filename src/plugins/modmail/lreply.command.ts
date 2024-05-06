@@ -1,8 +1,5 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import {
     ActionRowBuilder,
     Events,
@@ -15,12 +12,13 @@ import {
 } from "discord.js";
 import { MailThread } from "./MailThread";
 import { useClient, useEvent } from "../../hooks";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("lreply")
     .setDescription("Construct a long reply to a modmail thread.")
     .setDeferrable(false)
-    .setScope(SlashCommandScope.STAFF_SERVER);
+    .setScope(CommandScope.STAFF_SERVER);
 
 useChatCommand(builder, async (interaction) => {
     const thread = await MailThread.findOne({ channel: interaction.channelId });

@@ -8,22 +8,19 @@ import {
     PermissionFlagsBits,
     userMention,
 } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../structs/SlashCommandBuilder";
-import { useChatCommand } from "../hooks/useChatCommand";
-import { useButton } from "../hooks/useButton";
+import { GdayChatCommandBuilder } from "../structs/GdayChatCommandBuilder";
+import { useChatCommand, useButton } from "../hooks/";
 import { CHANNELS, ROLES } from "../globals";
 import { GdayButtonBuilder } from "../structs/GdayButtonBuilder";
+import { CommandScope } from "../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("sendsanta")
     .setDescription(
         "Throws the Santa squad button into the current channel, getting into the festive spirit, mate.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const { channel } = interaction;

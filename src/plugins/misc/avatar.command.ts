@@ -1,11 +1,9 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import { EmbedBuilder } from "discord.js";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("avatar")
     .setDescription(
         "Chuck in a username and get back a snap of their profile pic.",
@@ -18,7 +16,7 @@ const builder = new SlashCommandBuilder()
             )
             .setRequired(false),
     )
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const user = interaction.options.getUser("user", false) ?? interaction.user;

@@ -15,7 +15,7 @@ export const NEXT_EVENT: null | NextEvent = {
     color: "#E9703D",
 };
 
-//THESE GUILD IDS ARE MIRRORED SlashCommandBuilder, CHANGE THEM THERE TOO
+//THESE GUILD IDS ARE MIRRORED GdayChatCommandBuilder, CHANGE THEM THERE TOO
 export const GUILDS = {
     MAIN: "332309672486895637",
     STAFF: "337792272693461002",

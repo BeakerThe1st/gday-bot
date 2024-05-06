@@ -9,19 +9,16 @@ import {
     TextInputStyle,
     userMention,
 } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks";
-import { createTag, deleteTag, editTag, fetchTags } from "./tags";
-import { useEvent, usePagination } from "../../hooks";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand, useEvent, usePagination } from "../../hooks";
+import { createTag, deleteTag, editTag } from "./tags";
 import { ITag, Tag } from "./Tag.model";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("tags")
     .setDescription("Manages tags.")
-    .setScope(SlashCommandScope.GLOBAL)
+    .setScope(CommandScope.GLOBAL)
     .setDMPermission(false)
     .setDeferrable(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
@@ -68,7 +65,7 @@ const builder = new SlashCommandBuilder()
             ),
     );
 
-useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const subcommand = interaction.options.getSubcommand();
     //DM permission is false, therefore I think we can assert guild as non-null?
     const guildId = interaction.guild!.id;

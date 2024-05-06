@@ -1,11 +1,9 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import { GuildMember, PermissionFlagsBits, userMention } from "discord.js";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("unmute")
     .setDescription("Unmutes a user")
     .addUserOption((option) =>
@@ -15,7 +13,7 @@ const builder = new SlashCommandBuilder()
             .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.MuteMembers)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const member = interaction.options.getMember("user");

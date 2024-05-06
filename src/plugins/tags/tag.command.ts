@@ -1,12 +1,10 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import { Colors, EmbedBuilder, inlineCode, userMention } from "discord.js";
 import { Tag } from "./Tag.model";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("tag")
     .setDescription(
         "Digs out a tag for a bit of a chat, like calling out a mate.",
@@ -22,7 +20,7 @@ const builder = new SlashCommandBuilder()
     .addUserOption((option) =>
         option.setName("user").setDescription("User to ping with the tag."),
     )
-    .setScope(SlashCommandScope.GLOBAL);
+    .setScope(CommandScope.GLOBAL);
 
 useChatCommand(builder, async (interaction) => {
     const tagName = interaction.options.getString("name", true);

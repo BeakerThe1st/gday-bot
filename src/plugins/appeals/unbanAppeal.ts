@@ -1,7 +1,7 @@
 import { useClient } from "../../hooks";
 import { userMention } from "discord.js";
 import { CHANNELS, GUILDS } from "../../globals";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../hooks";
 
 useButton("appeal:unban", async (interaction, [userId]) => {
     await interaction.deferReply({ ephemeral: true });

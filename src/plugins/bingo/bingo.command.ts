@@ -1,20 +1,18 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { AttachmentBuilder } from "discord.js";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks";
 import { bingoTiles } from "./bingoTiles";
 import { Bingo } from "./Bingo.model";
 import { createCanvas, loadImage } from "canvas";
 import path from "path";
 import { BingoCheck } from "./BingoCheck.model";
 import { NEXT_EVENT } from "../../globals";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("bingo")
     .setDescription("Views your bingo card")
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 const generateBoard = () => {
     const board: string[][] = [];
@@ -117,7 +115,7 @@ const prettyBoard = async (board: string[][]) => {
     });
 };
 
-useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     /*if (process.env.NODE_ENV !== "development") {
         return `Bingo is not quite ready yet. Stay tuned!`;
     }*/

@@ -1,11 +1,9 @@
 import { ChannelType, Collection, PermissionFlagsBits } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("clear")
     .setDescription(
         "Clears out messages in a channel, clean up like a true blue Aussie.",
@@ -33,7 +31,7 @@ const builder = new SlashCommandBuilder()
     )
     .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     if (

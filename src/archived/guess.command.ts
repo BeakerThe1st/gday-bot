@@ -1,18 +1,16 @@
-import { useChatCommand } from "../hooks/useChatCommand";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../structs/SlashCommandBuilder";
+import { useChatCommand } from "../hooks/";
+import { GdayChatCommandBuilder } from "../structs/GdayChatCommandBuilder";
 import { Guess } from "./Guess.model";
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
+import { CommandScope } from "../structs/GdayCommandBuilder";
 
 let guessEnabled = true;
 
-const enableGuessBuilder = new SlashCommandBuilder()
+const enableGuessBuilder = new GdayChatCommandBuilder()
     .setName("toggleguess")
     .setDescription("Toggles whether macOS Guess is enabled.")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(CommandScope.MAIN_GUILD)
     .setEphemeral(true);
 
 useChatCommand(enableGuessBuilder, () => {
@@ -20,7 +18,7 @@ useChatCommand(enableGuessBuilder, () => {
     return `${guessEnabled ? "Enabled" : "Disabled"} the guess module.`;
 });
 
-const guessBuilder = new SlashCommandBuilder()
+const guessBuilder = new GdayChatCommandBuilder()
     .setName("guess")
     .setDescription("Guess the name of macOS 14.")
     .addStringOption((option) =>
@@ -29,7 +27,7 @@ const guessBuilder = new SlashCommandBuilder()
             .setDescription("Your guess for the name of macOS.")
             .setRequired(true),
     )
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(CommandScope.MAIN_GUILD)
     .setEphemeral(true);
 
 const toTitleCase = (str: string): string => {

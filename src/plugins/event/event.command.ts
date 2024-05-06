@@ -1,15 +1,13 @@
-import { useChatCommand } from "../../hooks/useChatCommand";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { useChatCommand } from "../../hooks/";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { NEXT_EVENT } from "../../globals";
 import { EmbedBuilder, time, TimestampStyles } from "discord.js";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("event")
     .setDescription("Throws up info on the next Apple event!")
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, () => {
     const event = NEXT_EVENT;

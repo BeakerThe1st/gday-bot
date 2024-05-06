@@ -1,12 +1,10 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { GuildMember, PermissionFlagsBits } from "discord.js";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks/";
 import { ROLES } from "../../globals";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder: SlashCommandBuilder = new SlashCommandBuilder()
+const builder: GdayChatCommandBuilder = new GdayChatCommandBuilder()
     .setName("establish")
     .setDescription("Hooks a user up with the image role, good on ya mate!")
     .addUserOption((option) =>
@@ -16,7 +14,7 @@ const builder: SlashCommandBuilder = new SlashCommandBuilder()
             .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const member = interaction.options.getMember("user");

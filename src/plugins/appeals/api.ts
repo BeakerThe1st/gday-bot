@@ -1,7 +1,5 @@
 import {
-    bold,
     ButtonStyle,
-    codeBlock,
     EmbedBuilder,
     inlineCode,
     time,
@@ -75,7 +73,11 @@ app.post("/ban-appeal", async (req, res) => {
         }
         embed.addFields({ name: "Argument", value: reason });
         embed.setFooter({
-            text: `User has ${await Case.count({ target: id, guild: GUILDS.MAIN, deleted: false })} total case(s)`,
+            text: `User has ${await Case.count({
+                target: id,
+                guild: GUILDS.MAIN,
+                deleted: false,
+            })} total case(s)`,
         });
         await appealChannel.send({
             content: `${id}`,

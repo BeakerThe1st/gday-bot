@@ -1,12 +1,10 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { inlineCode, PermissionFlagsBits } from "discord.js";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks/";
 import { Case, CaseType } from "../cases/Case.model";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("warn")
     .setDescription(
         "Gives a bloke a warning, letting 'em know to pull their head in.",
@@ -25,7 +23,7 @@ const builder = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setEphemeral(true)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const target = interaction.options.getUser("user", true);

@@ -1,11 +1,9 @@
 import { PermissionFlagsBits } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("unban")
     .setDescription(
         "Gives a user a fair go by unbanning them with the given ID, everyone deserves a second chance.",
@@ -23,7 +21,7 @@ const builder = new SlashCommandBuilder()
             .setRequired(false),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const user = interaction.options.getUser("user", true);

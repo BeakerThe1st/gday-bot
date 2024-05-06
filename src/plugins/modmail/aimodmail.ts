@@ -1,5 +1,5 @@
 /*useChatCommand(
-    new SlashCommandBuilder()
+    new GdayChatCommandBuilder()
         .setName("simulate_modmail")
         .setDescription("AI modmail simulation")
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
@@ -9,7 +9,7 @@
                 .setDescription("Message to simulate modmail for")
                 .setRequired(true),
         )
-        .setScope(SlashCommandScope.MAIN_GUILD),
+        .setScope(CommandScope.MAIN_GUILD),
     async (interaction: ChatInputCommandInteraction) => {
         const systemPrompt = `Your name is G'day, you are a Discord bot for the r/Apple Discord server.
         You speak in the style of an Australian and can be a bit cheeky.

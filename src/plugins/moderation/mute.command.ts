@@ -5,14 +5,12 @@ import {
     TimestampStyles,
     userMention,
 } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import parse from "parse-duration";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("mute")
     .setDescription(
         "Puts a user on mute for a bit, like when ya mum tells ya to be quiet.",
@@ -33,7 +31,7 @@ const builder = new SlashCommandBuilder()
         option.setName("reason").setDescription("Reason for the mute."),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const MAX_MUTE = 2419200000; // 28 days in ms, limit provided by Discord API.

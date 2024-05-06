@@ -1,11 +1,9 @@
 import { PermissionFlagsBits } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("jumbo")
     .setDescription(
         "Grabs the big version of an emoji, 'cause size matters, mate.",
@@ -17,7 +15,7 @@ const builder = new SlashCommandBuilder()
             .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.AttachFiles)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const emoji = interaction.options.getString("emoji", true).trim();

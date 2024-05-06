@@ -1,11 +1,9 @@
 import { inlineCode, PermissionFlagsBits } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("say")
     .setDescription(
         "Makes me, G’day, have a chinwag and say a message, like having a yarn with a mate.\n",
@@ -18,7 +16,7 @@ const builder = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setEphemeral(true)
-    .setScope(SlashCommandScope.GLOBAL);
+    .setScope(CommandScope.GLOBAL);
 
 useChatCommand(builder, async (interaction) => {
     const message = interaction.options.getString("message", true);

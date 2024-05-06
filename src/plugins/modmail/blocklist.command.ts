@@ -1,14 +1,12 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import { RAppleUser } from "../rApple/RAppleUser.model";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("blocklist")
     .setDescription("Manages the modmail blocklist")
-    .setScope(SlashCommandScope.STAFF_SERVER)
+    .setScope(CommandScope.STAFF_SERVER)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("add")
@@ -32,7 +30,7 @@ const builder = new SlashCommandBuilder()
             ),
     );
 
-useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const action = interaction.options.getSubcommand();
     const target = interaction.options.getUser("user", true);
     let rAppleUser = await RAppleUser.findOne({ userId: target.id });

@@ -25,6 +25,7 @@ export class PaginatedMessage<T> {
     options: PaginatedMessageOptions<T>;
     page: number;
     maxPages?: number;
+
     constructor(options: PaginatedMessageOptions<T>) {
         this.options = options;
         this.page = 1;

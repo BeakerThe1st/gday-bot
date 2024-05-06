@@ -1,13 +1,11 @@
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks/";
 import { GuildMember, PermissionFlagsBits } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { GUILDS, ROLES } from "../../globals";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { ROLES } from "../../globals";
 import { useClient } from "../../hooks";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("eb")
     .setDescription(
         "Keep someone buttoned up tighter than a kangaroo's pouch during the event.",
@@ -19,7 +17,7 @@ const builder = new SlashCommandBuilder()
             .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(CommandScope.MAIN_GUILD)
     .setEphemeral(true);
 
 useChatCommand(builder, async (interaction) => {

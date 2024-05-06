@@ -1,15 +1,13 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import { inlineCode } from "discord.js";
 import { MailThread } from "./MailThread";
 import { useClient } from "../../hooks";
 import { ModmailMessage } from "./ModmailMessage";
 import { Tag } from "../tags/Tag.model";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("treply")
     .setDescription("Replies with a tag in a modmail thread.")
     .addStringOption((option) =>
@@ -24,7 +22,7 @@ const builder = new SlashCommandBuilder()
             .setName("anonymous")
             .setDescription("Whether to reply anonymously."),
     )
-    .setScope(SlashCommandScope.STAFF_SERVER);
+    .setScope(CommandScope.STAFF_SERVER);
 
 useChatCommand(builder, async (interaction) => {
     const thread = await MailThread.findOne({ channel: interaction.channelId });

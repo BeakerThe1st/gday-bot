@@ -1,8 +1,5 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import {
     Colors,
     EmbedBuilder,
@@ -12,10 +9,11 @@ import {
     time,
     TimestampStyles,
 } from "discord.js";
-import { listify } from "../../../utils";
-import { Case } from "../../cases/Case.model";
+import { listify } from "../../utils";
+import { Case } from "../cases/Case.model";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("profile")
     .setDescription(
         "Takes a squiz at a user's profile, like having a stickybeak.",
@@ -26,7 +24,7 @@ const builder = new SlashCommandBuilder()
             .setDescription("The user to view the profile for")
             .setRequired(true),
     )
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
 useChatCommand(builder, async (interaction) => {
     const member = interaction.options.getMember("user");

@@ -1,14 +1,12 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../../hooks/";
 import { Colors, EmbedBuilder, Message, userMention } from "discord.js";
 import { IMailThread, MailThread } from "./MailThread";
 import { useClient } from "../../hooks";
 import { CHANNELS } from "../../globals";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("close")
     .setDescription("Closes a modmail thread.")
     .addBooleanOption((option) =>
@@ -16,7 +14,7 @@ const builder = new SlashCommandBuilder()
             .setName("silent")
             .setDescription("Whether to close the thread silently"),
     )
-    .setScope(SlashCommandScope.STAFF_SERVER);
+    .setScope(CommandScope.STAFF_SERVER);
 useChatCommand(builder, async (interaction) => {
     const thread: unknown = (await MailThread.findOneAndDelete({
         channel: interaction.channelId,

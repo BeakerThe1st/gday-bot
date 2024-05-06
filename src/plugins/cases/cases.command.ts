@@ -1,28 +1,22 @@
 import {
-    ActionRowBuilder,
     bold,
-    ButtonBuilder,
-    ButtonInteraction,
     ButtonStyle,
-    Message,
     PermissionFlagsBits,
     userMention,
 } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { Case, ICase } from "./Case.model";
-import { useButton, useChatCommand, usePagination } from "../../hooks";
-import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
+import { useChatCommand, usePagination, useUserCommand } from "../../hooks";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
+import { GdayUserCommandBuilder } from "../../structs/GdayUserCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const chatCommandBuilder = new GdayChatCommandBuilder()
     .setName("cases")
     .setDescription(
         "Has a squiz at all the cases in the guild, filtered by your specs.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option.setName("executor").setDescription("Case executor."),
     )
@@ -41,24 +35,13 @@ const builder = new SlashCommandBuilder()
                 { name: "Timeout", value: "TIMEOUT" },
             ),
     );
-useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
-    //Create a filter and push it to messagesToFilters
-    const executor = interaction.options.getUser("executor");
-    const target = interaction.options.getUser("target");
-    const type = interaction.options.getString("type");
-    let filter: any = {
-        deleted: false,
-    };
-    if (executor) {
-        filter.executor = executor.id;
-    }
-    if (target) {
-        filter.target = target.id;
-    }
-    if (type) {
-        filter.type = type;
-    }
 
+const userCommandBuilder = new GdayUserCommandBuilder()
+    .setName("Show cases")
+    .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+    .setScope(CommandScope.MAIN_GUILD);
+
+const getCasePagination = (filter: any, owner: string) => {
     const stringify = (result: ICase) => {
         let str = `${bold(result._id)} - ${result.type} on ${userMention(
             result.target,
@@ -71,7 +54,6 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
         }
         return str;
     };
-
     return usePagination<ICase>({
         preamble: "Found %count cases that fit the bill. Here ya go cobber!",
         emptyMsg:
@@ -79,6 +61,40 @@ useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
         query: Case.find(filter).sort({ createdAtTimestamp: "desc" }),
         stringify,
         perPage: 6,
-        owner: interaction.user.id,
+        owner,
     });
+};
+
+useChatCommand(
+    chatCommandBuilder as GdayChatCommandBuilder,
+    async (interaction) => {
+        //Create a filter and push it to messagesToFilters
+        const executor = interaction.options.getUser("executor");
+        const target = interaction.options.getUser("target");
+        const type = interaction.options.getString("type");
+        let filter: any = {
+            deleted: false,
+        };
+        if (executor) {
+            filter.executor = executor.id;
+        }
+        if (target) {
+            filter.target = target.id;
+        }
+        if (type) {
+            filter.type = type;
+        }
+        return getCasePagination(filter, interaction.user.id);
+    },
+);
+
+useUserCommand(userCommandBuilder, async (interaction) => {
+    return getCasePagination(
+        {
+            guild: interaction.guildId,
+            deleted: false,
+            target: interaction.targetUser.id,
+        },
+        interaction.user.id,
+    );
 });

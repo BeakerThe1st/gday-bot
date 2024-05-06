@@ -1,18 +1,20 @@
-import { SlashCommandBuilder as djsSlashCommandBuilder } from "discord.js";
+import {
+    ApplicationCommandType,
+    ContextMenuCommandBuilder as djsContextMenuCommandBuilder,
+} from "discord.js";
+import { CommandScope, GdayCommandBuilder } from "./GdayCommandBuilder";
 
-export enum SlashCommandScope {
-    GLOBAL,
-    MAIN_GUILD = "332309672486895637",
-    STAFF_SERVER = "337792272693461002",
-}
-
-export class SlashCommandBuilder extends djsSlashCommandBuilder {
+export class GdayUserCommandBuilder
+    extends djsContextMenuCommandBuilder
+    implements GdayCommandBuilder
+{
     public readonly ephemeral: boolean = false;
     public readonly deferrable: boolean = true;
-    public readonly scope: SlashCommandScope = SlashCommandScope.GLOBAL;
+    public readonly scope: CommandScope = CommandScope.GLOBAL;
 
     constructor() {
         super();
+        this.setType(ApplicationCommandType.User);
     }
 
     public setEphemeral(ephemeral: boolean) {
@@ -20,7 +22,7 @@ export class SlashCommandBuilder extends djsSlashCommandBuilder {
         return this;
     }
 
-    public setScope(scope: SlashCommandScope) {
+    public setScope(scope: CommandScope) {
         Reflect.set(this, "scope", scope);
         return this;
     }

@@ -1,7 +1,4 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import {
     ActionRowBuilder,
     ButtonStyle,
@@ -13,13 +10,24 @@ import {
     TextInputStyle,
     userMention,
 } from "discord.js";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import {
+    useButton,
+    useChatCommand,
+    useInteraction,
+    useUserCommand,
+} from "../../hooks/";
 import { RAppleUser } from "../rApple/RAppleUser.model";
 import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
-import { useButton } from "../../hooks/useButton";
-import { useInteraction } from "../../hooks/useInteraction";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
+import { GdayUserCommandBuilder } from "../../structs/GdayUserCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const userCommandBuilder = new GdayUserCommandBuilder()
+    .setName("Show scratchpad")
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+    .setEphemeral(true)
+    .setScope(CommandScope.MAIN_GUILD);
+
+const chatCommandBuilder = new GdayChatCommandBuilder()
     .setName("scratchpad")
     .setDescription("Shows a user's scratchpad")
     .addUserOption((option) =>
@@ -30,10 +38,9 @@ const builder = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setEphemeral(true)
-    .setScope(SlashCommandScope.MAIN_GUILD);
+    .setScope(CommandScope.MAIN_GUILD);
 
-useChatCommand(builder, async (interaction) => {
-    const targetId = interaction.options.getUser("user", true).id;
+const fetchResponse = async (targetId: string) => {
     let rAppleUser = await RAppleUser.findOne({ userId: targetId });
     if (!rAppleUser) {
         rAppleUser = new RAppleUser({ userId: targetId });
@@ -55,6 +62,13 @@ useChatCommand(builder, async (interaction) => {
                 .asActionRow(),
         ],
     };
+};
+useChatCommand(chatCommandBuilder, async (interaction) => {
+    return fetchResponse(interaction.options.getUser("user", true).id);
+});
+
+useUserCommand(userCommandBuilder, async (interaction) => {
+    return fetchResponse(interaction.targetId);
 });
 
 useButton("scratchpad:edit", async (interaction, args) => {

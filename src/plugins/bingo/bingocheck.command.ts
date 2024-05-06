@@ -1,15 +1,12 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { bold, Colors, EmbedBuilder, PermissionFlagsBits } from "discord.js";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks/";
 import { BingoCheck } from "./BingoCheck.model";
 import { useClient } from "../../hooks";
-import { Bingo } from "./Bingo.model";
 import { bingoTiles } from "./bingoTiles";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("bingocheck")
     .setDescription("Checks/unchecks a bingo item")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
@@ -20,8 +17,8 @@ const builder = new SlashCommandBuilder()
             .setRequired(true),
     )
     .setEphemeral(true)
-    .setScope(SlashCommandScope.MAIN_GUILD);
-useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+    .setScope(CommandScope.MAIN_GUILD);
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoTiles.keys()).includes(id)) {
         return "Not a bingo key!";

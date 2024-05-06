@@ -1,4 +1,4 @@
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks/";
 import {
     ActionRowBuilder,
     BaseMessageOptions,
@@ -11,17 +11,15 @@ import {
     time,
     TimestampStyles,
 } from "discord.js";
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { NEXT_EVENT } from "../../globals";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("eventmode")
     .setDescription("Manages event mode.")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-    .setScope(SlashCommandScope.MAIN_GUILD)
+    .setScope(CommandScope.MAIN_GUILD)
     .addSubcommand((subcommand) =>
         subcommand
             .setName("start")
@@ -81,7 +79,7 @@ const builder = new SlashCommandBuilder()
 
 const eventModes: Map<string, EventMode> = new Map();
 
-useChatCommand(builder as SlashCommandBuilder, (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, (interaction) => {
     if (!interaction.channel) {
         throw new Error("That command must only be run in a channel.");
     }

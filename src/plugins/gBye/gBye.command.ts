@@ -1,17 +1,15 @@
-import {
-    SlashCommandBuilder,
-    SlashCommandScope,
-} from "../../structs/SlashCommandBuilder";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { PermissionFlagsBits } from "discord.js";
-import { useChatCommand } from "../../hooks/useChatCommand";
+import { useChatCommand } from "../../hooks/";
 import { GByeConfig } from "./GByeConfig.model";
 import { fetchGbyeBansString, gByeGuilds } from "./gBye";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
 
-const builder = new SlashCommandBuilder()
+const builder = new GdayChatCommandBuilder()
     .setName("gbye")
     .setDescription("G'bye main command.")
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-    .setScope(SlashCommandScope.GLOBAL)
+    .setScope(CommandScope.GLOBAL)
     .addSubcommand((command) =>
         command
             .setName("set_channel")
@@ -39,7 +37,7 @@ const builder = new SlashCommandBuilder()
             ),
     );
 
-useChatCommand(builder as SlashCommandBuilder, async (interaction) => {
+useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const subcommand = interaction.options.getSubcommand();
     const { guildId } = interaction;
     let config = await GByeConfig.findOne({ guild: guildId });

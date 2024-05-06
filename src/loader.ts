@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { updateSlashCommands } from "./hooks";
+import { registerCommands } from "./hooks";
 
 export const loadFilesFromFolder = (folder: string) => {
     const files: string[] = [];
@@ -31,6 +31,6 @@ export const loadFilesFromFolder = (folder: string) => {
         ),
     ).then((resolved) => {
         console.log(`${resolved.length} files loaded`);
-        updateSlashCommands();
+        registerCommands();
     });
 };
