@@ -5,6 +5,8 @@ import { BingoCheck } from "./BingoCheck.model";
 import { useClient } from "../../hooks";
 import { bingoTiles } from "./bingoTiles";
 import { CommandScope } from "../../structs/GdayCommandBuilder";
+import { Bingo } from "./Bingo.model";
+import { GUILDS } from "../../globals";
 
 const builder = new GdayChatCommandBuilder()
     .setName("bingocheck")
@@ -19,7 +21,7 @@ const builder = new GdayChatCommandBuilder()
             .setRequired(true),
     );
 useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
-    const id = interaction.options.getString("bingo_id", true);
+    /*const id = interaction.options.getString("bingo_id", true);
     if (!Array.from(bingoTiles.keys()).includes(id)) {
         return "Not a bingo key!";
     }
@@ -40,8 +42,8 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
             ],
         });
     }
-    return `${current ? "Unchecked" : "Checked"} \`${id}\``;
-    /*const bingos = await Bingo.find();
+    return `${current ? "Unchecked" : "Checked"} \`${id}\``;*/
+    const bingos = await Bingo.find();
     const check = (await BingoCheck.findOne()) ?? (await BingoCheck.create({}));
     const filteredBingos = bingos.filter((bingo) => {
         const { board } = bingo;
@@ -71,14 +73,14 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
         if (topRightDiag.every((card) => check.bingoEntries.get(card)))
             return true;
     });
-    const rApple = await useClient().guilds.fetch("332309672486895637");
+    const rApple = await useClient().guilds.fetch(GUILDS.MAIN);
     for (const bingo of filteredBingos) {
         try {
             const member = await rApple.members.fetch(bingo.user);
-            await member.roles.add("1168755442407706644");
+            await member.roles.add("1237433543429460029");
         } catch {
             //ignored
         }
     }
-    return `Applied role to ${filteredBingos.length} entries`;*/
+    return `Applied role to ${filteredBingos.length} entries`;
 });

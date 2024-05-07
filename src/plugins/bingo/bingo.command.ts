@@ -125,6 +125,7 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     if (PERSIST) {
         board = await Bingo.findOne({ user: userId });
         if (!board) {
+            return `Sorry, you missed out on bingo this time around!`;
             board = await Bingo.create({
                 user: userId,
                 board: generateBoard(),
