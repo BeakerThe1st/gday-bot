@@ -33,7 +33,7 @@ export const bingoTiles: Map<string, string> = new Map([
     ["new_apm", "AirPods Max (2nd Gen)"],
     ["new_camera", "Upgraded Cameras"],
     ["oled", "OLED iPad Display"],
-    ["pencil_discontinued", "Apple Pencil Discontinued"],
+    ["pencil_discontinued", "AI Mention"],
     ["preorder_today", "Preorder Today"],
     ["privacy_mention", "Privacy Mention"],
     ["proraw", "ProRAW Mention"],
