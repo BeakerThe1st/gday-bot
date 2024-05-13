@@ -55,7 +55,7 @@ useEvent(Events.GuildMemberAdd, async (member: GuildMember) => {
     }
     const channel = await getGbyeChannel(member.guild);
     await channel?.send({
-        content: `# G'bye \n${member} (${member.user.username}) just joined your server, they are banned in:\n${gByeBanString}`,
+        content: `# G'bye \n${member} just joined your server, they are banned in:\n${gByeBanString}`,
         allowedMentions: { parse: [] },
     });
 });

@@ -1,5 +1,7 @@
 import {
+    ApplicationCommandType,
     ChatInputCommandInteraction,
+    CommandInteraction,
     MessageContextMenuCommandInteraction,
     REST,
     Routes,
@@ -57,21 +59,13 @@ export const useMessageCommand = (
 ) => contextMenuCommands.set(builder.name, { handler, builder });
 
 useInteraction(async (interaction) => {
-    if (
-        !(
-            interaction.isChatInputCommand() ||
-            interaction.isContextMenuCommand()
-        )
-    ) {
+    if (!interaction.isCommand()) {
         return null;
     }
     const { commandName } = interaction;
-    let command;
-    if (interaction.isChatInputCommand()) {
-        command = chatCommands.get(commandName);
-    } else if (interaction.isContextMenuCommand()) {
-        command = contextMenuCommands.get(commandName);
-    }
+    let command = interaction.isChatInputCommand()
+        ? chatCommands.get(commandName)
+        : contextMenuCommands.get(commandName);
     if (!command) {
         throw new Error(
             `${commandName} does not have a corresponding command in memory.`,
@@ -80,7 +74,7 @@ useInteraction(async (interaction) => {
     if (command.builder.deferrable) {
         await interaction.deferReply({ ephemeral: command.builder.ephemeral });
     }
-    // @ts-ignore
+    //@ts-expect-error
     return command.handler(interaction);
 });
 export const registerCommands = async () => {
@@ -127,19 +121,24 @@ export const deregisterCommands = async () => {
             scope === CommandScope.GLOBAL
                 ? Routes.applicationCommands(clientId)
                 : Routes.applicationGuildCommands(clientId, scope);
-        try {
-            await rest.put(route, {
-                body: [],
-            });
-        } catch (error) {
-            useError(`${error}`);
-        }
+        await rest
+            .put(route, { body: [] })
+            .catch((error) => useError(`${error}`));
     }
     console.log(`Command deregistration complete`);
 };
 
+const exitHandler = async () => {
+    console.log(`Received exit`);
+    setTimeout(() => {
+        console.log(`Command deregistration took too long, exiting anyway...`);
+        process.exit(1);
+    }, 5000);
+    await deregisterCommands();
+    console.log(`Exiting`);
+    process.exit(0);
+};
+
 if (process.env.NODE_ENV === "development") {
-    process.on("SIGTERM", deregisterCommands);
-    process.on("SIGINT", deregisterCommands);
-    process.on("exit", deregisterCommands);
+    process.on("SIGINT", exitHandler);
 }
