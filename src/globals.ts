@@ -9,10 +9,10 @@ interface NextEvent {
 
 //Timestamp is in ms
 export const NEXT_EVENT: null | NextEvent = {
-    name: "Let Loose",
-    timestamp: 1715090400000,
-    image: "https://cdn.discordapp.com/attachments/332310178277883916/1232926541399199754/Let-Loose.png",
-    color: "#E9703D",
+    name: "WWDC24",
+    timestamp: 1718038800000,
+    image: "https://i.imgur.com/aatoAqL.png",
+    color: "#0ca8ff",
 };
 
 //THESE GUILD IDS ARE MIRRORED GdayChatCommandBuilder, CHANGE THEM THERE TOO
