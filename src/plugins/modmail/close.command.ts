@@ -55,16 +55,18 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     });
     const silent = interaction.options.getBoolean("silent");
     if (!silent) {
-        await author.send({
-            embeds: [
-                new EmbedBuilder()
-                    .setTitle("Thread Closed")
-                    .setColor(Colors.DarkRed)
-                    .setDescription(
-                        `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`,
-                    ),
-            ],
-        });
+        await author
+            .send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle("Thread Closed")
+                        .setColor(Colors.DarkRed)
+                        .setDescription(
+                            `Thanks for reaching out! A moderator has closed your thread. You may open another one at any time by sending a message in here.`,
+                        ),
+                ],
+            })
+            .catch(() => {});
     }
     await interaction.channel.delete();
     return null;
