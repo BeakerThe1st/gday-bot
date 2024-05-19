@@ -58,8 +58,12 @@ useEvent(
                 entry.action ===
                 AuditLogEvent.AutoModerationUserCommunicationDisabled
             ) {
-                //Expiry is in 1 hour (default for naughties violation in r/apple)
-                expiry = Date.now() + 1000 * 60 * 60;
+                //Since it's automatic we need to fetch expiry
+                if (!targetId) {
+                    return;
+                }
+                const member = await guild.members.fetch(targetId);
+                expiry = member.communicationDisabledUntilTimestamp;
             } else {
                 //User initiated timeout - will have an expiry
                 expiry = getTimeoutExpiry(entry);
