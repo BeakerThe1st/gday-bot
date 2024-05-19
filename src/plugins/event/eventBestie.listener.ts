@@ -3,7 +3,7 @@ import { useEvent } from "../../hooks";
 import { GUILDS, NEXT_EVENT, ROLES } from "../../globals";
 
 useEvent("typingStart", async (typing: Typing) => {
-    if (!NEXT_EVENT) {
+    if (!NEXT_EVENT || !ROLES.MAIN.event_reserved) {
         return;
     }
 
