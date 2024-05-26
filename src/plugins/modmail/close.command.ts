@@ -1,6 +1,13 @@
 import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { useChatCommand } from "../../hooks/";
-import { Colors, EmbedBuilder, Message, userMention } from "discord.js";
+import {
+    Collection,
+    Colors,
+    EmbedBuilder,
+    FetchMessagesOptions,
+    Message,
+    userMention,
+} from "discord.js";
 import { IMailThread, MailThread } from "./MailThread";
 import { useClient } from "../../hooks";
 import { CHANNELS } from "../../globals";
@@ -27,7 +34,16 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     if (!interaction.channel) {
         return "That command can only be run in a channel!";
     }
-    const messages = await interaction.channel.messages.fetch();
+
+    const messages = new Collection<string, Message>();
+    let before = undefined;
+    do {
+        let options: FetchMessagesOptions = { before };
+        const fetch = await interaction.channel.messages.fetch(options);
+        fetch.forEach((value, key) => messages.set(key, value));
+        before = fetch.lastKey();
+    } while (before);
+
     const author = await useClient().users.fetch(castThread.author);
     const { username: authorUsername } = author;
     const logChannel = await useClient().channels.fetch(
@@ -71,16 +87,18 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     await interaction.channel.delete();
     return null;
 });
+
 const createLogFile = (messages: Message[]) => {
     const logLines: string[] = [];
     for (const message of messages) {
         let text = "";
         if (message.author.bot) {
             const [embed] = message.embeds;
-            if (!embed?.footer?.text) {
+            if (embed?.footer?.text) {
+                text = `${embed.footer.text}: ${embed.description}`;
+            } else {
                 continue;
             }
-            text = `${embed.footer.text}: ${embed.description}`;
         } else {
             text = `NOTE - ${message.author.username}: ${message.cleanContent}`;
         }
