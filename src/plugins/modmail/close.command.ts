@@ -100,7 +100,7 @@ const createLogFile = (messages: Message[]) => {
                 continue;
             }
         } else {
-            text = `NOTE - ${message.author.username}: ${message.cleanContent}`;
+            text = `NOTE - ${message.author.username}: ${message.cleanContent}${message.attachments ? ` ${message.attachments.map((value) => value.url)}` : ""}`;
         }
         text = `[${message.createdTimestamp}] ${text.replaceAll("\n", "\n\t\t\t")}`;
         logLines.push(text);
