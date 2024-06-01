@@ -9,10 +9,12 @@ const builder = new GdayChatCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setScope(CommandScope.MAIN_GUILD)
     .addSubcommand((subcommand) =>
-        subcommand.setName("start").setDescription("Starts nap time."),
+        subcommand
+            .setName("start")
+            .setDescription("Tuck the joeys in for a nap."),
     )
     .addSubcommand((subcommand) =>
-        subcommand.setName("stop").setDescription("Stops nap time."),
+        subcommand.setName("stop").setDescription("Let the joeys run free."),
     );
 
 useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
