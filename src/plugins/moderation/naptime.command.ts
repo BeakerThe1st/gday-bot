@@ -23,7 +23,7 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     if (!(channel instanceof GuildChannel) || !interaction.guildId) {
         return "Nap time only works in guild channels.";
     }
-    const permValue = subcommand === "start" ? true : null;
+    const permValue = subcommand === "start" ? false : null;
     await channel.permissionOverwrites.edit(interaction.guildId, {
         SendMessages: permValue,
     });
