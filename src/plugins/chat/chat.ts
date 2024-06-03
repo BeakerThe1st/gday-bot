@@ -85,9 +85,6 @@ const getChatResponse = async (message: Message) => {
             },
         ],
     });
-    runner.on("message", (msg) => {
-        console.log(msg);
-    });
     try {
         return await runner.finalContent();
     } catch {
