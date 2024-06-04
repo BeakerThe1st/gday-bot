@@ -27,6 +27,16 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     await channel.permissionOverwrites.edit(interaction.guildId, {
         SendMessages: permValue,
     });
+    const parentPerms = channel.parent?.permissionOverwrites;
+    if (
+        parentPerms &&
+        channel.permissionOverwrites.cache.every(
+            (perms, key) => parentPerms.cache.get(key) === perms,
+        )
+    ) {
+        //Sync if all permission overwrites of the channel are present in the parent category
+        await channel.lockPermissions();
+    }
     if (subcommand === "start") {
         return `🛌`;
     } else {
