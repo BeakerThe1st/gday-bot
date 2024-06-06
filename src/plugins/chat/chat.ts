@@ -64,7 +64,7 @@ const getChatResponse = async (message: Message) => {
         ...(await getContext(message)),
     ];
     const runner = useOpenAI().beta.chat.completions.runTools({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o",
         messages,
         tools: [
             {
