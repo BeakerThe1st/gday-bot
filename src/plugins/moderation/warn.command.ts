@@ -10,7 +10,6 @@ const builder = new GdayChatCommandBuilder()
         "Gives a bloke a warning, letting 'em know to pull their head in.",
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .setEphemeral(true)
     .setScope(CommandScope.MAIN_GUILD)
     .addUserOption((option) =>
         option
@@ -26,6 +25,12 @@ const builder = new GdayChatCommandBuilder()
     );
 useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     const target = interaction.options.getUser("user", true);
+    if (
+        interaction.user.id === "1202458111105966170" &&
+        target.id !== "383871501394247681"
+    ) {
+        return `no sorry`;
+    }
     const reason = interaction.options.getString("reason", true);
     await Case.create({
         type: CaseType.WARN,
