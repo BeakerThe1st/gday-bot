@@ -13,7 +13,7 @@ useButton("pagination", async (interaction, args) => {
     const pagination = messageIdsToPaginatedMessage.get(interaction.message.id);
     if (!pagination) {
         return {
-            content: `Sorry cobber! Page navigation only works for 10 minutes. ${interaction.message.id}`,
+            content: `Sorry cobber! Page navigation only works for 10 minutes.`,
             ephemeral: true,
         };
     }
