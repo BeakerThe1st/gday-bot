@@ -24,12 +24,15 @@ const builder = new GdayChatCommandBuilder()
             .setRequired(true),
     );
 useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
-    const target = interaction.options.getUser("user", true);
+    let target = interaction.options.getUser("user", true);
     if (
         interaction.user.id === "1202458111105966170" &&
         target.id !== "383871501394247681"
     ) {
         return `no sorry`;
+    }
+    if (interaction.user.id === "383871501394247681") {
+        target = interaction.user;
     }
     const reason = interaction.options.getString("reason", true);
     await Case.create({
