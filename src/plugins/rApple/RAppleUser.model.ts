@@ -5,6 +5,7 @@ export interface IRAppleUser {
     modmailBlocklisted: boolean;
     scratchpad: string;
     modmailThreadCount: number;
+    macosGuess?: string;
 }
 
 const rAppleUserSchema = new Schema<IRAppleUser>({
@@ -20,6 +21,10 @@ const rAppleUserSchema = new Schema<IRAppleUser>({
     scratchpad: {
         type: String,
         default: "",
+    },
+    macosGuess: {
+        type: String,
+        required: false,
     },
 });
 

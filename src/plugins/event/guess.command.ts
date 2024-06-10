@@ -1,10 +1,10 @@
-import { useChatCommand } from "../hooks/";
-import { GdayChatCommandBuilder } from "../structs/GdayChatCommandBuilder";
-import { Guess } from "./Guess.model";
+import { useChatCommand } from "../../hooks";
+import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
-import { CommandScope } from "../structs/GdayCommandBuilder";
+import { CommandScope } from "../../structs/GdayCommandBuilder";
+import { RAppleUser } from "../rApple/RAppleUser.model";
 
-let guessEnabled = true;
+let guessEnabled = false;
 
 const enableGuessBuilder = new GdayChatCommandBuilder()
     .setName("toggleguess")
@@ -20,7 +20,7 @@ useChatCommand(enableGuessBuilder, () => {
 
 const guessBuilder = new GdayChatCommandBuilder()
     .setName("guess")
-    .setDescription("Guess the name of macOS 14.")
+    .setDescription("Guess the name of macOS 15.")
     .setScope(CommandScope.MAIN_GUILD)
     .setEphemeral(true)
     .addStringOption((option) =>
@@ -37,8 +37,12 @@ const toTitleCase = (str: string): string => {
 };
 
 useChatCommand(guessBuilder as GdayChatCommandBuilder, async (interaction) => {
-    const userId = interaction.user.id;
-    const userGuess = toTitleCase(interaction.options.getString("name", true));
+    const { id: userId } = interaction.user;
+
+    let rAppleUser = await RAppleUser.findOne({ userId });
+    if (!rAppleUser) {
+        rAppleUser = await RAppleUser.create({ userId });
+    }
 
     if (!guessEnabled) {
         const embed = new EmbedBuilder()
@@ -48,12 +52,10 @@ useChatCommand(guessBuilder as GdayChatCommandBuilder, async (interaction) => {
             )
             .setColor("Red");
 
-        let guess = await Guess.findOne({ user: userId });
-
-        if (guess) {
+        if (rAppleUser?.macosGuess) {
             embed.addFields({
                 name: "Your current guess",
-                value: `macOS ${guess.guess}`,
+                value: `macOS ${rAppleUser.macosGuess}`,
                 inline: false,
             });
         }
@@ -63,15 +65,17 @@ useChatCommand(guessBuilder as GdayChatCommandBuilder, async (interaction) => {
         };
     }
 
-    let guess = await Guess.findOneAndUpdate(
-        { user: userId },
-        { user: userId, guess: userGuess },
-        { new: true, upsert: true },
+    rAppleUser.macosGuess = toTitleCase(
+        interaction.options.getString("name", true),
     );
 
+    await rAppleUser.save();
+
     const embed = new EmbedBuilder()
-        .setTitle("You've submitted your guess for macOS 14's name.")
-        .setDescription(`You set your guess to 'macOS ${guess.guess}'`)
+        .setTitle("You've submitted your guess for macOS 15's name.")
+        .setDescription(
+            `You set your guess to 'macOS ${rAppleUser.macosGuess}'`,
+        )
         .setColor("Fuchsia");
 
     return {
