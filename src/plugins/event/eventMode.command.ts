@@ -128,7 +128,7 @@ class EventMode {
     timer?: NodeJS.Timeout;
 
     constructor(channel: TextBasedChannel) {
-        this.image = "https://i.imgur.com/RGjdLnO.png";
+        this.image = "https://i.imgur.com/AyrRyvR.png";
         this.timerInterval = 60000;
         this.channel = channel;
     }
@@ -158,7 +158,7 @@ class EventMode {
             new ButtonBuilder()
                 .setLabel("YouTube")
                 .setStyle(ButtonStyle.Link)
-                .setURL("https://youtu.be/f1J38FlDKxo"),
+                .setURL("https://youtu.be/RXeOiIDNNek"),
             new ButtonBuilder()
                 .setLabel("Leaked Event Footage")
                 .setStyle(ButtonStyle.Link)
