@@ -8,12 +8,12 @@ interface NextEvent {
 }
 
 //Timestamp is in ms
-export const NEXT_EVENT: null | NextEvent = {
+export const NEXT_EVENT: null | NextEvent = null; /*{
     name: "WWDC24",
     timestamp: 1718038800000,
     image: "https://i.imgur.com/aatoAqL.png",
     color: "#0ca8ff",
-};
+};*/
 
 //THESE GUILD IDS ARE MIRRORED GdayChatCommandBuilder, CHANGE THEM THERE TOO
 export const GUILDS = {
