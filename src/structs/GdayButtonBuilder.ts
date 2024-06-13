@@ -22,7 +22,7 @@ export class GdayButtonBuilder extends ButtonBuilder {
         return this.updateCustomID();
     }
 
-    setCustomId(customId: string): this {
+    setCustomId(_customId: string): this {
         throw new Error("Setting custom IDs is not permitted on G'day buttons");
     }
 
