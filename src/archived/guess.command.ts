@@ -1,8 +1,8 @@
-import { useChatCommand } from "../../hooks";
-import { GdayChatCommandBuilder } from "../../structs/GdayChatCommandBuilder";
+import { useChatCommand } from "../hooks";
+import { GdayChatCommandBuilder } from "../structs/GdayChatCommandBuilder";
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
-import { CommandScope } from "../../structs/GdayCommandBuilder";
-import { RAppleUser } from "../rApple/RAppleUser.model";
+import { CommandScope } from "../structs/GdayCommandBuilder";
+import { RAppleUser } from "../plugins/rApple/RAppleUser.model";
 
 let guessEnabled = false;
 
