@@ -26,6 +26,7 @@ export const CHANNELS = {
         case_log: "1126077157895053312",
         log: "1120432710830280784",
         santa_applications: "1045659665771540511",
+        staff_notices: "476924704528138271",
     },
     STAFF: {
         modmail_parent: "582568757575024640",
