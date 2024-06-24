@@ -1,7 +1,7 @@
 import { GdayMessageCommandBuilder } from "../../structs/GdayMessageCommandBuilder";
 import { CommandScope } from "../../structs/GdayCommandBuilder";
 import { useClient, useInteraction, useMessageCommand } from "../../hooks";
-import { CHANNELS } from "../../globals";
+import { CHANNELS, ROLES } from "../../globals";
 import {
     ActionRowBuilder,
     channelLink,
@@ -10,6 +10,8 @@ import {
     Colors,
     Embed,
     EmbedBuilder,
+    GuildMemberRoleManager,
+    MessageCreateOptions,
     ModalActionRowComponentBuilder,
     ModalBuilder,
     SelectMenuBuilder,
@@ -156,7 +158,19 @@ useInteraction(async (interaction) => {
         ]);
     }
 
-    await staffNotices.send({ embeds: [embed] });
+    let messageOptions: MessageCreateOptions = { embeds: [embed] };
+    const reporterRoles = interaction.member?.roles;
+    if (
+        reporterRoles instanceof GuildMemberRoleManager &&
+        reporterRoles.highest.comparePositionTo(ROLES.MAIN.plus) >= 0
+    ) {
+        messageOptions = {
+            content: "@here",
+            allowedMentions: { parse: ["everyone"] },
+            ...messageOptions,
+        };
+    }
+    if (interaction.member?.roles) await staffNotices.send(messageOptions);
 
     return "Your report has been submitted, thanks for helping make r/Apple safer.";
 });
