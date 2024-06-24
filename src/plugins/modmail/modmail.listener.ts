@@ -14,7 +14,7 @@ import { CHANNELS, GUILDS } from "../../globals";
 import { ModmailMessage } from "./ModmailMessage";
 import { RAppleUser } from "../rApple/RAppleUser.model";
 import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../hooks";
 
 export const forwardModmailMessage = async (message: Message) => {
     const thread = await MailThread.findOne({ author: message.author.id });
