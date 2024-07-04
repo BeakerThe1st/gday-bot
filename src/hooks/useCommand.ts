@@ -127,18 +127,3 @@ export const deregisterCommands = async () => {
     }
     console.log(`Command deregistration complete`);
 };
-
-const exitHandler = async () => {
-    console.log(`Received exit`);
-    setTimeout(() => {
-        console.log(`Command deregistration took too long, exiting anyway...`);
-        process.exit(1);
-    }, 5000);
-    await deregisterCommands();
-    console.log(`Exiting`);
-    process.exit(0);
-};
-
-if (process.env.NODE_ENV === "development") {
-    process.on("SIGINT", exitHandler);
-}
