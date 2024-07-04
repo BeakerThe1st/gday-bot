@@ -1,9 +1,17 @@
 import { GdayMessageCommandBuilder } from "../../structs/GdayMessageCommandBuilder";
 import { CommandScope } from "../../structs/GdayCommandBuilder";
-import { useClient, useInteraction, useMessageCommand } from "../../hooks";
+import {
+    useButton,
+    useClient,
+    useInteraction,
+    useMessageCommand,
+} from "../../hooks";
 import { CHANNELS, ROLES } from "../../globals";
 import {
+    ActionRow,
     ActionRowBuilder,
+    ButtonComponent,
+    ButtonStyle,
     channelLink,
     channelMention,
     codeBlock,
@@ -19,6 +27,7 @@ import {
     TextInputStyle,
 } from "discord.js";
 import { json } from "express";
+import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
 
 const reportModal = new ModalBuilder();
 
@@ -158,7 +167,17 @@ useInteraction(async (interaction) => {
         ]);
     }
 
-    let messageOptions: MessageCreateOptions = { embeds: [embed] };
+    const assumeButton = new GdayButtonBuilder("report:assume")
+        .setLabel("Assume Report")
+        .setStyle(ButtonStyle.Success);
+
+    const actionRow = new ActionRowBuilder<GdayButtonBuilder>().setComponents(
+        assumeButton,
+    );
+    let messageOptions: MessageCreateOptions = {
+        embeds: [embed],
+        components: [actionRow],
+    };
     const reporterRoles = interaction.member?.roles;
     if (
         reporterRoles instanceof GuildMemberRoleManager &&
@@ -173,4 +192,14 @@ useInteraction(async (interaction) => {
     if (interaction.member?.roles) await staffNotices.send(messageOptions);
 
     return "Your report has been submitted, thanks for helping make r/Apple safer.";
+});
+
+useButton("report:assume", async (interaction) => {
+    await interaction.deferReply({ ephemeral: true });
+    await interaction.message.edit({
+        content: `Assumed by ${interaction.user}`,
+        embeds: interaction.message.embeds,
+        components: [],
+    });
+    return "Assumed report";
 });
