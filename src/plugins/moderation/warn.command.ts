@@ -4,6 +4,12 @@ import { useChatCommand } from "../../hooks/";
 import { Case, CaseType } from "../cases/Case.model";
 import { CommandScope } from "../../structs/GdayCommandBuilder";
 
+const capriscumbags = [
+    "294134692611883009",
+    "383871501394247681",
+    "1202458111105966170",
+];
+
 const builder = new GdayChatCommandBuilder()
     .setName("warn")
     .setDescription(
@@ -26,13 +32,10 @@ const builder = new GdayChatCommandBuilder()
 useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     let target = interaction.options.getUser("user", true);
     if (
-        interaction.user.id === "1202458111105966170" &&
-        target.id !== "383871501394247681"
+        capriscumbags.includes(interaction.user.id) &&
+        !capriscumbags.includes(target.id)
     ) {
         return `no sorry`;
-    }
-    if (interaction.user.id === "383871501394247681") {
-        target = interaction.user;
     }
     const reason = interaction.options.getString("reason", true);
     await Case.create({
