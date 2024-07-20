@@ -1,6 +1,11 @@
 import { useClient, useEvent } from "../../hooks";
 import { GUILDS } from "../../globals";
-import { DiscordAPIError, User } from "discord.js";
+import {
+    DiscordAPIError,
+    DiscordjsErrorCodes,
+    DiscordjsRangeError,
+    User,
+} from "discord.js";
 
 const userCooldown = new Set<User>();
 
