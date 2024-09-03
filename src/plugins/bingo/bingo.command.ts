@@ -119,14 +119,15 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     if (process.env.NODE_ENV !== "development") {
         return `Bingo is not quite ready yet. Stay tuned!`;
     }
-    const PERSIST = process.env.NODE_ENV !== "development";
-    const OVER = Date.now() > (NEXT_EVENT?.timestamp ?? Infinity);
+    const persist = process.env.NODE_ENV !== "development";
+    const notAcceptingEntries =
+        Date.now() > (NEXT_EVENT?.timestamp ?? Infinity);
     const userId = interaction.user.id;
     let board;
-    if (PERSIST) {
+    if (persist) {
         board = await Bingo.findOne({ user: userId });
         if (!board) {
-            if (OVER) {
+            if (notAcceptingEntries) {
                 return `Sorry you missed out on bingo this time around!`;
             }
             board = await Bingo.create({
@@ -139,7 +140,7 @@ useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
     }
 
     return {
-        content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board!${PERSIST ? "" : " **PERSISTENCE IS DISABLED**"}`,
+        content: `Here's your ${NEXT_EVENT?.name || "apple event"} bingo board!${persist ? "" : " **PERSISTENCE IS DISABLED**"}`,
         files: [await prettyBoard(board.board)],
     };
 });
