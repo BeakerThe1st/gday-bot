@@ -25,6 +25,7 @@ export const CHANNELS = {
     MAIN: {
         case_log: "1126077157895053312",
         log: "1120432710830280784",
+        bingo_check: "1280384286838624396",
         santa_applications: "1045659665771540511",
         staff_notices: "476924704528138271",
     },
