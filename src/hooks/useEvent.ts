@@ -2,7 +2,7 @@ import { useError } from "./useError";
 import { ClientEvents } from "discord.js";
 import { useClient } from "./useClient";
 
-type EventHandler<K extends keyof ClientEvents> = (
+export type EventHandler<K extends keyof ClientEvents> = (
     ...args: ClientEvents[K]
 ) => void | Promise<void>;
 
