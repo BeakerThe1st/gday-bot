@@ -8,12 +8,12 @@ interface NextEvent {
 }
 
 //Timestamp is in ms
-export const NEXT_EVENT: null | NextEvent = null; /*{
-    name: "WWDC24",
-    timestamp: 1718038800000,
-    image: "https://i.imgur.com/aatoAqL.png",
-    color: "#0ca8ff",
-};*/
+export const NEXT_EVENT: null | NextEvent = {
+    name: "It's Glowtime",
+    timestamp: 1725901200000,
+    image: "https://i.imgur.com/WCq98Br.png",
+    color: "#fb8b53",
+};
 
 //THESE GUILD IDS ARE MIRRORED GdayChatCommandBuilder, CHANGE THEM THERE TOO
 export const GUILDS = {
@@ -39,8 +39,8 @@ export const CHANNELS = {
 export const ROLES = {
     MAIN: {
         established: "881503056091557978",
-        event_reserved: "",
-        event_blocklisted: "1236653436557328435",
+        event_reserved: "1280333137884348540",
+        event_blocklisted: "1280333177906532353",
         mod_squad: "334889410006876161",
         plus: "338950814108483586",
         santa_squad: "",
