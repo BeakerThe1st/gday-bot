@@ -11,7 +11,7 @@ import morgan from "morgan";
 import { useClient } from "../../hooks";
 import { GdayButtonBuilder } from "../../structs/GdayButtonBuilder";
 import { Case } from "../cases/Case.model";
-import { GUILDS } from "../../globals";
+import { CHANNELS, GUILDS } from "../../globals";
 
 const app = express();
 
@@ -35,14 +35,15 @@ app.get("/guild-info", async (req, res) => {
 
 app.post("/ban-appeal", async (req, res) => {
     const { tag, id, reason } = req.body;
-    if (!tag || !id || !reason) {
+    if (!(tag && id && reason)) {
         return res.status(400).json({
             error: "Missing required parameters",
         });
     }
     try {
-        const appealChannel =
-            await useClient().channels.fetch("700365232542973979");
+        const appealChannel = await useClient().channels.fetch(
+            CHANNELS.STAFF.appeals,
+        );
         const rApple = await useClient().guilds.fetch(GUILDS.MAIN);
         const ban = await rApple.bans.fetch(id);
         const banCase = await Case.findOne({

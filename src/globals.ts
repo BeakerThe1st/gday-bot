@@ -32,6 +32,7 @@ export const CHANNELS = {
     STAFF: {
         modmail_parent: "582568757575024640",
         modmail_logs: "582572653710409748",
+        appeals: "700365232542973979",
     },
     APPEALS: {
         unban_announcements: "934958626257375244",
