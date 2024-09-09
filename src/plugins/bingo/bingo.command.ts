@@ -116,9 +116,9 @@ const prettyBoard = async (board: string[][]) => {
 };
 
 useChatCommand(builder as GdayChatCommandBuilder, async (interaction) => {
-    if (process.env.NODE_ENV !== "development") {
+    /*if (process.env.NODE_ENV !== "development") {
         return `Bingo is not quite ready yet. Stay tuned!`;
-    }
+    }*/
     const persist = process.env.NODE_ENV !== "development";
     const notAcceptingEntries =
         Date.now() > (NEXT_EVENT?.timestamp ?? Infinity);
