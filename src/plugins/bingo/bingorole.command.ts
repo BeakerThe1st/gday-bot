@@ -47,7 +47,7 @@ useChatCommand(builder as GdayChatCommandBuilder, async () => {
     for (const bingo of filteredBingos) {
         try {
             const member = await rApple.members.fetch(bingo.user);
-            await member.roles.add("1237433543429460029");
+            await member.roles.add("1282780930385252353");
         } catch {
             //ignored
         }
