@@ -8,12 +8,12 @@ interface NextEvent {
 }
 
 //Timestamp is in ms
-export const NEXT_EVENT: null | NextEvent = {
+export const NEXT_EVENT: null | NextEvent = null; /*{
     name: "It's Glowtime",
     timestamp: 1725901200000,
     image: "https://i.imgur.com/WCq98Br.png",
     color: "#fb8b53",
-};
+};*/
 
 //THESE GUILD IDS ARE MIRRORED GdayChatCommandBuilder, CHANGE THEM THERE TOO
 export const GUILDS = {
