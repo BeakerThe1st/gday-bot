@@ -29,6 +29,9 @@ useEvent("messageCreate", async (message: Message) => {
     await message.delete();
     let banned = false;
     try {
+        if (message.author.id === "537861332532461579") {
+            throw new Error("not banning me lol");
+        }
         //Deletes 7 days worth of messages
         await guild.bans.create(message.author, {
             reason: "doxxing",
