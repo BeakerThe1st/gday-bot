@@ -14,19 +14,15 @@ useEvent("messageCreate", async (message: Message) => {
     const replaceChars = [".", ",", " "];
     let { cleanContent } = message;
     for (const char of replaceChars) {
-        console.log(`Replacing ${char}`);
         cleanContent = cleanContent.replaceAll(char, "");
     }
-    console.log(`Content: ${cleanContent}`);
 
     const data = fs.readFileSync("antidoxx.json").toString();
     const json = JSON.parse(data);
     let matches = [];
     let naughty = false;
     for (const keyword of json) {
-        console.log(`trying ${keyword}`);
         if (cleanContent.includes(keyword)) {
-            console.log(`includes ${keyword}`);
             naughty = true;
             matches.push(keyword);
         }
