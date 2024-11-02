@@ -50,7 +50,7 @@ useEvent("messageCreate", async (message: Message) => {
     );
     if (logChannel && "send" in logChannel) {
         logChannel.send(
-            `${message.author} [${message.author.id}] doxx attempt, ${banned ? "banned" : "not banned"}\n${codeBlock(cleanContent)}\n${codeBlock(JSON.stringify(matches))}`,
+            `${message.author} [${message.author.id}] doxx attempt, ${banned ? "banned" : "not banned"}, ${message.channel}\n${codeBlock(cleanContent)}\n${codeBlock(JSON.stringify(matches))}`,
         );
     }
 });
