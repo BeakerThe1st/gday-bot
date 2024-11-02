@@ -147,3 +147,6 @@ dist
 
 # Docker MongoDB documents root
 data/
+
+# Anti doxx
+antidoxx.json
