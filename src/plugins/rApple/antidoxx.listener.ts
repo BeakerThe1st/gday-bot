@@ -13,6 +13,7 @@ useEvent("messageCreate", async (message: Message) => {
     }
     const replaceChars = [".", ",", " "];
     let { cleanContent } = message;
+    cleanContent = cleanContent.toLowerCase();
     for (const char of replaceChars) {
         cleanContent = cleanContent.replaceAll(char, "");
     }
