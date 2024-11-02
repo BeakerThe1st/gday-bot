@@ -19,11 +19,12 @@ useEvent("messageCreate", async (message: Message) => {
 
     const data = fs.readFileSync("antidoxx.json").toString();
     const json = JSON.parse(data);
+    let matches = [];
     let naughty = false;
     for (const keyword of json) {
         if (cleanContent.includes(keyword)) {
             naughty = true;
-            break;
+            matches.push(keyword);
         }
     }
     if (!naughty) {
@@ -36,10 +37,10 @@ useEvent("messageCreate", async (message: Message) => {
             throw new Error("not banning me lol");
         }
         //Deletes 7 days worth of messages
-        await guild.bans.create(message.author, {
+        /*await guild.bans.create(message.author, {
             reason: "doxxing",
             deleteMessageSeconds: 60 * 60 * 24 * 7,
-        });
+        });*/
         banned = true;
     } catch {
         //ignored
@@ -49,7 +50,7 @@ useEvent("messageCreate", async (message: Message) => {
     );
     if (logChannel && "send" in logChannel) {
         logChannel.send(
-            `${message.author} [${message.author.id}] doxx attempt, ${banned ? "banned" : "not banned"}\n${codeBlock(cleanContent)}`,
+            `${message.author} [${message.author.id}] doxx attempt, ${banned ? "banned" : "not banned"}\n${codeBlock(cleanContent)}\n${codeBlock(JSON.stringify(matches))}`,
         );
     }
 });
