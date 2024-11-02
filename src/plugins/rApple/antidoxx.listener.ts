@@ -8,13 +8,16 @@ useEvent("messageCreate", async (message: Message) => {
     if (guild?.id !== GUILDS.MAIN) {
         return;
     }
+    if (message.author.bot) {
+        return;
+    }
     const replaceChars = [".", ",", " "];
     let { cleanContent } = message;
     for (const char of replaceChars) {
         cleanContent = cleanContent.replaceAll(char, "");
     }
 
-    const data = fs.readFileSync("../../../antidoxx.json").toString();
+    const data = fs.readFileSync("antidoxx.json").toString();
     const json = JSON.parse(data);
     let naughty = false;
     for (const keyword of json) {
