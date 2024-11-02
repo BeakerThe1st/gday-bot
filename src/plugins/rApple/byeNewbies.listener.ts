@@ -12,7 +12,7 @@ useEvent("guildMemberAdd", async (member: GuildMember) => {
     }
 
     await member.kick();
-    const logChannel = await member.guild.channels.fetch("1169993577741434942");
+    const logChannel = await member.guild.channels.fetch("1302197173139673098");
     if (logChannel && "send" in logChannel) {
         await logChannel.send(
             `Kicked ${member} [${member.id}] for being too new, created ${time(Math.floor(member.user.createdTimestamp / 1000))}`,

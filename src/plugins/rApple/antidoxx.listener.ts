@@ -46,7 +46,7 @@ useEvent("messageCreate", async (message: Message) => {
         //ignored
     }
     const logChannel = await message.guild?.channels.fetch(
-        "1169993577741434942",
+        "1302197173139673098",
     );
     if (logChannel && "send" in logChannel) {
         logChannel.send(
