@@ -32,17 +32,17 @@ useEvent("messageCreate", async (message: Message) => {
         return;
     }
     await message.delete();
-    let banned = false;
+    let muted = false;
     try {
-        if (message.author.id === "537861332532461579") {
-            throw new Error("not banning me lol");
+        if (!message.member) {
+            throw new Error("no member");
         }
-        //Deletes 7 days worth of messages
-        await guild.bans.create(message.author, {
-            reason: `${useClient().user?.id} doxxing auto-ban`,
-            deleteMessageSeconds: 60 * 60 * 24 * 7,
-        });
-        banned = true;
+        //7 day mute
+        await message.member?.disableCommunicationUntil(
+            Date.now() + 1000 * 60 * 60 * 24 * 7,
+            `${useClient().user?.id} doxxing auto-mute`,
+        );
+        muted = true;
     } catch {
         //ignored
     }
@@ -51,7 +51,7 @@ useEvent("messageCreate", async (message: Message) => {
     );
     if (logChannel && "send" in logChannel) {
         logChannel.send(
-            `${message.author} [${message.author.id}] doxx attempt, ${banned ? "banned" : "not banned"}, ${message.channel}\n${codeBlock(cleanContent)}\n${codeBlock(JSON.stringify(matches))}`,
+            `${message.author} [${message.author.id}] doxx attempt, ${muted ? "muted" : "not muted"}, ${message.channel}\n${codeBlock(cleanContent)}\n${codeBlock(JSON.stringify(matches))}`,
         );
     }
 });
