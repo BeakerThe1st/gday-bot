@@ -1,57 +1,98 @@
-import { useClient, useEvent } from "../../hooks";
+import { useClient, useEvent, useOpenAI } from "../../hooks";
 import { codeBlock, Message } from "discord.js";
 import { GUILDS } from "../../globals";
-import fs from "fs";
+
+const authorMap = new Map<string, number>();
 
 useEvent("messageCreate", async (message: Message) => {
-    const { guild } = message;
+    const { guild, cleanContent, member } = message;
     if (guild?.id !== GUILDS.MAIN) {
         return;
     }
-    if (message.author.bot) {
+    if (message.author.bot || !member?.joinedTimestamp) {
         return;
-    }
-    const replaceChars = [".", ",", " "];
-    let { cleanContent } = message;
-    cleanContent = cleanContent.toLowerCase();
-    for (const char of replaceChars) {
-        cleanContent = cleanContent.replaceAll(char, "");
     }
 
-    const data = fs.readFileSync("antidoxx.json").toString();
-    const json = JSON.parse(data);
-    let matches = [];
-    let naughty = false;
-    for (const keyword of json) {
-        if (cleanContent.includes(keyword)) {
-            naughty = true;
-            matches.push(keyword);
-        }
-    }
-    if (!naughty) {
-        return;
-    }
-    await message.delete();
-    let muted = false;
-    try {
-        if (!message.member) {
-            throw new Error("no member");
-        }
-        //7 day mute
-        await message.member?.disableCommunicationUntil(
-            Date.now() + 1000 * 60 * 60 * 24 * 7,
-            `${useClient().user?.id} doxxing auto-mute`,
-        );
-        muted = true;
-    } catch {
-        //ignored
-    }
     const logChannel = await message.guild?.channels.fetch(
         "1302197173139673098",
     );
-    if (logChannel && "send" in logChannel) {
-        logChannel.send(
-            `${message.author} [${message.author.id}] doxx attempt, ${muted ? "muted" : "not muted"}, ${message.channel}\n${codeBlock(cleanContent)}\n${codeBlock(JSON.stringify(matches))}`,
-        );
+
+    if (!logChannel || !("send" in logChannel)) {
+        return;
     }
+
+    //joined more than 30 min ago
+    if (member.joinedTimestamp < Date.now() - 30 * 60 * 1000) {
+        if (authorMap.has(member.id)) {
+            authorMap.delete(member.id);
+        }
+        return;
+    }
+
+    const msgCount = authorMap.get(member.id);
+
+    if (msgCount && msgCount >= 5) {
+        return;
+    }
+
+    const runner = await useOpenAI().chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+            {
+                role: "system",
+                content:
+                    "You identify if a message is a doxxing attempt, even if it is slightly obfuscated.",
+            },
+            {
+                role: "user",
+                content: cleanContent,
+            },
+        ],
+        response_format: {
+            // See /docs/guides/structured-outputs
+            type: "json_schema",
+            json_schema: {
+                name: "info_schema",
+                schema: {
+                    type: "object",
+                    properties: {
+                        flag: {
+                            description:
+                                "Whether the message is a doxxing attempt",
+                            type: "boolean",
+                        },
+                        info: {
+                            description:
+                                "The personal information that is doxxed",
+                            type: "string",
+                        },
+                    },
+                    additionalProperties: false,
+                },
+            },
+        },
+    });
+
+    authorMap.set(member.id, (authorMap.get(member.id) ?? 0) + 1);
+
+    const content = runner.choices[0].message.content;
+
+    const parsed = JSON.parse(content ?? "{}");
+
+    parsed.content = cleanContent;
+
+    logChannel.send(
+        `Analysed ${authorMap.get(member.id)}th message by ${member}\n\n${codeBlock("json", JSON.stringify(parsed, null, 2))}`,
+    );
+
+    if (!parsed.flag) {
+        return;
+    }
+
+    logChannel.send(`Flagged ${member}, muting`);
+
+    await member.disableCommunicationUntil(
+        Date.now() + 1000 * 60 * 60 * 24 * 7,
+        `${useClient().user?.id} doxxing auto-mute`,
+    );
 });
