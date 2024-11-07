@@ -91,6 +91,8 @@ useEvent("messageCreate", async (message: Message) => {
 
     logChannel.send(`Flagged ${member}, muting`);
 
+    await message.delete();
+
     await member.disableCommunicationUntil(
         Date.now() + 1000 * 60 * 60 * 24 * 7,
         `${useClient().user?.id} doxxing auto-mute`,
