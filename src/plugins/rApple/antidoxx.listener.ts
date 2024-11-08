@@ -21,9 +21,10 @@ useEvent("messageCreate", async (message: Message) => {
         return;
     }
 
-    //joined more than 30 min ago
-    if (member.joinedTimestamp < Date.now() - 30 * 60 * 1000) {
+    //joined more than 24 hour ago
+    if (member.joinedTimestamp < Date.now() - 24 * 60 * 60 * 1000) {
         if (authorMap.has(member.id)) {
+            //member was previously in the map but we don't care about them anymore
             authorMap.delete(member.id);
         }
         return;
