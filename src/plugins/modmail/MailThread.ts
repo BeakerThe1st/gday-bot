@@ -60,15 +60,17 @@ mailThreadSchema.pre("save", async function () {
 mailThreadSchema.post("save", async function () {
     try {
         const resolvedAuthor = await useClient().users.fetch(this.author);
-        const initialMessage = await resolvedAuthor.dmChannel?.messages.fetch(
-            this.initialMessage as Snowflake,
+        const dmChannel = resolvedAuthor.dmChannel || await resolvedAuthor.createDM();
+
+        const initialMessage = await dmChannel.messages.fetch(
+            this.initialMessage as Snowflake
         );
+
         if (initialMessage) {
             await forwardModmailMessage(initialMessage);
         }
-    } catch {
-        console.log("errored");
-        //ignored
+    } catch (err) {
+        console.error("Error in mailThreadSchema post-save:", err);
     }
 });
 
