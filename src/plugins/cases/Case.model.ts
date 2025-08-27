@@ -85,7 +85,7 @@ caseSchema.pre("save", async function () {
         const user = await useClient().users.fetch(this.target);
         const guild = await useClient().guilds.fetch(this.guild);
         await user.send(
-            `You have been ${friendlyNames.get(this.type)} ${guild.name}${this.reason ? ` for ${inlineCode(this.reason)}` : ""}.${this.duration ? ` Expiry: ${time(new Date(parseInt(this.createdAtTimestamp) + this.duration), TimestampStyles.RelativeTime)}` : ""}${this.type === CaseType.BAN ? "\nAppeal at https://rapple.xyz/appeals" : ""}`,
+            `You have been ${friendlyNames.get(this.type)} ${guild.name}${this.reason ? ` for ${inlineCode(this.reason)}` : ""}.${this.duration ? ` Expiry: ${time(new Date(parseInt(this.createdAtTimestamp) + this.duration), TimestampStyles.RelativeTime)}` : ""}${this.type === CaseType.BAN ? "\nAppeal by joining https://discord.gg/v6eVy5AFF8 and messaging the G'day bot." : ""}`,
         );
         this.userNotified = true;
     } catch {
