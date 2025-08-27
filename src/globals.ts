@@ -8,12 +8,12 @@ interface NextEvent {
 }
 
 //Timestamp is in ms
-export const NEXT_EVENT: null | NextEvent = null; /*{
-    name: "It's Glowtime",
-    timestamp: 1725901200000,
-    image: "https://i.imgur.com/WCq98Br.png",
-    color: "#fb8b53",
-};*/
+export const NEXT_EVENT: null | NextEvent = {
+    name: "Awe Dropping",
+    timestamp: 1756832400000,
+    image: "https://designcompass.org/wp-content/uploads/2025/08/apple-event-awe-1536x1152.jpg",
+    color: "#1525a0",
+};
 
 //THESE GUILD IDS ARE MIRRORED GdayChatCommandBuilder, CHANGE THEM THERE TOO
 export const GUILDS = {
@@ -41,7 +41,7 @@ export const CHANNELS = {
 export const ROLES = {
     MAIN: {
         established: "881503056091557978",
-        event_reserved: "1280333137884348540",
+        event_reserved: "1410264445787181056",
         event_blocklisted: "1280333177906532353",
         mod_squad: "334889410006876161",
         plus: "338950814108483586",
