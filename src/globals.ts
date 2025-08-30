@@ -10,7 +10,7 @@ interface NextEvent {
 //Timestamp is in ms
 export const NEXT_EVENT: null | NextEvent = {
     name: "Awe Dropping",
-    timestamp: 1756832400000,
+    timestamp: 1757437200000,
     image: "https://designcompass.org/wp-content/uploads/2025/08/apple-event-awe-1536x1152.jpg",
     color: "#1525a0",
 };
