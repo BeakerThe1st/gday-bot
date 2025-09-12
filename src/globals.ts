@@ -7,6 +7,25 @@ interface NextEvent {
     color: ColorResolvable;
 }
 
+interface VanityEvent {
+    // Time bound to grant the role. Represented by a unix timestamp in ms.
+    startTime: number;
+    endTime: number;
+
+    roleId: string;
+    channelId: string;
+}
+
+export const VANITY_EVENT: VanityEvent | null = {
+    // Fri Sep 12 2025 12:00:00 GMT+0000
+    startTime: 1757678400000,
+    // Fri Sep 12 2025 14:00:00 GMT+0000
+    endTime: 1757678400000,
+
+    roleId: "1415930748820520960",
+    channelId: "1415870578002235473",
+}
+
 //Timestamp is in ms
 export const NEXT_EVENT: null | NextEvent = {
     name: "Awe Dropping",
