@@ -2,7 +2,7 @@ import { Typing } from "discord.js";
 import { useEvent } from "../../hooks";
 import { VANITY_EVENT, GUILDS } from "../../globals";
 
-useEvent("messageCreate", async (typing: Typing) => {
+useEvent("typingStart", async (typing: Typing) => {
     if (!VANITY_EVENT) {
         return;
     }
