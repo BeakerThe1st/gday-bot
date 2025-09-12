@@ -22,6 +22,8 @@ useEvent("typingStart", async (typing: Typing) => {
     const now = Date.now();
     if (now < VANITY_EVENT.startTime || now > VANITY_EVENT.endTime) return;
 
+    const { roles } = typing.member;
+
     if (!roles.cache.has(VANITY_EVENT.roleId)) {
         try {
         await roles.add(VANITY_EVENT.roleId);
