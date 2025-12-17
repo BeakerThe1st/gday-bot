@@ -6,8 +6,8 @@ useEvent("guildMemberAdd", async (member: GuildMember) => {
     if (member.guild.id !== GUILDS.MAIN) {
         return;
     }
-    //Created before today - 36hrs
-    if (member.user.createdTimestamp < Date.now() - 3 * 24 * 60 * 60 * 1000) {
+    //Created before today - 12hrs
+    if (member.user.createdTimestamp < Date.now() - 12 * 60 * 60 * 1000) {
         return;
     }
 
