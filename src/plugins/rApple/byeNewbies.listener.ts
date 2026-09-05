@@ -2,13 +2,19 @@ import { GUILDS } from "../../globals";
 import { GuildMember, time } from "discord.js";
 import { useEvent } from "../../hooks";
 
-const MIN_ACCOUNT_AGE_HOURS = 1;
+const MIN_ACCOUNT_AGE_HOURS = 0;
 
 // convenience consts
 const MIN_ACCOUNT_AGE = MIN_ACCOUNT_AGE_HOURS * 60 * 60 * 1000;
 const MIN_ACCOUNT_AGE_TEXT = `${MIN_ACCOUNT_AGE_HOURS} hour${MIN_ACCOUNT_AGE_HOURS === 1 ? "" : "s"}`;
 
 useEvent("guildMemberAdd", async (member: GuildMember) => {
+    // easy switch without having to delete the file, since there's 
+    // no mechanism for disabling a plugin.
+    if (MIN_ACCOUNT_AGE === 0) {
+        return;
+    }
+    
     if (member.guild.id !== GUILDS.MAIN) {
         return;
     }
