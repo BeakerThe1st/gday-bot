@@ -4,10 +4,11 @@ import { NEXT_EVENT } from "../../globals";
 import { EmbedBuilder, time, TimestampStyles } from "discord.js";
 import { CommandScope } from "../../structs/GdayCommandBuilder";
 
+// STAFF_SERVER is set as a workaround to "disable" the plugin.
 const builder = new GdayChatCommandBuilder()
     .setName("event")
     .setDescription("Throws up info on the next Apple event!")
-    .setScope(CommandScope.MAIN_GUILD);
+    .setScope(CommandScope.STAFF_SERVER);
 
 useChatCommand(builder as GdayChatCommandBuilder, () => {
     const event = NEXT_EVENT;
